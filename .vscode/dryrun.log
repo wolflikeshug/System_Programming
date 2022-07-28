@@ -1,0 +1,5 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/huggingwolf/Documents/GitHub/System_Programming'
+make: 'readfile' is up to date.
+make: Leaving directory '/home/huggingwolf/Documents/GitHub/System_Programming'
+ 
