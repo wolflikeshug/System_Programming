@@ -1,5 +1,5 @@
-make --dry-run --keep-going --print-directory
+make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/home/huggingwolf/Documents/GitHub/System_Programming'
-make: 'readfile' is up to date.
+gcc readfile.c -o readfile;
 make: Leaving directory '/home/huggingwolf/Documents/GitHub/System_Programming'
  

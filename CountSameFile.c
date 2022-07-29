@@ -5,8 +5,6 @@
 #define array_size 1024
 #define sha256_size 128
 
-char output[array_size];
-
 // list all the filenames in the directory and store them in an array
 void list_files(char *dirname, char *files[])
 {
@@ -29,10 +27,9 @@ void list_files(char *dirname, char *files[])
 }
 
 // store the sha256 hash of the file in the list one by one
-void print_hash(char *filesname[])
+void print_hash(char *filesname[], char *output[])
 {
     char command[array_size];
-    strcpy(command, "sha256sum ");
     char *token;
     int i = 0;
     while(filesname[i] != NULL) {
@@ -40,7 +37,19 @@ void print_hash(char *filesname[])
         strcat(command, filesname[i]);
         i++;
     }
-    *output = system(command);
+    printf(command);
+    printf("%i\n",system(command));
+    *command = system(command);
+    printf(command);
+    // split the string into two parts: the filename and the hash
+    token = strtok(command, " ");
+    i = 0;
+    while (token != NULL)
+    {
+        strcpy(output[i], token);
+        i++;
+        token = strtok(NULL, " ");
+    }
 }
 
 // check the chars in the array if they are the same
@@ -64,9 +73,11 @@ void check_same(char *hash[])
 void main()
 {
     char *files[array_size];
+    char *output[array_size];
     list_files(".", files);
-    print_hash(files);
-    printf("============================");
-    check_same(files);
+    print_hash(files,output);
+    printf("============================\n");
+    check_same(output);
+    printf(*output);
     exit(0);
 }
