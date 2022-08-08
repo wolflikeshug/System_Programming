@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Aug  8 10:56:49 2022
+# Make data base, printed on Mon Aug  8 18:13:44 2022
 
 # Variables
 
@@ -71,7 +73,7 @@ LESS_TERMCAP_ue = [0m
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_AUTH_SOCK = /tmp/ssh-XXXXXXG7pmFg/agent.1648
+SSH_AUTH_SOCK = /tmp/ssh-XXXXXX6BmCUZ/agent.1914
 # default
 .SHELLFLAGS := -c
 # environment
@@ -80,18 +82,18 @@ XDG_CONFIG_DIRS = /etc/xdg
 +D = $(patsubst %/,%,$(dir $+))
 # environment
 XDG_SESSION_DESKTOP = lightdm-xsession
-# makefile (from 'makefile', line 1)
-MAKEFILE_LIST := makefile
+# makefile
+MAKEFILE_LIST := 
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 115789
+VSCODE_PID = 4693
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/kali:@/tmp/.ICE-unix/1648,unix/kali:/tmp/.ICE-unix/1648
+SESSION_MANAGER = local/kali:@/tmp/.ICE-unix/1914,unix/kali:/tmp/.ICE-unix/1914
 # automatic
 *F = $(notdir $*)
 # environment
@@ -161,11 +163,13 @@ CLUTTER_IM_MODULE = fcitx
 # environment
 LOGNAME = huggingwolf
 # environment
+GIO_LAUNCHED_DESKTOP_FILE = /usr/share/applications/code.desktop
+# environment
 XDG_VTNR = 7
 # makefile
-.DEFAULT_GOAL := readfile
+.DEFAULT_GOAL := 
 # environment
-DISPLAY = :0.0
+DISPLAY = :0
 # environment
 USER = huggingwolf
 # environment
@@ -173,7 +177,9 @@ GTK_MODULES = gail:atk-bridge
 # default
 MAKE_VERSION := 4.3
 # environment
-SSH_AGENT_PID = 1723
+GIO_LAUNCHED_DESKTOP_FILE_PID = 4693
+# environment
+SSH_AGENT_PID = 1987
 # environment
 _ = /usr/share/code/code
 # environment
@@ -197,8 +203,6 @@ VSCODE_IPC_HOOK = /run/user/1000/vscode-c390699e-1.69.2-main.sock
 # environment
 XDG_SESSION_ID = 2
 # environment
-PANEL_GDK_CORE_DEVICE_EVENTS = 0
-# environment
 DOTNET_CLI_TELEMETRY_OPTOUT = 1
 # default
 .RECIPEPREFIX := 
@@ -217,7 +221,7 @@ XDG_MENU_PREFIX = xfce-
 # environment
 GDMSESSION = lightdm-xsession
 # variable set hash-table stats:
-# Load=103/1024=10%, Rehash=0, Collisions=9/133=7%
+# Load=104/1024=10%, Rehash=0, Collisions=9/131=7%
 
 # Pattern-specific Variable Values
 
@@ -225,9 +229,9 @@ GDMSESSION = lightdm-xsession
 
 # Directories
 
-# . (device 2050, inode 14420607): 12 files, no impossibilities.
+# . (device 2050, inode 14420607): 9 files, no impossibilities.
 
-# 12 files, no impossibilities in 1 directories.
+# 9 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -235,25 +239,12 @@ GDMSESSION = lightdm-xsession
 
 # Files
 
-CountSameFile: CountSameFile.c
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'makefile', line 6):
-	gcc CountSameFile.c -o CountSameFile;
-
-readfile: readfile.c
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'makefile', line 3):
-	gcc readfile.c -o readfile;
-
 # Not a target:
-readfile.c:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+Makefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
 
 # Not a target:
 .DEFAULT:
@@ -271,33 +262,32 @@ all:
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-28 17:40:09.249387573
+#  File does not exist.
 #  File has been updated.
-#  Successfully updated.
+#  Failed to be updated.
 
 # Not a target:
-CountSameFile.c:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+GNUmakefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
 
 # files hash-table stats:
-# Load=8/1024=1%, Rehash=0, Collisions=0/20=0%
+# Load=6/1024=1%, Rehash=0, Collisions=0/15=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 17 / storage = 177 B / avg = 10 B
-# current buf: size = 8162 B / used = 177 B / count = 17 / avg = 10 B
-
-# strcache performance: lookups = 27 / hit rate = 37%
-# hash-table stats:
+# strcache buffers: 1 (0) / strings = 17 / storage = 148 B / avg = 8 B
+# current buf: size = 8162 B / used = 148 B / count = 17 / avg = 8 B
  
-make: *** No rule to make target 'all'.  Stop.
 
-# Load=17/8192=0%, Rehash=0, Collisions=0/27=0%
-# Finished Make data base on Mon Aug  8 10:56:49 2022
+# strcache performance: lookups = 20 / hit rate = 15%
+# hash-table stats:
+# Load=17/8192=0%, Rehash=0, Collisions=0/20=0%
+# Finished Make data base on Mon Aug  8 18:13:44 2022
 
  

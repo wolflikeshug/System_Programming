@@ -1,5 +1,6 @@
 make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/home/huggingwolf/Documents/GitHub/System_Programming'
-gcc readfile.c -o readfile;
 make: Leaving directory '/home/huggingwolf/Documents/GitHub/System_Programming'
  
+make: *** No targets specified and no makefile found.  Stop.
+

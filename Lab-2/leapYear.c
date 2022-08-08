@@ -1,10 +1,6 @@
-//
-// Created by huggingwolf on 8/08/22.
-//
-
-//check the input year is leap year or not
 #include <stdio.h>
 
+//check the input year is leap year or not
 void main() {
     int year;
     printf("Enter the year: ");
