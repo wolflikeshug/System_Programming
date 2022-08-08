@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Aug  1 12:42:52 2022
+# Make data base, printed on Mon Aug  8 10:56:49 2022
 
 # Variables
 
@@ -71,7 +71,7 @@ LESS_TERMCAP_ue = [0m
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_AUTH_SOCK = /tmp/ssh-XXXXXXVdCsz5/agent.1470
+SSH_AUTH_SOCK = /tmp/ssh-XXXXXXG7pmFg/agent.1648
 # default
 .SHELLFLAGS := -c
 # environment
@@ -85,13 +85,13 @@ MAKEFILE_LIST := makefile
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 312649
+VSCODE_PID = 115789
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/kali:@/tmp/.ICE-unix/1470,unix/kali:/tmp/.ICE-unix/1470
+SESSION_MANAGER = local/kali:@/tmp/.ICE-unix/1648,unix/kali:/tmp/.ICE-unix/1648
 # automatic
 *F = $(notdir $*)
 # environment
@@ -173,7 +173,7 @@ GTK_MODULES = gail:atk-bridge
 # default
 MAKE_VERSION := 4.3
 # environment
-SSH_AGENT_PID = 1544
+SSH_AGENT_PID = 1723
 # environment
 _ = /usr/share/code/code
 # environment
@@ -225,7 +225,7 @@ GDMSESSION = lightdm-xsession
 
 # Directories
 
-# . (device 2066, inode 14420607): 12 files, no impossibilities.
+# . (device 2050, inode 14420607): 12 files, no impossibilities.
 
 # 12 files, no impossibilities in 1 directories.
 
@@ -298,6 +298,6 @@ CountSameFile.c:
 make: *** No rule to make target 'all'.  Stop.
 
 # Load=17/8192=0%, Rehash=0, Collisions=0/27=0%
-# Finished Make data base on Mon Aug  1 12:42:52 2022
+# Finished Make data base on Mon Aug  8 10:56:49 2022
 
  
