@@ -6,7 +6,7 @@
 #include <string.h>
 
 // take one argument in, if the number can be divided by 400 or can be divided by 4 and not be divided by 100, print "leap year", otherwise return print "not leap year"
-void main(int argc, char* argv[]){
+int main(int argc, char* argv[]){
     if(argc != 2){
         printf("Usage: ./q1 <year>\n");
         exit(1);
