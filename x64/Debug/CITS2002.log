@@ -1,2 +1,0 @@
-﻿workshop2.obj : error LNK2005: main 已经在 leapYear.obj 中定义
-C:\Users\HuggingWolf\OneDrive\文档\GitHub\System_Programming\x64\Debug\CITS2002.exe : fatal error LNK1169: 找到一个或多个多重定义的符号
