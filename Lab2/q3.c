@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_LENGTH 1200;
+
 int main (int argc, char* argv[]){
 // print out the biggest num in argv
     int i, max = 0;
