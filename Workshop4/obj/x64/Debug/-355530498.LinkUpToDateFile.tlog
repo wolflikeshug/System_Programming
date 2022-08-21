@@ -1,0 +1,1 @@
+g++ -o "/root/projects/Workshop4/bin/x64/Debug/Workshop4.out" -Wl,--no-undefined -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack /root/projects/Workshop4/obj/x64/Debug/main.o

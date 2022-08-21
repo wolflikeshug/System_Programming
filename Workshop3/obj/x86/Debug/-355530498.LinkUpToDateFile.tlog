@@ -1,0 +1,1 @@
+g++ -o "/root/projects/Workshop3/bin/x86/Debug/Workshop3.out" -Wl,--no-undefined -Wl,-z,relro -Wl,-z,noexecstack /root/projects/Workshop3/obj/x86/Debug/main.o
