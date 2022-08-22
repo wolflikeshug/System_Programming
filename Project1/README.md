@@ -1,4 +1,4 @@
-Project 1 2022 - see also project 1 clarifications
+# Project 1 2022 - see also project 1 clarifications
 The wording on this page may yet change to improve grammar and to make things clearer.
 
 The goal of this project is to develop a system utility program, named estimatecron, which checks the correctness of a simplified crontab-file, and determines some simple metrics about the set of commands specified in the file.
@@ -18,7 +18,7 @@ which specifies the month to be analysed and the name of the two required text f
 
 Your estimatecron program should first check the validity of the information in its input files (reporting any errors), simulate (better word?) the execution of commands invoked during the requested month, and report the values of:  the name of the most frequently executed command (a single word), the total number of commands invoked (a non-negative integer), and the maximum number of commands running at any time (a non-negative integer).
 
-File formats
+# File formats
 Your estimatecron program should read information from 2 text files - a simplified crontab-file which specifies at which times commands should be executed, and an estimates-file which specifies the average execution times (in minutes) of commands.
 The crontab-file consists of 2 types of lines:
 
@@ -56,7 +56,7 @@ submit-project  1
 deep-thought    600
 
 
-Project requirements and fine-print
+# Project requirements and fine-print
 Your project should be written in the C11 programming language, in a single source-code file named estimatecron.c
 The crontab-file and the estimates-file will each contain at most 20 non-comment lines. Each line will be at most 100 characters long, and each command name will be at most 40 characters long.
 Your project should check for errors in both the crontab-file and the estimates-file. If any errors are found, only the first error should be reported and the program should terminate.
