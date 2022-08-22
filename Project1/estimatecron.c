@@ -15,7 +15,7 @@ FILE *dict;
 int i;
 char *buffer;
 char command[MAX_LINE_SIZE];
-char cron_command[MAX_LINE_SIZE][MAX_COMMAND_SIZE];
+char cron_command[MAX_LIST_SIZE][MAX_COMMAND_SIZE];
 
 // Function: read_command_file
 // Description: Reads the command from crontab-file and stores it in an array
