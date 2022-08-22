@@ -4,8 +4,14 @@
 # execute a command at 4:15AM every Sunday
 15 4 * * sun   weekly-backup
 #
+# mail out a daily newsletter
+0 2 * * *      send-daily-newsletter
+#
 # start thinking about the project....
 0 10 22 7 mon  deep-thought
+#
+# mail out a weekly newsletter
+0 2 * * mon      send-weekly-newsletter
 #
 # submit my project automatically, just in case I forget!
 59 16 16 8 *   submit-project
