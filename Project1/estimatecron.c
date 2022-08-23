@@ -35,7 +35,6 @@ char *valid_hour[] = {"*","0","1","2","3","4","5","6","7","8","9","10","11","12"
 char *valid_date[] = {"*","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"};
 char *valid_month[] = {"*","0","1","2","3","4","5","6","7","8","9","10","11"};
 char *valid_day_of_week[] = {"*","0","1","2","3","4","5","6","mon","tue","wed","thu","fri","sat","sun"};
-char *day_of_week_list[] = {"*","mon","tue","wed","thu","fri","sat","sun"};
 crontab_line cron_command[MAX_LIST_SIZE];
 
 // Oh My, Look at this. I really need a header file, this c file looks way too long.
@@ -92,18 +91,32 @@ char *chgDayFomat(char *day) {
     } else if (strext(day, "sun")) {
         return "6";
     }
-    return "*";
+    return day;
 }
 
-// Function: check_cron_list
-// Description: Checks if every command have estimate time
-void check_cron_list(){
-    for (int i = 0; i < total_cron_lines; i++) {
-        if (count_list[i] != 1) {
-            printf("Error: Command \"%s\" cannot find right estimate time.\n", cron_command[i].cmd);
+// Functions: precheck(char *)
+// Description: precheck the file if all the lines are less than 100 characters ( not including \n haracter)
+void precheck(char *file) {
+    FILE *fp = fopen(file, "r");
+    if (fp == NULL) {
+        printf("Error: File not found.\n");
+        exit(EXIT_FAILURE);
+    }
+    int count = 0;
+    while (!feof(fp)) {
+        char tmp;
+        tmp = fgetc(fp);
+        count++;
+        if (count > MAX_LINE_SIZE) {
+            fclose(fp);
+            printf("Error: File contain oversize line.\n");
             exit(EXIT_FAILURE);
         }
+        if (tmp == '\n') {
+            count = 0;
+        }
     }
+    fclose(fp);
 }
 
 // Function: check_cron_format
@@ -113,15 +126,31 @@ void check_cron_format(char* cronLn){
     char *cpyLn = malloc(sizeof(char) * MAX_LINE_SIZE); // malloc space for cpyLn
     strcpy(cpyLn, cronLn);
 
+    strtok(cpyLn, " "); // check the format
+    for(int i = 0; i < 5; i++){ // run 7 times (include above line), there should be excately 6 elements in the line
+        char *tmp = strtok(NULL, " ");
+        if(i <= 4 && tmp == NULL){
+            printf("Error: Wrong format for cron schedule.\n");// if there is less than 6 element, wrong format
+            exit(EXIT_FAILURE);
+        }
+        else if(i > 4 && tmp != NULL){
+            printf("Error: Wrong format for cron schedule.\n");// if there is more than 6 element, wrong format
+            exit(EXIT_FAILURE);
+        }
+        else if (i == 4 && strlen(tmp) > MAX_COMMAND_SIZE){
+            printf("Error: Too long for cron command.\n");// if coomand is more than 41 characters, wrong format
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    strcpy(cpyLn, cronLn);
     char *char1 = strtok(cpyLn, " ");
     char *char2 = strtok(NULL, " ");
     char *char3 = strtok(NULL, " ");
     char *char4 = strtok(NULL, " ");
     char *char5 = strtok(NULL, " ");
-    char *char6 = strtok(NULL, " ");
-    rmnLn(char6);
 
-    bool bool1 = false;
+    bool bool1 = false; // if the formate is correct, bool will be true
     bool bool2 = false;
     bool bool3 = false;
     bool bool4 = false;
@@ -144,30 +173,13 @@ void check_cron_format(char* cronLn){
             bool5 = true;
         }
         if (bool1 && bool2 && bool3 && bool4 && bool5) {
+            free(cpyLn);
             return;
         }
     }
     free(cpyLn); // free memory
-    if (!bool1) {
-        printf("Error: Invalid minute detected in command \"%s\".\n", char6);
-        exit(EXIT_FAILURE);
-    }
-    if (!bool2) {
-        printf("Error: Invalid hour detected in command \"%s\".\n", char6);
-        exit(EXIT_FAILURE);
-    }
-    if (!bool3) {
-        printf("Error: Invalid date detected in command \"%s\".\n", char6);
-        exit(EXIT_FAILURE);
-    }
-    if (!bool4) {
-        printf("Error: Invalid month detected in command \"%s\".\n", char6);
-        exit(EXIT_FAILURE);
-    }
-    if (!bool5) {
-        printf("Error: Invalid day of week detected in command \"%s\".\n", char6);
-        exit(EXIT_FAILURE);
-    }
+    printf("Error: Wrong format for cron schedule.\n"); // if there is no match, there is wrong format
+    exit(EXIT_FAILURE);
 }
 
 // Function: read_command_file
@@ -213,17 +225,41 @@ void read_crontab_file()
         strcpy(cron_command[i].sch_hour,        hours);
         strcpy(cron_command[i].sch_date,        date);
         strcpy(cron_command[i].sch_month,       month);
-        if (charInList(day_of_week, day_of_week_list)) {
-            strcpy(cron_command[i].sch_day_of_week, chgDayFomat(day_of_week));
-        } else {
-            strcpy(cron_command[i].sch_day_of_week, day_of_week);
-        }
+        strcpy(cron_command[i].sch_day_of_week, chgDayFomat(day_of_week));
 
         total_cron_lines++;
         i++;
     }
     free(cron_line);
     fclose(dict);
+}
+
+// Function: check_estimate_format(char *)
+// Description: Checks if the estimate is in correct format
+void check_estimate_format(char *estimate) {
+    char *cpyEstimate = malloc(sizeof(char) * MAX_LINE_SIZE); // malloc space for cpyEstimate
+    strcpy(cpyEstimate, estimate);
+    char *tmp = strtok(cpyEstimate, " "); // check the format
+    for(int i = 0; i < 4; i++){ //run 2 times (include above line), there should be excately 2 element in the line
+        if(i < 2 && tmp == NULL){
+            printf("Error: Wrong format for estimate.\n");  // if there is less than 2 element, there is wrong format
+            exit(EXIT_FAILURE);
+        }
+        else if(i >= 2 && tmp != NULL){
+            printf("Error: Wrong format for estimate.\n");  // if there is more than 2 element, there is wrong format
+            exit(EXIT_FAILURE);
+        }
+        else if(i == 0 && strlen(tmp) > MAX_COMMAND_SIZE){
+            printf("Error: Too long for estimate command.\n");  // if command is more than 41 characters, there is wrong format
+            exit(EXIT_FAILURE);
+        }
+        else if(i == 1 && atoi(tmp) <= 0){
+            printf("Error: Wrong  time estimation.\n");  // the second element should be positive integer
+            exit(EXIT_FAILURE);
+        }
+        tmp = strtok(NULL, " ");
+    }
+    free(cpyEstimate); // free memory
 }
 
 // Function: read_estimates_file
@@ -249,11 +285,13 @@ void read_estimates_file()
 
     // read the file line by line
     while( fgets(estimate_line, MAX_LINE_SIZE, dict) != NULL ) {
+        
         //if command start with "#" then skip it
         if (estimate_line[0] == '#') {
             continue;
         }
 
+        check_estimate_format(estimate_line); // check the format
         // get the command from the estimate_line
         char *command = strtok(estimate_line, " ");
         char *estimateTime = strtok(NULL, " ");
@@ -268,6 +306,17 @@ void read_estimates_file()
     free(command);
     free(estimate_line);
     fclose(dict);
+}
+
+// Function: check_cron_list
+// Description: Checks if every command have estimate time
+void check_cron_list(){
+    for (int i = 0; i < total_cron_lines; i++) {
+        if (count_list[i] != 1) {
+            printf("Error: Command \"%s\" cannot find right estimate time.\n", cron_command[i].cmd);
+            exit(EXIT_FAILURE);
+        }
+    }
 }
 
 
@@ -287,6 +336,10 @@ int main(int argc, char* argv[])
         crontab_file = argv[2];
         estimates_file = argv[3];
     }
+
+    // precheck the crontab-file and estimate-file
+    precheck(crontab_file);
+    precheck(estimates_file);
 
     // read the crontab-file and estimates-file
     read_crontab_file();
