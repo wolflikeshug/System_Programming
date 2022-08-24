@@ -21,13 +21,13 @@
 
 typedef struct crontab_line
 {
-    char cmd[MAX_COMMAND_SIZE]; // command to run
-    int sch_minute;             // schedule for the process
+    char cmd[MAX_COMMAND_SIZE];             // command to run
+    int sch_minute;                         // schedule for the process
     int sch_hour;
     int sch_date;
     int sch_month;
     int sch_day_of_week;
-    int est; // estimates time for each command
+    int est;                                // estimates time for each command
 } crontab_line;
 
 typedef struct time_struct
@@ -41,8 +41,9 @@ typedef struct time_struct
 
 typedef struct record_pad
 {
-    char cmd[MAX_COMMAND_SIZE]; // command name
-    int time;                   // total period runs for the commandnot-set
+    crontab_line    command;                // command
+    time_struct     *schedule;              // scheduled time to run the command
+    int             time;                   // total period runs for the commandnot-set
 
 } record_pad;
 
@@ -60,7 +61,7 @@ char *valid_hour[] = {"*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10
 char *valid_date[] = {"*", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
 char *valid_month[] = {"*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
 char *valid_day_of_week[] = {"*", "0", "1", "2", "3", "4", "5", "6", "mon", "tue", "wed", "thu", "fri", "sat", "sun"};
-crontab_line cron_command[MAX_LIST_SIZE];
+record_pad cron_command[MAX_LIST_SIZE];
 
 // Fuction: strext(char *, char *)
 // Description: Returns True if string2 is contained in string1
@@ -121,35 +122,35 @@ int chgTimeFomat(char *char1)
 // Description: Changes day format from mon-sun to 0-6, if char is *, returns -1
 int chgDayFomat(char *day)
 {
-    if (strext(day, "mon"))
+    if (strext(day, "mon"))                             // turn "mon" to int 0
     {
         return 0;
     }
-    else if (strext(day, "tue"))
+    else if (strext(day, "tue"))                        // turn "tue" to int 1
     {
         return 1;
     }
-    else if (strext(day, "wed"))
+    else if (strext(day, "wed"))                        // turn "wed" to int 2
     {
         return 2;
     }
-    else if (strext(day, "thu"))
+    else if (strext(day, "thu"))                        // turn "thu" to int 3
     {
         return 3;
     }
-    else if (strext(day, "fri"))
+    else if (strext(day, "fri"))                        // turn "fri" to int 4
     {
         return 4;
     }
-    else if (strext(day, "sat"))
+    else if (strext(day, "sat"))                        // turn "sat" to int 5
     {
         return 5;
     }
-    else if (strext(day, "sun"))
+    else if (strext(day, "sun"))                        // turn "sun" to int 6
     {
         return 6;
     }
-    else if (strext(day, "*"))
+    else if (strcmp(day, "*") == 0)                     // turn "*" to int -1
     {
         return -1;
     }
@@ -190,7 +191,8 @@ bool ckState(time_struct time1, time_struct time2, int estimate_minutes)
     return false;
 }
 
-// Function: whenToRun(time_struct)
+// Function: whenToRun(record_pad *, month)
+// Description: Returns a array of time_struct that contains the time to run the command
 
 
 // Functions: precheck(char *)
@@ -237,17 +239,17 @@ void check_cron_format(char *cronLn)
         char *tmp = strtok(NULL, " ");
         if (i <= 4 && tmp == NULL)
         {
-            printf("Error: Wrong format for cron schedule.\n"); // if there is less than 6 element, wrong format
+            printf("Error: Wrong format for cron schedule.\n");     // if there is less than 6 element, wrong format
             exit(EXIT_FAILURE);
         }
         else if (i > 4 && tmp != NULL)
         {
-            printf("Error: Wrong format for cron schedule.\n"); // if there is more than 6 element, wrong format
+            printf("Error: Wrong format for cron schedule.\n");     // if there is more than 6 element, wrong format
             exit(EXIT_FAILURE);
         }
         else if (i == 4 && strlen(tmp) > MAX_COMMAND_SIZE)
         {
-            printf("Error: Too long for cron command.\n"); // if coomand is more than 41 characters, wrong format
+            printf("Error: Too long for cron command.\n");          // if coomand is more than 41 characters, wrong format
             exit(EXIT_FAILURE);
         }
     }
@@ -259,7 +261,7 @@ void check_cron_format(char *cronLn)
     char *char4 = strtok(NULL, " ");
     char *char5 = strtok(NULL, " ");
 
-    bool bool1 = false; // if the formate is correct, bool will be true
+    bool bool1 = false;                                             // if the formate is correct, bool will be true
     bool bool2 = false;
     bool bool3 = false;
     bool bool4 = false;
@@ -293,8 +295,8 @@ void check_cron_format(char *cronLn)
             return;
         }
     }
-    free(cpyLn);                                        // free memory
-    printf("Error: Wrong format for cron schedule.\n"); // if there is no match, there is wrong format
+    free(cpyLn);                                                    // free memory
+    printf("Error: Wrong format for cron schedule.\n");             // if there is no match, there is wrong format
     exit(EXIT_FAILURE);
 }
 
@@ -339,12 +341,12 @@ void read_crontab_file()
         char *day_of_week = strtok(NULL, " ");
         char *command = strtok(NULL, " ");
 
-        strcpy(cron_command[i].cmd, command);
-        cron_command[i].sch_minute = chgTimeFomat(minutes);
-        cron_command[i].sch_hour = chgTimeFomat(hours);
-        cron_command[i].sch_date = chgTimeFomat(date);
-        cron_command[i].sch_month = chgTimeFomat(month);
-        cron_command[i].sch_day_of_week = chgDayFomat(day_of_week);
+        strcpy(cron_command[i].command.cmd, command);
+        cron_command[i].command.sch_minute = chgTimeFomat(minutes);
+        cron_command[i].command.sch_hour = chgTimeFomat(hours);
+        cron_command[i].command.sch_date = chgTimeFomat(date);
+        cron_command[i].command.sch_month = chgTimeFomat(month);
+        cron_command[i].command.sch_day_of_week = chgDayFomat(day_of_week);
 
         total_cron_lines++;
         i++;
@@ -357,29 +359,29 @@ void read_crontab_file()
 // Description: Checks if the estimate is in correct format
 void check_estimate_format(char *estimate)
 {
-    char *cpyEstimate = malloc(sizeof(char) * MAX_LINE_SIZE); // malloc space for cpyEstimate
+    char *cpyEstimate = malloc(sizeof(char) * MAX_LINE_SIZE);       // malloc space for cpyEstimate
     strcpy(cpyEstimate, estimate);
     char *tmp = strtok(cpyEstimate, " "); // check the format
-    for (int i = 0; i < 4; i++)
-    { // run 2 times (include above line), there should be excately 2 element in the line
+    for (int i = 0; i < 4; i++)                                     // run 2 times (include above line), there should be excately 2 element in the line
+    {                          
         if (i < 2 && tmp == NULL)
         {
-            printf("Error: Wrong format for estimate.\n"); // if there is less than 2 element, there is wrong format
+            printf("Error: Wrong format for estimate.\n");          // if there is less than 2 element, there is wrong format
             exit(EXIT_FAILURE);
         }
         else if (i >= 2 && tmp != NULL)
         {
-            printf("Error: Wrong format for estimate.\n"); // if there is more than 2 element, there is wrong format
+            printf("Error: Wrong format for estimate.\n");          // if there is more than 2 element, there is wrong format
             exit(EXIT_FAILURE);
         }
         else if (i == 0 && strlen(tmp) > MAX_COMMAND_SIZE)
         {
-            printf("Error: Too long for estimate command.\n"); // if command is more than 41 characters, there is wrong format
+            printf("Error: Too long for estimate command.\n");      // if command is more than 41 characters, there is wrong format
             exit(EXIT_FAILURE);
         }
         else if (i == 1 && atoi(tmp) <= 0)
         {
-            printf("Error: Wrong  time estimation.\n"); // the second element should be positive integer
+            printf("Error: Wrong  time estimation.\n");             // the second element should be positive integer
             exit(EXIT_FAILURE);
         }
         tmp = strtok(NULL, " ");
@@ -425,11 +427,11 @@ void read_estimates_file()
         char *estimateTime = strtok(NULL, " ");
         rmnLn(estimateTime);
         int i = 0;
-        while (!strext(cron_command[i].cmd, command))
+        while (!strext(cron_command[i].command.cmd, command))
         {
             i++;
         }
-        cron_command[i].est = atoi(estimateTime);
+        cron_command[i].command.est = atoi(estimateTime);
         count_list[i] = 1;
     }
     free(command);
@@ -445,17 +447,17 @@ void check_cron_list()
     {
         if (count_list[i] != 1)
         {
-            printf("Error: Command \"%s\" cannot find right estimate time.\n", cron_command[i].cmd);
+            printf("Error: Command \"%s\" cannot find right estimate time.\n", cron_command[i].command.cmd);
             exit(EXIT_FAILURE);
         }
     }
 }
 
-// Function: ckComState(crontab_line *, int, int, int)
+// Function: ckComState(record_pad *, int, int, int)
 // Description: Checks if the command is running or not at the given time
-bool ckComState(crontab_line cron_command, int curr_minute, int curr_hour, int curr_date, int curr_day)
+bool ckComState(record_pad cron_command, int curr_minute, int curr_hour, int curr_date, int curr_day)
 {
-
+    
 }
 
 // Function: time_simulator(int)
@@ -515,13 +517,13 @@ int main(int argc, char *argv[])
     for (int i = 0; i < total_cron_lines; i++)
     {
         printf("%i: %i\t%i\t%i\t%i\t%i\t%i\t%s\n", i,
-               cron_command[i].sch_minute,
-               cron_command[i].sch_hour,
-               cron_command[i].sch_date,
-               cron_command[i].sch_month,
-               cron_command[i].sch_day_of_week,
-               cron_command[i].est,
-               cron_command[i].cmd);
+               cron_command[i].command.sch_minute,
+               cron_command[i].command.sch_hour,
+               cron_command[i].command.sch_date,
+               cron_command[i].command.sch_month,
+               cron_command[i].command.sch_day_of_week,
+               cron_command[i].command.est,
+               cron_command[i].command.cmd);
         ;
     }
     return 0;
