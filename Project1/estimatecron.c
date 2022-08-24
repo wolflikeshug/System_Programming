@@ -1,3 +1,6 @@
+//  CITS2002 Project 1 2022
+//  Student1:   23006364   Hu   Daniel
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,7 +42,8 @@ typedef struct time_struct
 typedef struct record_pad
 {
     char cmd[MAX_COMMAND_SIZE]; // command name
-    int time;                   // total time runs for the command
+    int time;                   // total period runs for the commandnot-set
+
 } record_pad;
 
 FILE *dict;
