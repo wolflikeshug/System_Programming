@@ -7,7 +7,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Wed Aug 24 14:27:41 2022
+# Make data base, printed on Wed Aug 24 14:58:18 2022
 
 # Variables
 
@@ -30,7 +30,7 @@ HOMEDRIVE = C:
 # automatic
 ^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
 # makefile
-CURDIR := c:/Users/HuggingWolf/OneDrive/文档/GitHub/System_Programming
+CURDIR := c:/Users/HuggingWolf/Documents/GitHub/System_Programming/Project1
 # default
 SHELL := sh.exe
 # environment
@@ -43,8 +43,8 @@ ONEDRIVE = C:\Users\HuggingWolf\OneDrive - The University of Western Australia
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # environment
 PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
-# makefile
-MAKEFILE_LIST := 
+# makefile (from 'makefile', line 1)
+MAKEFILE_LIST :=  makefile
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -76,7 +76,7 @@ ELECTRON_RUN_AS_NODE = 1
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_25036_LYRXCUEKFUVNDDYN
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_9220_YUZPXGEEORUGHKVQ
 # environment
 COMPUTERNAME = THUNDERBOOK-16
 # environment
@@ -116,7 +116,7 @@ ONEDRIVECOMMERCIAL = C:\Users\HuggingWolf\OneDrive - The University of Western A
 # default
 MAKE_VERSION := 3.82.90
 # makefile
-.DEFAULT_GOAL := 
+.DEFAULT_GOAL := estimatecron
 # environment
 PROGRAMFILES(X86) = C:\Program Files (x86)
 # automatic
@@ -158,6 +158,8 @@ SYSTEMROOT = C:\WINDOWS
 # environment
 APPDATA = C:\Users\HuggingWolf\AppData\Roaming
 # environment
+__COMPAT_LAYER = DetectorsShimLog
+# environment
 TEMP = C:\Users\HUGGIN~1\AppData\Local\Temp
 # environment
 COMSPEC = C:\WINDOWS\system32\cmd.exe
@@ -186,11 +188,11 @@ PROCESSOR_LEVEL = 6
 # environment
 FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 25036
+VSCODE_PID = 9220
 # environment
 USERDOMAIN_ROAMINGPROFILE = THUNDERBOOK-16
 # variable set hash-table stats:
-# Load=89/1024=9%, Rehash=0, Collisions=12/104=12%
+# Load=90/1024=9%, Rehash=0, Collisions=12/108=11%
 
 # Pattern-specific Variable Values
 
@@ -204,7 +206,7 @@ USERDOMAIN_ROAMINGPROFILE = THUNDERBOOK-16
 # C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1660965744): 31 files, no impossibilities.
 # C:\WINDOWS\System32\Wbem (key C:/WINDOWS/System32/Wbem, mtime 1660965763): 172 files, no impossibilities.
 # C:\Program Files\Solidigm\Solidigm(TM) Storage Tool\ (key C:/Program Files/Solidigm/Solidigm(TM) Storage Tool/, mtime 1660672928): 59 files, no impossibilities.
-# . (key c:/Users/HuggingWolf/OneDrive/文档/GitHub/System_Programming, mtime 1661311070): 10 files, no impossibilities.
+# . (key c:/Users/HuggingWolf/Documents/GitHub/System_Programming/Project1, mtime 1661324297): 9 files, no impossibilities.
 # C:\Program Files\Microsoft SQL Server\150\Tools\Binn\ (key C:/Program Files/Microsoft SQL Server/150/Tools/Binn/, mtime 1660705620): 4 files, no impossibilities.
 # C:\Program Files\Docker\Docker\resources\bin (key C:/Program Files/Docker/Docker/resources/bin, mtime 1660888191): 13 files, no impossibilities.
 # C:\Program Files\Git\cmd (key C:/Program Files/Git/cmd, mtime 1661068150): 8 files, no impossibilities.
@@ -216,19 +218,19 @@ USERDOMAIN_ROAMINGPROFILE = THUNDERBOOK-16
 # C:\Windows (key C:/Windows, mtime 1661316704): 114 files, no impossibilities.
 # C:\Program Files\LLVM\bin (key C:/Program Files/LLVM/bin, mtime 1660724626): 109 files, no impossibilities.
 # C:\Users\HuggingWolf\AppData\Local\Programs\Python\Python310\ (key C:/Users/HuggingWolf/AppData/Local/Programs/Python/Python310/, mtime 1660818623): 18 files, no impossibilities.
-# C:\Users\HuggingWolf\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/HuggingWolf/AppData/Local/Programs/Python/Python310/Scripts/, mtime 1661130565): 8 files, no impossibilities.
+# C:\Users\HuggingWolf\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/HuggingWolf/AppData/Local/Programs/Python/Python310/Scripts/, mtime 1661323286): 10 files, no impossibilities.
 # C:\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1660965763): 172 files, no impossibilities.
 # C:\Program Files\Common Files\Oracle\Java\javapath (key C:/Program Files/Common Files/Oracle/Java/javapath, mtime 1660978291): 6 files, no impossibilities.
 # C:\Program Files\dotnet\ (key C:/Program Files/dotnet/, mtime 1660705574): 13 files, no impossibilities.
 # C:\WINDOWS\System32\WindowsPowerShell\v1.0\ (key C:/WINDOWS/System32/WindowsPowerShell/v1.0/, mtime 1660965744): 31 files, no impossibilities.
-# C:\Windows\system32 (key C:/Windows/system32, mtime 1661315858): 3092 files, no impossibilities.
+# C:\Windows\system32 (key C:/Windows/system32, mtime 1661322889): 3092 files, no impossibilities.
 # C:\Program Files (x86)\Gpg4win\..\GnuPG\bin: could not be stat'd.
 # C:\WINDOWS\System32\OpenSSH\: could not be stat'd.
 # C:\Program Files (x86)\VMware\VMware Workstation\bin\ (key C:/Program Files (x86)/VMware/VMware Workstation/bin/, mtime 1660705961): 4 files, no impossibilities.
-# C:\WINDOWS\system32 (key C:/WINDOWS/system32, mtime 1661315858): 3092 files, no impossibilities.
+# C:\WINDOWS\system32 (key C:/WINDOWS/system32, mtime 1661322889): 3092 files, no impossibilities.
 # C:\Users\HuggingWolf\AppData\Local\JetBrains\Toolbox\scripts (key C:/Users/HuggingWolf/AppData/Local/JetBrains/Toolbox/scripts, mtime 1661082190): 2 files, no impossibilities.
 
-# 7240 files, no impossibilities in 29 directories.
+# 7241 files, no impossibilities in 29 directories.
 
 # Implicit Rules
 
@@ -243,6 +245,14 @@ all:
 #  File does not exist.
 #  File has not been updated.
 
+estimatecron: estimatecron.c
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 2):
+	gcc -o estimatecron estimatecron.c
+	./estimatecron 0 crontab-file estimate-file
+
 # Not a target:
 .SUFFIXES:
 #  Implicit rule search has not been done.
@@ -250,18 +260,17 @@ all:
 #  File has not been updated.
 
 # Not a target:
-Makefile:
-#  Implicit rule search has been done.
-#  File does not exist.
-#  File has been updated.
-#  Failed to be updated.
-
-# Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  File does not exist.
+#  Last modified 2022-08-24 11:17:50
 #  File has been updated.
-#  Failed to be updated.
+#  Successfully updated.
+
+# Not a target:
+estimatecron.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
 .DEFAULT:
@@ -269,30 +278,30 @@ makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
-# Not a target:
-GNUmakefile:
-#  Implicit rule search has been done.
-#  File does not exist.
-#  File has been updated.
-#  Failed to be updated.
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 6):
+	rm -f estimatecron
 
 # files hash-table stats:
-# Load=6/1024=1%, Rehash=0, Collisions=0/15=0%
+# Load=7/1024=1%, Rehash=0, Collisions=0/18=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 8 (7) / strings = 3745 / storage = 58244 B / avg = 15 B
-# current buf: size = 8174 B / used = 1108 B / count = 45 / avg = 24 B
-# other used: total = 50070 B / count = 3700 / avg = 13 B
-# other free: total = 82 B / max = 15 B / min = 6 B / avg = 11 B
+# strcache buffers: 8 (7) / strings = 3745 / storage = 58284 B / avg = 15 B
+# current buf: size = 8174 B / used = 1134 B / count = 47 / avg = 24 B
+# other used: total = 50110 B / count = 3698 / avg = 13 B
+# other free: total = 68 B / max = 15 B / min = 5 B / avg = 9 B
 
-# strcache performance: lookups = 7276 / hit rate = 48%
+# strcache performance: lookups = 7280 / hit rate = 48%
 # hash-table stats:
-# Load=3745/8192=46%, Rehash=0, Collisions=2541/7276=35%
-# Finished Make data base on Wed Aug 24 14:27:41 2022
+# Load=3745/8192=46%, Rehash=0, Collisions=2562/7280=35%
+# Finished Make data base on Wed Aug 24 14:58:18 2022
 
  
 make.exe: *** No rule to make target 'all'.  Stop.

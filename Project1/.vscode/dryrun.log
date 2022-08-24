@@ -1,0 +1,6 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+make.exe: Entering directory 'c:/Users/HuggingWolf/Documents/GitHub/System_Programming/Project1'
+gcc -o estimatecron estimatecron.c
+./estimatecron 0 crontab-file estimate-file
+make.exe: Leaving directory 'c:/Users/HuggingWolf/Documents/GitHub/System_Programming/Project1'
+ 
