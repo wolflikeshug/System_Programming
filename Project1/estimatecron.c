@@ -317,9 +317,9 @@ void check_cron_format(char *cronLn)
 {
     char *cpyLn = malloc(sizeof(char) * MAX_LINE_SIZE);                 // malloc space for cpyLn
     strcpy(cpyLn, cronLn);
-
     char *tmp = strtok(cpyLn, " ");                                     // check the format
     int i = 0;
+    
     while(tmp != NULL)
     {
         if (i == 5 && strlen(tmp) > MAX_COMMAND_SIZE)
@@ -410,7 +410,7 @@ void read_crontab_file()
         
         // if the formate of cron is not valid then exit with error
         check_cron_format(cron_line);
-        
+
         // if the formate of cron is valid then store it in cron_command array
         char *minutes = strtok(cron_line, " ");
         char *hours = strtok(NULL, " ");
@@ -444,29 +444,31 @@ void check_estimate_format(char *estimate)
     char *cpyEstimate = malloc(sizeof(char) * MAX_LINE_SIZE);           // malloc space for cpyEstimate
     strcpy(cpyEstimate, estimate);
     char *tmp = strtok(cpyEstimate, " "); // check the format
-    for (int i = 0; i < 4; i++)                                         // run 2 times (include above line), there should be excately 2 element in the line
-    {                          
-        if (i < 2 && tmp == NULL)
+    int i = 0;
+    while (tmp != NULL)
+    {    
+        if (i == 0 && strlen(tmp) > MAX_COMMAND_SIZE)
         {
-            printf("Error: Wrong format for estimate.\n");              // if there is less than 2 element, there is wrong format
-            exit(EXIT_FAILURE);
-        }
-        else if (i >= 2 && tmp != NULL)
-        {
-            printf("Error: Wrong format for estimate.\n");              // if there is more than 2 element, there is wrong format
-            exit(EXIT_FAILURE);
-        }
-        else if (i == 0 && strlen(tmp) > MAX_COMMAND_SIZE)
-        {
-            printf("Error: Too long for estimate command.\n");          // if command is more than 41 characters, there is wrong format
+            printf("Error: \"%s\" is Too long for command.\n", tmp);    // if command is more than 41 characters, there is wrong format
             exit(EXIT_FAILURE);
         }
         else if (i == 1 && atoi(tmp) <= 0)
         {
-            printf("Error: Wrong  time estimation.\n");                 // the second element should be positive integer
+            printf("Error: Wrong time estimation.\n");                  // the second element should be positive integer
             exit(EXIT_FAILURE);
         }
         tmp = strtok(NULL, " ");
+        i++;
+    }
+    if (i < 2)
+    {
+        printf("Error: Too less argument for estimate.\n");             // if there is less than 2 element, there is wrong format
+        exit(EXIT_FAILURE);
+    }
+    else if (i > 2)
+    {
+        printf("Error: Too many argument for estimate line.\n");        // if there is more than 2 element, there is wrong format
+        exit(EXIT_FAILURE);
     }
     free(cpyEstimate); // free memory
 }
