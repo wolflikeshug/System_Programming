@@ -9,15 +9,16 @@
 #define MAX_LIST_SIZE 21
 #define MAX_LINE_SIZE 101
 #define MAX_COMMAND_SIZE 41
-#define VALID_MINUTES_LIST_SIZE 61
+
 #define VALID_MINUTES 60
-#define VALID_HOURS_LIST_SIZE 25
 #define VALID_HOURS 24
+#define VALID_MONTHS 12
+#define VALID_DAYS 7
+#define VALID_MINUTES_LIST_SIZE 61
+#define VALID_HOURS_LIST_SIZE 25
 #define VALID_DATE_LIST_SIZE 32
 #define VALID_MONTHS_LIST_SIZE 25
-#define VALID_MONTHS 12
 #define VALID_DAY_LIST_SIZE 15
-#define VALID_DAYS 7
 
 typedef struct crontab_line
 {
@@ -53,16 +54,17 @@ FILE *dict;
 int month;
 int total_cron_lines;
 int *count_list;
-int curr_year = 2022;
 int proccess_count = 0;
+int curr_year = 2022;
 int days_in_month[VALID_MONTHS_LIST_SIZE] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
 char *crontab_file;
 char *estimates_file;
 char *valid_minute[] = {"*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"};
 char *valid_hour[] = {"*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
 char *valid_date[] = {"*", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
-char *valid_month[] = {"*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"};
-char *valid_day_of_week[] = {"*", "0", "1", "2", "3", "4", "5", "6", "mon", "tue", "wed", "thu", "fri", "sat", "sun"};
+char *valid_month[] = {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec", "*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
+char *valid_day_of_week[] = {"mon", "tue", "wed", "thu", "fri", "sat", "sun", "*", "0", "1", "2", "3", "4", "5", "6"};
 record_pad *cron_command;
 
 // =====================================================================================
@@ -124,41 +126,32 @@ int chgTimeFomat(char *char1)
     return atoi(char1);
 }
 
+// Function: findInArray(char *, char **, int)
+// Description: Returns index of char in array
+int findInArray(char *char1, char *list[], int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (strcmp(char1, list[i]) == 0)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 // Funcion: chgDayFomat(char *)
 // Description: Changes day format from sun-sat to 0-6, if char is *, returns -1
 int chgDayFomat(char *day)
 {
-    if (strcmp(day, "*") == 0)
+    int index = findInArray(day, valid_day_of_week, VALID_DAY_LIST_SIZE);
+    if (index < VALID_DAYS)
+    {
+        return index;
+    }
+    else if( index == VALID_DAYS)
     {
         return -1;
-    }
-    else if (strcmp(day, "sun") == 0)
-    {
-        return 0;
-    }
-    else if (strcmp(day, "mon") == 0)
-    {
-        return 1;
-    }
-    else if (strcmp(day, "tue") == 0)
-    {
-        return 2;
-    }
-    else if (strcmp(day, "wed") == 0)
-    {
-        return 3;
-    }
-    else if (strcmp(day, "thu") == 0)
-    {
-        return 4;
-    }
-    else if (strcmp(day, "fri") == 0)
-    {
-        return 5;
-    }
-    else if (strcmp(day, "sat") == 0)
-    {
-        return 6;
     }
     return atoi(day);
 }
@@ -167,57 +160,14 @@ int chgDayFomat(char *day)
 // Description: Changes month format from jan,feb,etc to 0-11, if char is *, returns -1
 int chgMonthFomat(char *month)
 {
-    if (strcmp(month, "*") == 0)
+    int index = findInArray(month, valid_month, VALID_MONTHS_LIST_SIZE);
+    if (index < VALID_MONTHS)
+    {
+        return index;
+    }
+    else if( index == VALID_MONTHS)
     {
         return -1;
-    }
-    else if (strcmp(month, "jan") == 0)
-    {
-        return 0;
-    }
-    else if (strcmp(month, "feb") == 0)
-    {
-        return 1;
-    }
-    else if (strcmp(month, "mar") == 0)
-    {
-        return 2;
-    }
-    else if (strcmp(month, "apr") == 0)
-    {
-        return 3;
-    }
-    else if (strcmp(month, "may") == 0)
-    {
-        return 4;
-    }
-    else if (strcmp(month, "jun") == 0)
-    {
-        return 5;
-    }
-    else if (strcmp(month, "jul") == 0)
-    {
-        return 6;
-    }
-    else if (strcmp(month, "aug") == 0)
-    {
-        return 7;
-    }
-    else if (strcmp(month, "sep") == 0)
-    {
-        return 8;
-    }
-    else if (strcmp(month, "oct") == 0)
-    {
-        return 9;
-    }
-    else if (strcmp(month, "nov") == 0)
-    {
-        return 10;
-    }
-    else if (strcmp(month, "dec") == 0)
-    {
-        return 11;
     }
     return atoi(month);
 }
@@ -255,90 +205,58 @@ bool isitTime(int int1, int int2)
 }
 
 // Function: chgDayFomatReverse(int)
-// Description: Changes day format from 0-6 to sun-sat
+// Description: Changes day format from 0-6 to sun-sat  (used to help print debug output, no longer used in program )
 char *chgDayFomatReverse(int day)
 {
-    if (day == 0)
+    switch (day)
     {
+    case 0:
         return "sun";
-    }
-    else if (day == 1)
-    {
+    case 1:
         return "mon";
-    }
-    else if (day == 2)
-    {
+    case 2:
         return "tue";
-    }
-    else if (day == 3)
-    {
+    case 3: 
         return "wed";
-    }
-    else if (day == 4)
-    {
+    case 4:
         return "thu";
-    }
-    else if (day == 5)
-    {
+    case 5:
         return "fri";
-    }
-    else if (day == 6)
-    {
+    case 6:
         return "sat";
     }
     return "";
 }
 
 // Function: chgMonthFomatReverse(int)
-// Description: Changes month format from 0-11 to Jan,Feb,etc
+// Description: Changes month format from 0-11 to Jan,Feb,etc   (used to help print debug output, no longer used in program )
 char *chgMonthFomatReverse(int month)
 {
-    if (month == 0)
+    switch (month)
     {
+    case 0:
         return "Jan";
-    }
-    else if (month == 1)
-    {
+    case 1:
         return "Feb";
-    }
-    else if (month == 2)
-    {
+    case 2:
         return "Mar";
-    }
-    else if (month == 3)
-    {
+    case 3:
         return "Apr";
-    }
-    else if (month == 4)
-    {
+    case 4:
         return "May";
-    }
-    else if (month == 5)
-    {
+    case 5:
         return "Jun";
-    }
-    else if (month == 6)
-    {
+    case 6:
         return "Jul";
-    }
-    else if (month == 7)
-    {
+    case 7:
         return "Aug";
-    }
-    else if (month == 8)
-    {
+    case 8:
         return "Sep";
-    }
-    else if (month == 9)
-    {
+    case 9:
         return "Oct";
-    }
-    else if (month == 10)
-    {
+    case 10:
         return "Nov";
-    }
-    else if (month == 11)
-    {
+    case 11:
         return "Dec";
     }
     return "";
