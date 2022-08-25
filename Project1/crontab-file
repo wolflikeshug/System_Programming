@@ -1,8 +1,8 @@
 # execute a command at 3AM every
-0 3 * * *      daily-backup dude
+0 3 * * *      daily-backup
 #
 # execute a command at 4:15AM every Sunday
-15 4 * * sun   weekly-backup
+0 2 * * sun   weekly-backup
 #
 # mail out a daily newsletter
 0 2 * * *      send-daily-newsletter

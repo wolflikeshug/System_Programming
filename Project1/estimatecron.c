@@ -21,13 +21,13 @@
 
 typedef struct crontab_line
 {
-    char cmd[MAX_COMMAND_SIZE];             // command to run
-    int sch_minute;                         // schedule for the process
+    char cmd[MAX_COMMAND_SIZE];                 // command to run
+    int sch_minute;                             // schedule for the process
     int sch_hour;
     int sch_date;
     int sch_month;
     int sch_day_of_week;
-    int est;                                // estimates time for each command
+    int est;                                    // estimates time for each command
 } crontab_line;
 
 typedef struct time_struct
@@ -41,10 +41,10 @@ typedef struct time_struct
 
 typedef struct record_pad
 {
-    crontab_line    command;                // command
-    bool            state;                  // true if the command is active, false if not
-    int             remaining_minutes;      // time left for the command to end
-    int             time;                   // total period runs for the commandnot-set
+    crontab_line    command;                    // command
+    bool            state;                      // true if the command is active, false if not
+    int             remaining_minutes;          // time left for the command to end
+    int             time;                       // total period runs for the commandnot-set
 
 } record_pad;
 
@@ -370,7 +370,7 @@ void precheck(char *file)
     FILE *fp = fopen(file, "r");
     if (fp == NULL)
     {
-        printf("Error: File not found.\n");
+        printf("Error: \"%s\" not found.\n", file);
         exit(EXIT_FAILURE);
     }
     int count = 0;
@@ -427,12 +427,25 @@ void check_cron_format(char *cronLn)
     char *char3 = strtok(NULL, " ");
     char *char4 = strtok(NULL, " ");
     char *char5 = strtok(NULL, " ");
+    char *char6 = strtok(NULL, " ");
+    char *char7 = strtok(NULL, " ");
 
     bool bool1 = false;                                             // if the formate is correct, bool will be true
     bool bool2 = false;
     bool bool3 = false;
     bool bool4 = false;
     bool bool5 = false;
+
+    if (strlen(char6) > 40)
+    {
+        printf("Error: Too long for cron command.\n");
+        exit(EXIT_FAILURE);
+    }
+    if (char7 != NULL)
+    {
+        printf("Error: Too many argument.\n");
+        exit(EXIT_FAILURE);
+    }
 
     for (int i = 0; i < VALID_MINUTES_LIST_SIZE; i++)
     {
@@ -454,6 +467,7 @@ void check_cron_format(char *cronLn)
         }
         if (!bool5 && i < VALID_DAY_LIST_SIZE && strcmp(char5, valid_day_of_week[i]) == 0)
         {
+
             bool5 = true;
         }
         if (bool1 && bool2 && bool3 && bool4 && bool5)
@@ -462,8 +476,8 @@ void check_cron_format(char *cronLn)
             return;
         }
     }
-    free(cpyLn);                                                    // free memory
-    printf("Error: Wrong format for cron schedule.\n");             // if there is no match, there is wrong format
+    free(cpyLn);                                                        // free memory
+    printf("Error: Wrong format for cron schedule.\n");
     exit(EXIT_FAILURE);
 }
 
@@ -473,18 +487,7 @@ void read_crontab_file()
 {
     char *cron_line;
     dict = fopen(crontab_file, "r");
-    // print Error if file does not exist
-    if (dict == NULL)
-    {
-        printf("Error: Crontab-File cannot be found.\n");
-        printf("This Error can be caused by the following reasons:\n");
-        printf("1. The file does not exist.\n");
-        printf("2. The file is empty.\n");
-        printf("3. Do not have premission to access the file.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    cron_line = malloc(MAX_LINE_SIZE * sizeof(char));       // malloc the cron_line array
+    cron_line = malloc(MAX_LINE_SIZE * sizeof(char));                   // malloc the cron_line array
 
     // read the file line by line
     int i = 0;
@@ -529,29 +532,29 @@ void read_crontab_file()
 // Description: Checks if the estimate is in correct format
 void check_estimate_format(char *estimate)
 {
-    char *cpyEstimate = malloc(sizeof(char) * MAX_LINE_SIZE);       // malloc space for cpyEstimate
+    char *cpyEstimate = malloc(sizeof(char) * MAX_LINE_SIZE);           // malloc space for cpyEstimate
     strcpy(cpyEstimate, estimate);
     char *tmp = strtok(cpyEstimate, " "); // check the format
-    for (int i = 0; i < 4; i++)                                     // run 2 times (include above line), there should be excately 2 element in the line
+    for (int i = 0; i < 4; i++)                                         // run 2 times (include above line), there should be excately 2 element in the line
     {                          
         if (i < 2 && tmp == NULL)
         {
-            printf("Error: Wrong format for estimate.\n");          // if there is less than 2 element, there is wrong format
+            printf("Error: Wrong format for estimate.\n");              // if there is less than 2 element, there is wrong format
             exit(EXIT_FAILURE);
         }
         else if (i >= 2 && tmp != NULL)
         {
-            printf("Error: Wrong format for estimate.\n");          // if there is more than 2 element, there is wrong format
+            printf("Error: Wrong format for estimate.\n");              // if there is more than 2 element, there is wrong format
             exit(EXIT_FAILURE);
         }
         else if (i == 0 && strlen(tmp) > MAX_COMMAND_SIZE)
         {
-            printf("Error: Too long for estimate command.\n");      // if command is more than 41 characters, there is wrong format
+            printf("Error: Too long for estimate command.\n");          // if command is more than 41 characters, there is wrong format
             exit(EXIT_FAILURE);
         }
         else if (i == 1 && atoi(tmp) <= 0)
         {
-            printf("Error: Wrong  time estimation.\n");             // the second element should be positive integer
+            printf("Error: Wrong  time estimation.\n");                 // the second element should be positive integer
             exit(EXIT_FAILURE);
         }
         tmp = strtok(NULL, " ");
@@ -566,21 +569,10 @@ void read_estimates_file()
     char *command;
     char *estimate_line;
     dict = fopen(estimates_file, "r");
-    // print Error if file does not exist
-    if (dict == NULL)
-    {
-        printf("Error: Estimates-File cannot be found.\n");
-        printf("This Error can be caused by the following reasons:\n");
-        printf("1. The file does not exist.\n");
-        printf("2. The file is empty.\n");
-        printf("3. Do not have premission to access the file.\n");
-        exit(EXIT_FAILURE);
-    }
 
     command = malloc(MAX_LINE_SIZE * sizeof(char));
     estimate_line = malloc(MAX_LINE_SIZE * sizeof(char));
     
-
     // read the file line by line
     while (fgets(estimate_line, MAX_LINE_SIZE, dict) != NULL)
     {
@@ -634,8 +626,6 @@ void check_cron_list()
 int ckState(time_struct now)
 {
     int running_commands = 0;
-    bool newGuy = false;
-
     for (int i = 0; i < total_cron_lines; i++)
     {
         if (cron_command[i].state == false &&
@@ -650,8 +640,6 @@ int ckState(time_struct now)
             cron_command[i].time++;
             proccess_count++;
             running_commands++;
-
-            newGuy = true;
         }
         else if (cron_command[i].state == true &&
                  cron_command[i].remaining_minutes == 0)
@@ -663,14 +651,6 @@ int ckState(time_struct now)
         {
             cron_command[i].remaining_minutes--;
         }
-        if (cron_command[i].state == true && newGuy)
-        {
-            printf("%i:%i %i/%s/%i %s\tTime left:%d\t\n\t\"%s\"\n",now.hour, now.minute, now.date, chgMonthFomatReverse(now.month), curr_year, chgDayFomatReverse(now.day_of_week), cron_command[i].remaining_minutes, cron_command[i].command.cmd);
-        }
-    }
-    if (newGuy)
-    {
-        printf("------------------------------------------\n\n\n\n");
     }
     return running_commands;
 }
@@ -708,43 +688,46 @@ int main(int argc, char *argv[])
     // read the arguments if correct, otherwise print error
     if (argc != 4)
     {
-        // printf("Error: Wrong number of arguments.\n");
-        // exit(EXIT_FAILURE);
-        month = 4;
-        crontab_file = "crontab-file";
-        estimates_file = "estimate-file";
+        printf("Error: Wrong number of arguments. take 3 but %d found.\n", argc - 1);
+        exit(EXIT_FAILURE);
     }
     else
     {
         for (int i = 0; i < VALID_MONTHS_LIST_SIZE; i++)
         {
-            if (strcmp(argv[1], valid_month[i]) == 0)
+            if (strcmp(argv[1], "*") != 0 && strcmp(argv[1], valid_month[i]) == 0)
             {
                 month = chgMonthFomat(argv[1]);
+                break;
+            } else if (i == VALID_MONTHS_LIST_SIZE - 1){
+                printf("\"%s\" is not a valid argument for month. Take 0 to 11 or \"jan\" to \"dec\"\n", argv[1]);
+                exit(EXIT_FAILURE);
             }
         }
         crontab_file = argv[2];
         estimates_file = argv[3];
     }
     
-    precheck(crontab_file);                                             // precheck the crontab-file and estimate-file
+    precheck(crontab_file);                                                             // precheck the crontab-file and estimate-file
     precheck(estimates_file);
     
-    cron_command = malloc(MAX_LIST_SIZE * sizeof(record_pad));          // malloc the memory for the cron_command list at MAX_LIST_SIZE
+    cron_command = malloc(MAX_LIST_SIZE * sizeof(record_pad));                          // malloc the memory for the cron_command list at MAX_LIST_SIZE
 
-    read_crontab_file();                                                // read the crontab-file and estimates-file
+    read_crontab_file();                                                                // read the crontab-file and estimates-file
 
-    cron_command = realloc (cron_command, total_cron_lines * sizeof(record_pad));      //after read crontab-file, we can asure the mem cron_command need
-    count_list = malloc(total_cron_lines * sizeof(int));                // malloc the memory for the count_list according to the total_cron_lines
+    cron_command = realloc (cron_command, total_cron_lines * sizeof(record_pad));       //after read crontab-file, we can asure the mem cron_command need
+    count_list = malloc(total_cron_lines * sizeof(int));                                // malloc the memory for the count_list according to the total_cron_lines
 
-    read_estimates_file();                                              // read the estimates-file
-    check_cron_list();                                                  // check if the estimates are valid
+    read_estimates_file();                                                              // read the estimates-file
+    check_cron_list();                                                                  // check if the estimates are valid
 
     // print the cron commands, just for debugging
-    printf("minute\thour\tdate\tmonth\tDOW\test\tcommand\n");
+    printf("----------------------------------------------------\n");
+    printf("id\tminu\thour\tdate\tmonth\tday\test\tcommand\n");
+    printf("----------------------------------------------------\n");
     for (int i = 0; i < total_cron_lines; i++)
     {
-        printf("%i: %i\t%i\t%i\t%i\t%i\t%i\t%s\n", i,
+        printf("| %i |\t%i\t%i\t%i\t%i\t%i\t%i\t%s\n", i,
                cron_command[i].command.sch_minute,
                cron_command[i].command.sch_hour,
                cron_command[i].command.sch_date,
@@ -754,11 +737,10 @@ int main(int argc, char *argv[])
                cron_command[i].command.cmd);
         ;
     }
+    printf("\n");
 
-    int max_process_num = time_simulator(month);                        // simulate the time in the target month
-
-    printf("Champ's name:\ttotal time:\tpeak-num:\n");
-    printf("%s\t%d\t\t%d\n", findchamp().command.cmd, proccess_count, max_process_num);
+    int max_process_num = time_simulator(month);                                        // simulate the time in the target month
+    printf("%s %d %d\n", findchamp().command.cmd, proccess_count, max_process_num);     // print out the required information
 
     free(cron_command);
     free(count_list);
