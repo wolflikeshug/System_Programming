@@ -315,28 +315,31 @@ void precheck(char *file)
 // Description: Checks if cron's schedule is in correct format
 void check_cron_format(char *cronLn)
 {
-    char *cpyLn = malloc(sizeof(char) * MAX_LINE_SIZE); // malloc space for cpyLn
+    char *cpyLn = malloc(sizeof(char) * MAX_LINE_SIZE);                 // malloc space for cpyLn
     strcpy(cpyLn, cronLn);
 
-    strtok(cpyLn, " "); // check the format
-    for (int i = 0; i < 5; i++)
-    { // run 7 times (include above line), there should be excately 6 elements in the line
-        char *tmp = strtok(NULL, " ");
-        if (i <= 4 && tmp == NULL)
+    char *tmp = strtok(cpyLn, " ");                                     // check the format
+    int i = 0;
+    while(tmp != NULL)
+    {
+        if (i == 5 && strlen(tmp) > MAX_COMMAND_SIZE)
         {
-            printf("Error: Wrong format for cron schedule.\n");     // if there is less than 6 element, wrong format
+            printf("Error: Too long for cron command.\n");              // if coomand is more than 41 characters, wrong format
             exit(EXIT_FAILURE);
         }
-        else if (i > 4 && tmp != NULL)
-        {
-            printf("Error: Wrong format for cron schedule.\n");     // if there is more than 6 element, wrong format
-            exit(EXIT_FAILURE);
-        }
-        else if (i == 4 && strlen(tmp) > MAX_COMMAND_SIZE)
-        {
-            printf("Error: Too long for cron command.\n");          // if coomand is more than 41 characters, wrong format
-            exit(EXIT_FAILURE);
-        }
+        tmp = strtok(NULL, " ");
+        i++;
+    }
+
+    if (i < 6)
+    {
+        printf("Error: Too less argument for cron command line.\n");     // if there is less than 6 element, wrong format
+        exit(EXIT_FAILURE);
+    } else if (i > 6)
+    {
+        printf("%d\n", i);
+        printf("Error: Too many argument for cron command line.\n");     // if there is more than 6 element, wrong format
+        exit(EXIT_FAILURE);
     }
 
     strcpy(cpyLn, cronLn);
@@ -345,25 +348,12 @@ void check_cron_format(char *cronLn)
     char *char3 = strtok(NULL, " ");
     char *char4 = strtok(NULL, " ");
     char *char5 = strtok(NULL, " ");
-    char *char6 = strtok(NULL, " ");
-    char *char7 = strtok(NULL, " ");
 
-    bool bool1 = false;                                             // if the formate is correct, bool will be true
+    bool bool1 = false;                                                 // if the formate is correct, bool will be true
     bool bool2 = false;
     bool bool3 = false;
     bool bool4 = false;
     bool bool5 = false;
-
-    if (strlen(char6) > 40)
-    {
-        printf("Error: Too long for cron command.\n");
-        exit(EXIT_FAILURE);
-    }
-    if (char7 != NULL)
-    {
-        printf("Error: Too many argument.\n");
-        exit(EXIT_FAILURE);
-    }
 
     for (int i = 0; i < VALID_MINUTES_LIST_SIZE; i++)
     {
@@ -416,11 +406,12 @@ void read_crontab_file()
         {
             continue;
         }
-
+        rmnLn(cron_line);                                              // remove the newline character
+        
         // if the formate of cron is not valid then exit with error
         check_cron_format(cron_line);
-
-        rmnLn(cron_line);
+        
+        // if the formate of cron is valid then store it in cron_command array
         char *minutes = strtok(cron_line, " ");
         char *hours = strtok(NULL, " ");
         char *date = strtok(NULL, " ");
@@ -584,7 +575,7 @@ int time_simulator(int month)
     int max_process_num = 0;
     for (tm.date = 1; tm.date <= getDaysInMonth(tm.month); tm.date++)
     {
-        tm.day_of_week = getDayOfWeek(tm.month, tm.date);
+        tm.day_of_week = getDayOfWeek(tm.month, tm.date);                               // get the day of week for the current date
         for (tm.hour = 0; tm.hour < VALID_HOURS; tm.hour++)
         {
             for (tm.minute = 0; tm.minute < VALID_MINUTES; tm.minute++)
@@ -655,7 +646,7 @@ int main(int argc, char *argv[])
                cron_command[i].command.cmd);
         ;
     }
-    printf("\n");
+    printf("----------------------------------------------------\n");
 
     int max_process_num = time_simulator(month);                                        // simulate the time in the target month
     printf("%s %d %d\n", findchamp().command.cmd, proccess_count, max_process_num);     // print out the required information
