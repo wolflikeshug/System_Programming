@@ -315,16 +315,16 @@ void precheck(char *file)
 // Description: Checks if cron's schedule is in correct format
 void check_cron_format(char *cronLn)
 {
-    char *cpyLn = malloc(sizeof(char) * MAX_LINE_SIZE);                 // malloc space for cpyLn
+    char *cpyLn = malloc(sizeof(char) * MAX_LINE_SIZE);                                             // malloc space for cpyLn
     strcpy(cpyLn, cronLn);
-    char *tmp = strtok(cpyLn, " ");                                     // check the format
+    char *tmp = strtok(cpyLn, " ");                                                                 // check the format
     int i = 0;
     
     while(tmp != NULL)
     {
         if (i == 5 && strlen(tmp) > MAX_COMMAND_SIZE)
         {
-            printf("Error: Too long for cron command.\n");              // if coomand is more than 41 characters, wrong format
+            printf("Error: Too long for cron command.\n");                                          // if coomand is more than 41 characters, wrong format
             exit(EXIT_FAILURE);
         }
         tmp = strtok(NULL, " ");
@@ -333,12 +333,12 @@ void check_cron_format(char *cronLn)
 
     if (i < 6)
     {
-        printf("Error: Too less argument for cron command line.\n");     // if there is less than 6 element, wrong format
+        printf("Error: Too less argument for cron command line.\n");                                // if there is less than 6 element, wrong format
         exit(EXIT_FAILURE);
     } else if (i > 6)
     {
         printf("%d\n", i);
-        printf("Error: Too many argument for cron command line.\n");     // if there is more than 6 element, wrong format
+        printf("Error: Too many argument for cron command line.\n");                                // if there is more than 6 element, wrong format
         exit(EXIT_FAILURE);
     }
 
@@ -349,7 +349,7 @@ void check_cron_format(char *cronLn)
     char *char4 = strtok(NULL, " ");
     char *char5 = strtok(NULL, " ");
 
-    bool bool1 = false;                                                 // if the formate is correct, bool will be true
+    bool bool1 = false;                                                                             // if the formate is correct, bool will be true
     bool bool2 = false;
     bool bool3 = false;
     bool bool4 = false;
@@ -384,7 +384,7 @@ void check_cron_format(char *cronLn)
             return;
         }
     }
-    free(cpyLn);                                                        // free memory
+    free(cpyLn);                                                                                    // free memory
     printf("Error: Wrong format for cron schedule.\n");
     exit(EXIT_FAILURE);
 }
@@ -395,7 +395,7 @@ void read_crontab_file()
 {
     char *cron_line;
     dict = fopen(crontab_file, "r");
-    cron_line = malloc(MAX_LINE_SIZE * sizeof(char));                   // malloc the cron_line array
+    cron_line = malloc(MAX_LINE_SIZE * sizeof(char));                                               // malloc the cron_line array
 
     // read the file line by line
     int i = 0;
@@ -406,7 +406,7 @@ void read_crontab_file()
         {
             continue;
         }
-        rmnLn(cron_line);                                              // remove the newline character
+        rmnLn(cron_line);                                                                           // remove the newline character
         
         // if the formate of cron is not valid then exit with error
         check_cron_format(cron_line);
@@ -441,7 +441,7 @@ void read_crontab_file()
 // Description: Checks if the estimate is in correct format
 void check_estimate_format(char *estimate)
 {
-    char *cpyEstimate = malloc(sizeof(char) * MAX_LINE_SIZE);           // malloc space for cpyEstimate
+    char *cpyEstimate = malloc(sizeof(char) * MAX_LINE_SIZE);                                       // malloc space for cpyEstimate
     strcpy(cpyEstimate, estimate);
     char *tmp = strtok(cpyEstimate, " "); // check the format
     int i = 0;
@@ -449,12 +449,12 @@ void check_estimate_format(char *estimate)
     {    
         if (i == 0 && strlen(tmp) > MAX_COMMAND_SIZE)
         {
-            printf("Error: \"%s\" is Too long for command.\n", tmp);    // if command is more than 41 characters, there is wrong format
+            printf("Error: \"%s\" is Too long for command.\n", tmp);                                // if command is more than 41 characters, there is wrong format
             exit(EXIT_FAILURE);
         }
         else if (i == 1 && atoi(tmp) <= 0)
         {
-            printf("Error: Wrong time estimation.\n");                  // the second element should be positive integer
+            printf("Error: Wrong time estimation.\n");                                              // the second element should be positive integer
             exit(EXIT_FAILURE);
         }
         tmp = strtok(NULL, " ");
@@ -462,12 +462,12 @@ void check_estimate_format(char *estimate)
     }
     if (i < 2)
     {
-        printf("Error: Too less argument for estimate.\n");             // if there is less than 2 element, there is wrong format
+        printf("Error: Too less argument for estimate.\n");                                         // if there is less than 2 element, there is wrong format
         exit(EXIT_FAILURE);
     }
     else if (i > 2)
     {
-        printf("Error: Too many argument for estimate line.\n");        // if there is more than 2 element, there is wrong format
+        printf("Error: Too many argument for estimate line.\n");                                    // if there is more than 2 element, there is wrong format
         exit(EXIT_FAILURE);
     }
     free(cpyEstimate); // free memory
@@ -577,7 +577,7 @@ int time_simulator(int month)
     int max_process_num = 0;
     for (tm.date = 1; tm.date <= getDaysInMonth(tm.month); tm.date++)
     {
-        tm.day_of_week = getDayOfWeek(tm.month, tm.date);                               // get the day of week for the current date
+        tm.day_of_week = getDayOfWeek(tm.month, tm.date);                                       // get the day of week for the current date
         for (tm.hour = 0; tm.hour < VALID_HOURS; tm.hour++)
         {
             for (tm.minute = 0; tm.minute < VALID_MINUTES; tm.minute++)
@@ -621,18 +621,18 @@ int main(int argc, char *argv[])
             break;
     }
     
-    precheck(crontab_file);                                                             // precheck the crontab-file and estimate-file
+    precheck(crontab_file);                                                                     // precheck the crontab-file and estimate-file
     precheck(estimates_file);
     
-    cron_command = malloc(MAX_LIST_SIZE * sizeof(struct record_pad));                          // malloc the memory for the cron_command list at MAX_LIST_SIZE
+    cron_command = malloc(MAX_LIST_SIZE * sizeof(struct record_pad));                           // malloc the memory for the cron_command list at MAX_LIST_SIZE
 
-    read_crontab_file();                                                                // read the crontab-file and estimates-file
+    read_crontab_file();                                                                        // read the crontab-file and estimates-file
 
-    cron_command = realloc (cron_command, total_cron_lines * sizeof(struct record_pad));       //after read crontab-file, we can asure the mem cron_command need
-    count_list = malloc(total_cron_lines * sizeof(int));                                // malloc the memory for the count_list according to the total_cron_lines
+    cron_command = realloc (cron_command, total_cron_lines * sizeof(struct record_pad));        // after read crontab-file, we can asure the mem cron_command need
+    count_list = malloc(total_cron_lines * sizeof(int));                                        // malloc the memory for the count_list according to the total_cron_lines
 
-    read_estimates_file();                                                              // read the estimates-file
-    check_cron_list();                                                                  // check if the estimates are valid
+    read_estimates_file();                                                                      // read the estimates-file
+    check_cron_list();                                                                          // check if the estimates are valid
 
     // print the cron commands, just for debugging
     printf("----------------------------------------------------\n");
@@ -652,8 +652,8 @@ int main(int argc, char *argv[])
     }
     printf("----------------------------------------------------\n");
 
-    int max_process_num = time_simulator(month);                                        // simulate the time in the target month
-    printf("%s %d %d\n", findchamp().command.cmd, proccess_count, max_process_num);     // print out the required information
+    int max_process_num = time_simulator(month);                                                // simulate the time in the target month
+    printf("%s %d %d\n", findchamp().command.cmd, proccess_count, max_process_num);             // print out the required information
 
     free(cron_command);
     free(count_list);
