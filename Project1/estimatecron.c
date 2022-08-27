@@ -597,26 +597,28 @@ int main(int argc, char *argv[])
 {
     // check if the number of arguments is correct
     // read the arguments if correct, otherwise print error
-    if (argc != 4)
+    switch (argc)
     {
-        printf("Error: Wrong number of arguments. take 3 but %d found.\n", argc - 1);
-        exit(EXIT_FAILURE);
-    }
-    else
-    {
-        for (int i = 0; i < VALID_MONTHS_LIST_SIZE; i++)
-        {
-            if (strcmp(argv[1], "*") != 0 && strcmp(argv[1], valid_month[i]) == 0)
+        case 4:
+            for (int i = 0; i < VALID_MONTHS_LIST_SIZE; i++)
             {
-                month = chgMonthFomat(argv[1]);
-                break;
-            } else if (i == VALID_MONTHS_LIST_SIZE - 1){
-                printf("\"%s\" is not a valid argument for month. Take 0 to 11 or \"jan\" to \"dec\"\n", argv[1]);
-                exit(EXIT_FAILURE);
+                if (strcmp(argv[1], "*") != 0 && strcmp(argv[1], valid_month[i]) == 0)
+                {
+                    month = chgMonthFomat(argv[1]);
+                    break;
+                } else if (i == VALID_MONTHS_LIST_SIZE - 1){
+                    printf("\"%s\" is not a valid argument for month. Take 0 to 11 or \"jan\" to \"dec\"\n", argv[1]);
+                    exit(EXIT_FAILURE);
+                }
             }
-        }
-        crontab_file = argv[2];
-        estimates_file = argv[3];
+            crontab_file = argv[2];
+            estimates_file = argv[3];
+            break;
+        
+        default:
+            printf("Error: Wrong number of arguments. take 3 but %d found.\n", argc - 1);
+            exit(EXIT_FAILURE);
+            break;
     }
     
     precheck(crontab_file);                                                             // precheck the crontab-file and estimate-file
