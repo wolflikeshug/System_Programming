@@ -22,13 +22,13 @@
 
 typedef struct crontab_line
 {
-    char cmd[MAX_COMMAND_SIZE];                 // command to run
-    int sch_minute;                             // schedule for the process
+    char cmd[MAX_COMMAND_SIZE];                         // command to run
+    int sch_minute;                                     // schedule for the process
     int sch_hour;
     int sch_date;
     int sch_month;
     int sch_day_of_week;
-    int est;                                    // estimates time for each command
+    int est;                                            // estimates time for each command
 } crontab_line;
 
 typedef struct time_struct
@@ -42,10 +42,10 @@ typedef struct time_struct
 
 typedef struct record_pad
 {
-    crontab_line    command;                    // command
-    bool            state;                      // true if the command is active, false if not
-    int             remaining_minutes;          // time left for the command to end
-    int             time;                       // total period runs for the commandnot-set
+    struct crontab_line     command;                    // command
+    bool                    state;                      // true if the command is active, false if not
+    int                     remaining_minutes;          // time left for the command to end
+    int                     time;                       // total period runs for the commandnot-set
 
 } record_pad;
 
@@ -65,7 +65,7 @@ char *valid_hour[] = {"*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10
 char *valid_date[] = {"*", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
 char *valid_month[] = {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec", "*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
 char *valid_day_of_week[] = {"mon", "tue", "wed", "thu", "fri", "sat", "sun", "*", "0", "1", "2", "3", "4", "5", "6"};
-record_pad *cron_command;
+struct record_pad *cron_command;
 
 // =====================================================================================
 //                                  TOOL FUNCTIONS
@@ -264,9 +264,9 @@ char *chgMonthFomatReverse(int month)
 
 // Function: findChamp()
 // Description: Go throught cron_command and return the cron have highest time
-record_pad findchamp()
+struct record_pad findchamp()
 {
-    record_pad champ = cron_command[0];
+    struct record_pad champ = cron_command[0];
     for (int i = 1; i < total_cron_lines; i++)
     {
         if (champ.time < cron_command[i].time)
@@ -526,7 +526,7 @@ void check_cron_list()
     }
 }
 
-// Function: ckState(time_struct)
+// Function: ckState(struct time_struct)
 // Description: 
 // 1.   Run over all the programs in the cron_command list not running and check if they should start running, 
 //      if yes then run the program (change the state to Ture, reset the remaining_minutes, time + 1, proccess_count + 1) print the program name and time left to finish.
@@ -534,7 +534,7 @@ void check_cron_list()
 //      if yes then run the program (change the state to False) print the program name and says it is finish.
 //      if no then remaining_minutes - 1 and print the program name and time left to finish.
 // 3.   return and print the number of commands that is running. print the number of commands that starts running is the number of commands that is finish running.
-int ckState(time_struct now)
+int ckState(struct time_struct now)
 {
     int running_commands = 0;
     for (int i = 0; i < total_cron_lines; i++)
@@ -572,7 +572,7 @@ int ckState(time_struct now)
 // and return the array of the data we interested in.
 int time_simulator(int month)
 {
-    time_struct tm;
+    struct time_struct tm;
     tm.month = month;
     int max_process_num = 0;
     for (tm.date = 1; tm.date <= getDaysInMonth(tm.month); tm.date++)
@@ -622,11 +622,11 @@ int main(int argc, char *argv[])
     precheck(crontab_file);                                                             // precheck the crontab-file and estimate-file
     precheck(estimates_file);
     
-    cron_command = malloc(MAX_LIST_SIZE * sizeof(record_pad));                          // malloc the memory for the cron_command list at MAX_LIST_SIZE
+    cron_command = malloc(MAX_LIST_SIZE * sizeof(struct record_pad));                          // malloc the memory for the cron_command list at MAX_LIST_SIZE
 
     read_crontab_file();                                                                // read the crontab-file and estimates-file
 
-    cron_command = realloc (cron_command, total_cron_lines * sizeof(record_pad));       //after read crontab-file, we can asure the mem cron_command need
+    cron_command = realloc (cron_command, total_cron_lines * sizeof(struct record_pad));       //after read crontab-file, we can asure the mem cron_command need
     count_list = malloc(total_cron_lines * sizeof(int));                                // malloc the memory for the count_list according to the total_cron_lines
 
     read_estimates_file();                                                              // read the estimates-file

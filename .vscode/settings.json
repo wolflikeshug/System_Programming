@@ -28,5 +28,9 @@
     "**/.*/**",
     "**/.vscode",
     "**/.vscode/**"
-  ]
+  ],
+  "files.associations": {
+    "stdlib.h": "c",
+    "cstdlib": "c"
+  }
 }
