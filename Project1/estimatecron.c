@@ -53,7 +53,6 @@ FILE *dict;
 
 int month;
 int total_cron_lines;
-int *count_list;
 int proccess_count = 0;
 int curr_year = 2022;
 int days_in_month[VALID_MONTHS_LIST_SIZE] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -66,6 +65,8 @@ char *valid_date[] = {"*", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "1
 char *valid_month[] = {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec", "*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
 char *valid_day_of_week[] = {"mon", "tue", "wed", "thu", "fri", "sat", "sun", "*", "0", "1", "2", "3", "4", "5", "6"};
 struct record_pad *cron_command;
+bool  debug = false;
+bool *check_list;
 
 // =====================================================================================
 //                                  TOOL FUNCTIONS
@@ -212,18 +213,25 @@ char *chgDayFomatReverse(int day)
     {
     case 0:
         return "sun";
+        break;
     case 1:
         return "mon";
+        break;
     case 2:
         return "tue";
+        break;
     case 3: 
         return "wed";
+        break;
     case 4:
         return "thu";
+        break;
     case 5:
         return "fri";
+        break;
     case 6:
         return "sat";
+        break;
     }
     return "";
 }
@@ -236,28 +244,40 @@ char *chgMonthFomatReverse(int month)
     {
     case 0:
         return "Jan";
+        break;
     case 1:
         return "Feb";
+        break;
     case 2:
         return "Mar";
+        break;
     case 3:
         return "Apr";
+        break;
     case 4:
         return "May";
+        break;
     case 5:
         return "Jun";
+        break;
     case 6:
         return "Jul";
+        break;
     case 7:
         return "Aug";
+        break;
     case 8:
         return "Sep";
+        break;
     case 9:
         return "Oct";
+        break;
     case 10:
         return "Nov";
+        break;
     case 11:
         return "Dec";
+        break;
     }
     return "";
 }
@@ -505,7 +525,7 @@ void read_estimates_file()
             i++;
         }
         cron_command[i].command.est = atoi(estimateTime);
-        count_list[i] = 1;
+        check_list[i] = true;
     }
     free(command);
     free(estimate_line);
@@ -518,7 +538,7 @@ void check_cron_list()
 {
     for (int i = 0; i < total_cron_lines; i++)
     {
-        if (count_list[i] != 1)
+        if (!check_list[i])
         {
             printf("Error: Command \"%s\" cannot find right estimate time.\n", cron_command[i].command.cmd);
             exit(EXIT_FAILURE);
@@ -537,6 +557,7 @@ void check_cron_list()
 int ckState(struct time_struct now)
 {
     int running_commands = 0;
+    debug = getenv("DEBUG");
     for (int i = 0; i < total_cron_lines; i++)
     {
         if (cron_command[i].state == false &&
@@ -629,33 +650,36 @@ int main(int argc, char *argv[])
     read_crontab_file();                                                                        // read the crontab-file and estimates-file
 
     cron_command = realloc (cron_command, total_cron_lines * sizeof(struct record_pad));        // after read crontab-file, we can asure the mem cron_command need
-    count_list = malloc(total_cron_lines * sizeof(int));                                        // malloc the memory for the count_list according to the total_cron_lines
+    check_list = malloc(total_cron_lines * sizeof(bool));                                        // malloc the memory for the check_list according to the total_cron_lines
 
     read_estimates_file();                                                                      // read the estimates-file
     check_cron_list();                                                                          // check if the estimates are valid
 
-    // print the cron commands, just for debugging
-    printf("----------------------------------------------------\n");
-    printf("id\tminu\thour\tdate\tmonth\tday\test\tcommand\n");
-    printf("----------------------------------------------------\n");
-    for (int i = 0; i < total_cron_lines; i++)
+    if(debug) 
     {
-        printf("| %i |\t%i\t%i\t%i\t%i\t%i\t%i\t%s\n", i,
-               cron_command[i].command.sch_minute,
-               cron_command[i].command.sch_hour,
-               cron_command[i].command.sch_date,
-               cron_command[i].command.sch_month,
-               cron_command[i].command.sch_day_of_week,
-               cron_command[i].command.est,
-               cron_command[i].command.cmd);
-        ;
+        // print the cron commands, just for debugging
+        printf("----------------------------------------------------\n");
+        printf("id\tminu\thour\tdate\tmonth\tday\test\tcommand\n");
+        printf("----------------------------------------------------\n");
+        for (int i = 0; i < total_cron_lines; i++)
+        {
+            printf("| %i |\t%i\t%i\t%i\t%i\t%i\t%i\t%s\n", i,
+                cron_command[i].command.sch_minute,
+                cron_command[i].command.sch_hour,
+                cron_command[i].command.sch_date,
+                cron_command[i].command.sch_month,
+                cron_command[i].command.sch_day_of_week,
+                cron_command[i].command.est,
+                cron_command[i].command.cmd);
+            ;
+        }
+        printf("----------------------------------------------------\n");
     }
-    printf("----------------------------------------------------\n");
 
     int max_process_num = time_simulator(month);                                                // simulate the time in the target month
     printf("%s %d %d\n", findchamp().command.cmd, proccess_count, max_process_num);             // print out the required information
 
     free(cron_command);
-    free(count_list);
+    free(check_list);
     return 0;
 }
