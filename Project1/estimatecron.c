@@ -63,7 +63,7 @@ char *valid_minute[] = {"*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "
 char *valid_hour[] = {"*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
 char *valid_date[] = {"*", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
 char *valid_month[] = {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec", "*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
-char *valid_day_of_week[] = {"mon", "tue", "wed", "thu", "fri", "sat", "sun", "*", "0", "1", "2", "3", "4", "5", "6"};
+char *valid_day_of_week[] = {"sun", "mon", "tue", "wed", "thu", "fri", "sat", "*", "0", "1", "2", "3", "4", "5", "6"};
 struct record_pad *cron_command;
 bool  debug = false;
 bool *check_list;
@@ -557,7 +557,6 @@ void check_cron_list()
 int ckState(struct time_struct now)
 {
     int running_commands = 0;
-    debug = getenv("DEBUG");
     for (int i = 0; i < total_cron_lines; i++)
     {
         if (cron_command[i].state == false &&
@@ -583,6 +582,33 @@ int ckState(struct time_struct now)
         {
             cron_command[i].remaining_minutes--;
         }
+    }
+
+    bool printornot = false;
+    for (int i = 0; i < total_cron_lines; i++)
+    {
+        if (cron_command[i].state == true)
+        {
+            printornot = true;
+        }
+    }
+
+
+    if (printornot)
+    {
+        printf("time: %d/%d %d %d:%d\n", now.month, now.date, now.day_of_week, now.hour, now.minute);
+        for (int i = 0; i < total_cron_lines; i++)
+        {
+            if (cron_command[i].state == true)
+            {
+                printf("Running: %s, Time left: %d %d\n", cron_command[i].command.cmd, cron_command[i].remaining_minutes, cron_command[i].command.sch_day_of_week);
+            }
+            else
+            {
+                printf("Not running: %s\n", cron_command[i].command.cmd);
+            }
+        }
+        printf("\n");
     }
     return running_commands;
 }
