@@ -1,11 +1,13 @@
 #include "Lab4.h"
 
 void main(int argc, char* argv[]){
-    int *values;
-    values = malloc(5 * sizeof(int));
-    for (int i = 0; i < 5; i++){
-        values[i] = i;
+    char *str1 = "Hello";
+    char *str2 = "Hello";
+    bool str3 = strcmp_pointer(str1, str2);
+    if (str3 == true){
+        printf("The strings are the same");
     }
-    int* max = maximum_p(values, 5);
-    printf("The maximum value is %d\n", *max);
+    else{
+        printf("The strings are not the same");
+    }
 }
