@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -x
+
+rm -f goodchessmove manychessmoves goodmove-* output-*
+
+cc -std=c11 -Wall -Werror -o goodchessmove goodchessmove.c
+
+cc -std=c11 -Wall -Werror -o manychessmoves manychessmoves.c
+
