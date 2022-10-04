@@ -1,13 +1,6 @@
 #ifndef _LIST_H
 #define _LIST_H
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <unistd.h>
-
 #include "tools.h"
 
 // A SIMPLE LIST IMPLEMENTATION
@@ -27,6 +20,6 @@ extern bool list_find(LIST *list, char *target);
 extern LIST *list_add(LIST *list, char *newkeyword);
 
 // REMOVE CHAIN FROM THE LIST, DO NOTHING IF THE CHAIN IS NOT IN THE LIST
-extern void *list_remove(LIST *list, char *target);
+extern void list_remove(LIST *list, char *target);
 
 #endif

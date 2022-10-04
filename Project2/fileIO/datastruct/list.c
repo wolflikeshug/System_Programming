@@ -1,4 +1,4 @@
-#define _POSIX_C_SOURCE 200112L
+#define _POSIX_C_SOURCE 200809L
 
 #include "list.h"
 
@@ -49,7 +49,7 @@ LIST *list_add(LIST *list, char *newkeyword)
 }
 
 // REMOVE CHAIN FROM THE LIST, DO NOTHING IF THE CHAIN IS NOT IN THE LIST
-void *list_remove(LIST *list, char *target)
+void list_remove(LIST *list, char *target)
 {
     while (list->next != NULL)
     {

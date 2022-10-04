@@ -1,4 +1,4 @@
-#define _POSIX_C_SOURCE 200112L
+#define _POSIX_C_SOURCE 200809L
 
 #include "hashtable_mlist.h"
 
@@ -27,8 +27,25 @@ bool hashtable_mlist_find(HASHTABLE_MLIST *hashtable, char *string)
     return mlist_find(hashtable[hash], string);
 }
 
+// RETURN THE KEYWORD LIST OF THE GIVEN FILENAME IF NOT FOUND CREATE A NEW ONE
+HASHTABLE_LIST *hashtable_mlist_filename_list(HASHTABLE_MLIST *hashtable, char *filename)
+{
+    uint64_t hash = DJBHash(filename) % HASHTABLE_MLIST_SIZE;
+
+    MLIST *mlist = hashtable[hash];
+    if (mlist_find(mlist, filename))
+    {
+        return mlist->keys;
+    }
+    else
+    {
+        *mlist = hashtable[hash];
+        return mlist_add(mlist, filename)->keys;
+    }
+}
+
 //  RETURN THE LIST OF FILENAME HAVING THE KEYWORD UNDER THEIR HASHTABLE_LIST
-LIST *hashtable_mlist_find_key(HASHTABLE_MLIST *hashtable, char *keyword)
+LIST *hashtable__mlist_have_key(HASHTABLE_MLIST *hashtable, char *keyword)
 {
     LIST *list = list_new();
     for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)

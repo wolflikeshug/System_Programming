@@ -1,9 +1,13 @@
+#define _POSIX_C_SOURCE 200809L
+
 #include "indexfileIO.h"
+
+char *INDEX_FILE = "/tmp/trove";
 
 // CHANGE THE INDEX FILE NAME
 void change_index_file(char *filename)
 {
-    strup(INDEX_FILE, filename);
+    INDEX_FILE = strdup(filename);
 }
 
 // CREATE A NEW INDEX FILE IF THERE ISN'T ONE ALREADY, OTHERWISE OPEN IT
@@ -28,18 +32,25 @@ void indexfile_replace(FILE *indexFile, HASHTABLE_MLIST *hashtable)
 }
 
 // UPDATE THE OLD HASHTABLE WHICH HAVING THE SAME FILE NAME AS IN NEW WHILE KEEPING THE OTHER DATA
-void *indexfile_update(FILE *indexFile, HASHTABLE_MLIST *hashtable)
+void indexfile_update(FILE *indexFile, HASHTABLE_MLIST *hashtable)
 {
     HASHTABLE_MLIST *old_hashtable = hashtable_new();
-    realloc(old_hashtable, file_getsize(indexFile));
+    char* p = realloc(old_hashtable, file_getsize(indexFile));
     indexfile_load(indexFile, old_hashtable);
     hashtable_mlist_update(old_hashtable, hashtable);
     indexfile_replace(indexFile, old_hashtable);
     free(hashtable);
+    free(p);
 }
 
 // CLOSE THE INDEX FILE
 void indexfile_close(FILE *indexFile)
 {
     fclose(indexFile);
+}
+
+int main(void)
+{
+    INDEX_FILE = "/tmp/trove";
+    return 0;
 }

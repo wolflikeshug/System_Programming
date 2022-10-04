@@ -31,6 +31,7 @@
   ],
   "files.associations": {
     "stdlib.h": "c",
-    "cstdlib": "c"
+    "cstdlib": "c",
+    "wordfileio.h": "c"
   }
 }
