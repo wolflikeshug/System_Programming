@@ -3,13 +3,13 @@
 #include "hashtable_mlist.h"
 
 //  ALLOCATE AND INITIALISE SPACE FOR A NEW HASHTABLE (AN ARRAY OF MLISTS)
-HASHTABLE_MLIST *hashtable_mlist_file(void)
+HASHTABLE_MLIST *hashtable_mlist_new(void)
 {
     HASHTABLE_MLIST *new = calloc(HASHTABLE_MLIST_SIZE, sizeof(MLIST *));
 
     CHECK_MEM(new);
     return new;
-} 
+}
 
 //  ADD A NEW STRING TO A GIVEN HASHTABLE
 void hashtable_mlist_add(HASHTABLE_MLIST *hashtable, char *string)
@@ -39,13 +39,13 @@ HASHTABLE_LIST *hashtable_mlist_filename_list(HASHTABLE_MLIST *hashtable, char *
     }
     else
     {
-        *mlist = hashtable[hash];
+        mlist = hashtable[hash];
         return mlist_add(mlist, filename)->keys;
     }
 }
 
 //  RETURN THE LIST OF FILENAME HAVING THE KEYWORD UNDER THEIR HASHTABLE_LIST
-LIST *hashtable__mlist_have_key(HASHTABLE_MLIST *hashtable, char *keyword)
+LIST *hashtable_mlist_have_key(HASHTABLE_MLIST *hashtable, char *keyword)
 {
     LIST *list = list_new();
     for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
@@ -87,5 +87,5 @@ void hashtable_mlist_remove(HASHTABLE_MLIST *hashtable, char *string)
 {
     uint64_t hash = DJBHash(string) % HASHTABLE_MLIST_SIZE;
 
-    hashtable[hash] = mlist_remove(hashtable[hash], string);
+    mlist_remove(hashtable[hash], string);
 }

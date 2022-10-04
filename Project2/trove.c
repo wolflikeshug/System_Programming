@@ -4,6 +4,6 @@
 
 int main (void)
 {
-    printf("%li\n", strlen('\0'));
+    printf("%li\n", strlen("\0"));
     return 0;
 }

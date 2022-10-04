@@ -34,7 +34,7 @@ void indexfile_replace(FILE *indexFile, HASHTABLE_MLIST *hashtable)
 // UPDATE THE OLD HASHTABLE WHICH HAVING THE SAME FILE NAME AS IN NEW WHILE KEEPING THE OTHER DATA
 void indexfile_update(FILE *indexFile, HASHTABLE_MLIST *hashtable)
 {
-    HASHTABLE_MLIST *old_hashtable = hashtable_new();
+    HASHTABLE_MLIST *old_hashtable = hashtable_mlist_new();
     char* p = realloc(old_hashtable, file_getsize(indexFile));
     indexfile_load(indexFile, old_hashtable);
     hashtable_mlist_update(old_hashtable, hashtable);
@@ -47,10 +47,4 @@ void indexfile_update(FILE *indexFile, HASHTABLE_MLIST *hashtable)
 void indexfile_close(FILE *indexFile)
 {
     fclose(indexFile);
-}
-
-int main(void)
-{
-    INDEX_FILE = "/tmp/trove";
-    return 0;
 }

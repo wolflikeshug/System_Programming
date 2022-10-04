@@ -2,15 +2,18 @@
 
 #include "tools.h"
 
+int keylen = 4;
+
 // DJBHASH FUNCTION FOR HASH STRING
 uint64_t DJBHash(char *string)
 {
     uint64_t hash = 5381;
-    int c;
+    char c;
 
-    while (c = *string++)
+    while (c != '\0'){
         hash = ((hash << 5) + hash) + c;
-
+        c = *string++;
+    }
     return hash;
 }
 
@@ -64,11 +67,4 @@ bool wordlen_check(char *word)
         return true;
     }
     return false;
-    
-}
-
-int main(void)
-{
-    keylen = 4;
-    return 0;
 }

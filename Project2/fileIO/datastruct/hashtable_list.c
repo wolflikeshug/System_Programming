@@ -9,7 +9,7 @@ HASHTABLE_LIST *hashtable_list_new(void)
 
     CHECK_MEM(new);
     return new;
-} HASHTABLE_LIST;
+}
 
 //  ADD A NEW STRING TO A GIVEN HASHTABLE
 void hashtable_list_add(HASHTABLE_LIST *hashtable, char *string)

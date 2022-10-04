@@ -26,6 +26,6 @@ extern MLIST *mlist_add(MLIST *mlist, char *newfilename);
 extern void mlist_replace(MLIST *mlist1, MLIST *mlist2);
 
 // REMOVE FILENAME FROM THE MLIST, DO NOTHING IF THE FILENAME IS NOT IN THE MLIST
-extern void *mlist_remove(MLIST *mlist, char *target);
+extern void mlist_remove(MLIST *mlist, char *target);
 
 #endif

@@ -32,7 +32,6 @@ MLIST *mlist_new_item(char *newfilename)
     CHECK_MEM(newMList);
     newMList->filename = strdup(newfilename);
     CHECK_MEM(newMList->filename);
-    newMList->keys = list_new();
     newMList->next = mlist_new();
     return newMList;
 }
@@ -50,7 +49,7 @@ MLIST *mlist_add(MLIST *mlist, char *newfilename)
 }
 
 // REPLACE THE CHAIN WITH THE SAME FILENAME IN MLIST2
-MLIST *mlist_replace(MLIST *mlist1, MLIST *mlist2)
+void mlist_replace(MLIST *mlist1, MLIST *mlist2)
 {
     MLIST *tmp = mlist1;
     while (mlist1 != NULL)
@@ -61,11 +60,11 @@ MLIST *mlist_replace(MLIST *mlist1, MLIST *mlist2)
         }
         mlist1 = mlist1->next;
     }
-    return tmp;
+    mlist1 = tmp;
 }
 
 // REMOVE CHAIN FROM THE MLIST, DO NOTHING IF THE FILENAME IS NOT IN THE MLIST
-void *mlist_remove(MLIST *mlist, char *target)
+void mlist_remove(MLIST *mlist, char *target)
 {
     while (mlist->next != NULL)
     {
