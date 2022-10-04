@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <unistd.h>
+#include <ctype.h>
 
 extern int keylen;
 

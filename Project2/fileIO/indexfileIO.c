@@ -13,7 +13,13 @@ void change_index_file(char *filename)
 // CREATE A NEW INDEX FILE IF THERE ISN'T ONE ALREADY, OTHERWISE OPEN IT
 FILE *indexfile_init(void)
 {
-    return fopen(INDEX_FILE, "w+");
+    FILE *fp = fopen(INDEX_FILE, "r");
+    if (fp == NULL)
+    {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+    return fp;
 }
 
 // READ THE INDEX FILE AND LOAD THE HASHTABLE FROM IT
