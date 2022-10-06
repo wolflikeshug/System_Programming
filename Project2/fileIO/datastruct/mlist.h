@@ -9,7 +9,7 @@
 typedef struct mlist
 {
     char *filename;
-    HASHTABLE_LIST*keys;
+    HASHTABLE_LIST* keys;
     struct mlist *next;
 } MLIST;
 
@@ -27,5 +27,11 @@ extern void mlist_replace(MLIST *mlist1, MLIST *mlist2);
 
 // REMOVE FILENAME FROM THE MLIST, DO NOTHING IF THE FILENAME IS NOT IN THE MLIST
 extern void mlist_remove(MLIST *mlist, char *target);
+
+// Print the MLIST
+extern void mlist_print(MLIST *mlist);
+
+// FREE THE MEMORY OF THE MLIST
+extern void mlist_free(MLIST *mlist);
 
 #endif

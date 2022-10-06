@@ -3,7 +3,7 @@
 #include "wordFileIO.h"
 
 // PUT THE WORD INTO HASHTABLE_LIST
-void store_word(char *word, HASHTABLE_LIST *hashtable)
+void store_word(HASHTABLE_LIST *hashtable, char *word)
 {
     hashtable_list_add(hashtable, word);
 }
@@ -11,27 +11,33 @@ void store_word(char *word, HASHTABLE_LIST *hashtable)
 // RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
 void recordWord(FILE *fp, char *filename, HASHTABLE_MLIST *hashtable)
 {
+
     char *word = (char *)malloc(sizeof(char) * 1);
-    word[0] = '\0';
+    memset(word, '\0', 1);
+    int len = 0; // length of the word
+    char tmp[20000]; // store the word temporarily
+    tmp[0] = '\0';
     char c = fgetc(fp);
-    while (feof(fp))
+    while (!feof(fp))
     {
         if (stillWord(c))
         {
-            word = (char *)realloc(word, sizeof(char) * (strlen(word) + 2));
-            word[strlen(word) - 1] = c;
-            word[strlen(word)] = '\0';
+            tmp[len] = c;
+            len++;
         }
         else
         {
+            tmp[len] = '\0';
+            word = strdup(tmp);
+            len = 0;
+            tmp[len] = '\0';
             if (wordlen_check(word))
             {
-                store_word(word, hashtable_mlist_filename_list(hashtable, filename));
+                store_word(hashtable_mlist_filename_list(hashtable, filename), word);
             }
-            word = (char *)malloc(sizeof(char) * 1);
-            word[0] = '\0';
         }
         c = fgetc(fp);
     }
+    free(word);
 }
 

@@ -3,7 +3,7 @@
 
 #include "list.h"
 
-#define HASHTABLE_LIST_SIZE 997
+#define HASHTABLE_LIST_SIZE 2027
 
 //  WE DEFINE A HASHTABLE AS A (WILL BE, DYNAMICALLY ALLOCATED) ARRAY OF LISTs
 typedef LIST *HASHTABLE_LIST;
@@ -17,5 +17,14 @@ extern void hashtable_list_add(HASHTABLE_LIST *hashtable, char *string);
 
 //  FIND OUT IF A REQUIRED STRING ALREADY EXISTS IN A GIVEN HASHTABLE
 extern bool hashtable_list_find(HASHTABLE_LIST *hashtable, char *string);
+
+// PRINT THE HASHTABLE
+extern void hashtable_list_print(HASHTABLE_LIST *hashtable);
+
+// REMOVE A STRING FROM THE HASHTABLE
+extern void hashtable_list_remove(HASHTABLE_LIST *hashtable, char *string);
+
+// FREE THE HASHTABLE
+extern void hashtable_list_free(HASHTABLE_LIST *hashtable);
 
 #endif

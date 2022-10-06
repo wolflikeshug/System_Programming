@@ -22,4 +22,10 @@ extern LIST *list_add(LIST *list, char *newkeyword);
 // REMOVE CHAIN FROM THE LIST, DO NOTHING IF THE CHAIN IS NOT IN THE LIST
 extern void list_remove(LIST *list, char *target);
 
+// PRINT THE LIST
+extern void list_print(LIST *list);
+
+// FREE THE MEMORY OF THE LIST
+extern void list_free(LIST *list);
+
 #endif

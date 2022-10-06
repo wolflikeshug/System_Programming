@@ -5,13 +5,17 @@
 // CREATE A NEW, EMPTY LIST
 LIST *list_new(void)
 {
-    return NULL;
+    LIST *new = calloc(1, sizeof(LIST));
+    CHECK_MEM(new);
+    new->keyword = NULL;
+    new->next = NULL;
+    return new;
 }
 
 //  DETERMINE IF THE TARGET IS STORED IN A GIVEN LIST
 bool list_find(LIST *list, char *target)
 {
-    while (list != NULL)
+    while (list != NULL && list->keyword != NULL)
     {
         if (strcmp(list->keyword, target) == 0)
         {
@@ -30,20 +34,22 @@ LIST *list_new_item(char *newkeyword)
     newList->keyword = strdup(newkeyword);
     CHECK_MEM(newList->keyword);
     newList->next = list_new();
+    CHECK_MEM(newList->next);
     return newList;
 }
 
 // ADD NEW CHAIN TO THE LIST, DO NOTHING IF THE CHAIN IS ALREADY IN THE LIST
 LIST *list_add(LIST *list, char *newkeyword)
 {
+    LIST * tmp = list;
     if (list_find(list, newkeyword))
     {
-        return list;
+        return tmp;
     }
     else
     {
         LIST *newList = list_new_item(newkeyword);
-        newList->next = list;
+        newList->next = tmp;
         return newList;
     }
 }
@@ -64,6 +70,23 @@ void list_remove(LIST *list, char *target)
     }
 }
 
+// PRINT THE LIST,.,.
+void list_print(LIST *list)
+{
+    if (list != NULL)
+    {
+        while (list->next != NULL)
+        {
+            printf("%s, ", list->keyword);
+            list = list->next;
+        }
+        if (list->next == NULL)
+        {
+            printf("%s, ", list->keyword);
+        }
+    }
+}
+
 // FREE THE MEMORY OF THE LIST
 void list_free(LIST *list)
 {
@@ -72,5 +95,8 @@ void list_free(LIST *list)
         LIST *tmp = list;
         list = list->next;
         free(tmp);
+        tmp = NULL;
     }
+    free(list);
+    list = NULL;
 }

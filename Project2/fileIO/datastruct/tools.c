@@ -8,11 +8,11 @@ int keylen = 4;
 uint64_t DJBHash(char *string)
 {
     uint64_t hash = 5381;
-    char c;
+    char c = *string;
 
     while (c != '\0'){
-        hash = ((hash << 5) + hash) + c;
-        c = *string++;
+        hash = hash * 33 + c;
+        c = *++string;
     }
     return hash;
 }
@@ -61,8 +61,9 @@ void change_keylen(int len)
 // CHECK IF THE WORD LEN IS GREATER THAN KEYLEN
 bool wordlen_check(char *word)
 {
-    int len = strlen(word);
-    if (len > keylen)
+    char *tmp = word;
+    int len = strlen(tmp);
+    if (len >= keylen)
     {
         return true;
     }

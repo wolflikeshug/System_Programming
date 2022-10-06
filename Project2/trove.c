@@ -3,7 +3,7 @@
 
 #include "trove.h"
 
-// open the target file and record all the words in the file
+// fopen the target file and record all the words in the file
 void update_process(char *filename, HASHTABLE_MLIST *hashtable)
 {
     FILE *fp = fopen(filename, "r");
@@ -12,7 +12,7 @@ void update_process(char *filename, HASHTABLE_MLIST *hashtable)
         perror("fopen");
         exit(EXIT_FAILURE);
     }
-    char *fileRealPath = "";
+    char *fileRealPath = (char *)malloc(PATH_MAX);
     realpath(filename, fileRealPath);
     recordWord(fp, filename, hashtable);
     fclose(fp);
