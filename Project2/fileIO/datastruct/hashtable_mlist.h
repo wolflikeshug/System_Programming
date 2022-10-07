@@ -22,6 +22,9 @@ extern HASHTABLE_LIST *hashtable_mlist_filename_list(HASHTABLE_MLIST *hashtable,
 //  RETURN THE LIST OF FILENAME HAVING THE KEYWORD UNDER THEIR HASHTABLE_LIST,.,.
 extern LIST *hashtable_mlist_have_key(HASHTABLE_MLIST *hashtable, char *key);
 
+//  PRINT LIST OF FILENAME HAVING THE KEYWORD UNDER THEIR HASHTABLE_LIST,.,.
+extern void hashtable_mlist_have_key_print(HASHTABLE_MLIST *hashtable, char *key);
+
 // TRAVERSE THE HASHTABLE1 AND UPDATE THE CHAIN WITH THE SAME FILENAME IN HASHTABLE2,.,.
 extern void hashtable_mlist_update(HASHTABLE_MLIST *hashtable1, HASHTABLE_MLIST *hashtable2);
 

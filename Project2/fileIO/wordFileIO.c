@@ -1,17 +1,13 @@
-#define _POSIX_C_SOURCE 200809L
+#define _POSIX_C_SOURCE 20089L
+#define _GNU_SOURCE
 
 #include "wordFileIO.h"
 
-// PUT THE WORD INTO HASHTABLE_LIST
-void store_word(HASHTABLE_LIST *hashtable, char *word)
-{
-    hashtable_list_add(hashtable, word);
-}
-
 // RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
-void recordWord(FILE *fp, char *filename, HASHTABLE_MLIST *hashtable)
+void recordWord(char *filename, HASHTABLE_MLIST *hashtable)
 {
-
+    filename = getRealPath(filename);
+    FILE *fp = openfile(filename);
     char *word = (char *)malloc(sizeof(char) * 1);
     memset(word, '\0', 1);
     int len = 0; // length of the word
@@ -33,11 +29,12 @@ void recordWord(FILE *fp, char *filename, HASHTABLE_MLIST *hashtable)
             tmp[len] = '\0';
             if (wordlen_check(word))
             {
-                store_word(hashtable_mlist_filename_list(hashtable, filename), word);
+                hashtable_mlist_add(hashtable, filename, word);
             }
         }
         c = fgetc(fp);
     }
+    fclose(fp);
     free(word);
 }
 

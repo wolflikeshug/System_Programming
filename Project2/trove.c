@@ -1,4 +1,4 @@
-#define _POSIX_C_SOURCE 200809L
+#define _POSIX_C_SOURCE 20089L
 #define _GNU_SOURCE
 
 #include "trove.h"
@@ -6,12 +6,7 @@
 // fopen the target file and record all the words in the file
 void update_process(char *filename, HASHTABLE_MLIST *hashtable)
 {
-    FILE *fp = fopen(filename, "r");
-    if (fp == NULL)
-    {
-        perror("fopen");
-        exit(EXIT_FAILURE);
-    }
+    FILE *fp = fopen(filename);
     char *fileRealPath = (char *)malloc(PATH_MAX);
     realpath(filename, fileRealPath);
     recordWord(fp, filename, hashtable);
@@ -24,13 +19,13 @@ int main(int argc, char *argv[])
     int result;
     int file_list_size = argc - 2;
 
-    bool index_change = false;
+    bool trove_change = false;
     bool length_change = false;
     bool rebuild = false;
     bool update = false;
     bool remove = false;
 
-    FILE *indexFile;
+    FILE *troveFile;
 
     while ((result = getopt(argc, argv, "f:brul:")) != -1)
     {
@@ -39,11 +34,11 @@ int main(int argc, char *argv[])
         case 'f':
             if (optarg != NULL)
             {
-                index_change = true;
+                trove_change = true;
             }
             else
             {
-                perror("No index file name");
+                perror("No trove file name");
                 exit(EXIT_FAILURE);
             }
         case 'l':
@@ -78,9 +73,9 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (index_change)
+    if (trove_change)
     {
-        change_index_file(optarg);
+        change_trove_file(optarg);
         file_list_size -= 2;
     }
 
@@ -101,61 +96,61 @@ int main(int argc, char *argv[])
 
     if (rebuild)
     {
-        indexFile = fopen(INDEX_FILE, "w");
+        troveFile = fopen(TROVE_FILE, "w");
         HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
         for (int i = 0; i < file_list_size; i++)
         {
             update_process(filelist[i], hashtable);
         }
-        indexfile_replace(indexFile, hashtable);
+        trovefile_replace(troveFile, hashtable);
     }
 
     if (update)
     {
-        indexFile = fopen(INDEX_FILE, "r");
-        if (indexFile == NULL)
+        troveFile = fopen(TROVE_FILE, "r");
+        if (troveFile == NULL)
         {
-            perror("No index file");
+            perror("No trove file");
             exit(EXIT_FAILURE);
         }
-        indexFile = fopen(INDEX_FILE, "w");
+        troveFile = fopen(TROVE_FILE, "w");
         HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
-        indexfile_load(indexFile, hashtable);
+        trovefile_load(troveFile, hashtable);
         for (int i = 0; i < file_list_size; i++)
         {
             update_process(filelist[i], hashtable);
         }
-        indexfile_replace(indexFile, hashtable);
+        trovefile_replace(troveFile, hashtable);
     }
 
     if (remove)
     {
-        indexFile = fopen(INDEX_FILE, "r");
-        if (indexFile == NULL)
+        troveFile = fopen(TROVE_FILE, "r");
+        if (troveFile == NULL)
         {
-            perror("No index file");
+            perror("No trove file");
             exit(EXIT_FAILURE);
         }
-        indexFile = fopen(INDEX_FILE, "w");
+        troveFile = fopen(TROVE_FILE, "w");
         HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
-        indexfile_load(indexFile, hashtable);
+        trovefile_load(troveFile, hashtable);
         for (int i = 0; i < file_list_size; i++)
         {
             hashtable_mlist_remove(hashtable, filelist[i]);
         }
-        indexfile_replace(indexFile, hashtable);
+        trovefile_replace(troveFile, hashtable);
     }
 
     if (!rebuild && !update && !remove && !length_change)
     {
-        indexFile = fopen(INDEX_FILE, "r");
-        if (indexFile == NULL)
+        troveFile = fopen(TROVE_FILE, "r");
+        if (troveFile == NULL)
         {
-            perror("No index file");
+            perror("No trove file");
             exit(EXIT_FAILURE);
         }
         HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
-        indexfile_load(indexFile, hashtable);
+        trovefile_load(troveFile, hashtable);
         for (int i = 0; i < file_list_size; i++)
         {
             if (hashtable_mlist_find(hashtable, filelist[i]))
@@ -165,6 +160,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    fclose(indexFile);
+    fclose(troveFile);
     return 0;
 }

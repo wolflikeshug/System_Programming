@@ -32,6 +32,8 @@
   "files.associations": {
     "stdlib.h": "c",
     "cstdlib": "c",
-    "wordfileio.h": "c"
+    "wordfileio.h": "c",
+    "hashtable_mlist.h": "c",
+    "test.h": "c"
   }
 }

@@ -1,4 +1,5 @@
-#define _POSIX_C_SOURCE 200809L
+#define _POSIX_C_SOURCE 20089L
+#define _GNU_SOURCE
 
 #include "tools.h"
 
@@ -10,14 +11,15 @@ uint64_t DJBHash(char *string)
     uint64_t hash = 5381;
     char c = *string;
 
-    while (c != '\0'){
+    while (c != '\0')
+    {
         hash = hash * 33 + c;
         c = *++string;
     }
     return hash;
 }
 
-// GET THE FILE SIZE OF THE INDEX FILE
+// GET THE FILE SIZE OF THE TROVE FILE
 int file_getsize(FILE *file)
 {
     int size;
@@ -45,10 +47,6 @@ bool stillWord(char c)
     {
         return true;
     }
-    if (c == '_')
-    {
-        return true;
-    }
     return false;
 }
 
@@ -68,4 +66,60 @@ bool wordlen_check(char *word)
         return true;
     }
     return false;
+}
+
+// IF THE FILE IS NOT EXIST POP UP ERROR MESSAGE
+// IF THE FILE IS EXIST RETURN THE FILE POINTER
+FILE *openfile(char *filename)
+{
+    FILE *file = fopen(filename, "r+");
+    if (file == NULL)
+    {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+    return file;
+}
+
+// CHECK IF THE FILE IS EXIST, IF EXIST DO NOTHING IF NOT EXIT POP ERROR MESSAGE
+void file_exist(char *filename)
+{
+    fclose(openfile(filename));
+}
+
+// GET THE REAL PATH OF THE FILE
+char *getRealPath(char *filename)
+{
+    char *fileRealPath = (char *)malloc(PATH_MAX);
+    realpath(filename, fileRealPath);
+    return fileRealPath;
+}
+
+// READ FILE USING ZCAT
+char *read_through_zcat(char *filename)
+{
+    return ""; // TODO
+}
+
+char *getLine(FILE *file)
+{
+    char *line = (char *)malloc(1);
+    char c;
+    int i = 0;
+    while (!feof(file))
+    {
+        c = fgetc(file);
+        if (c != '\n')
+        {
+            line[i] = c;
+            i++;
+            line = (char *)realloc(line, i + 1);
+        }
+        else
+        {
+            line[i] = '\0';
+            break;
+        }
+    }
+    return line;
 }

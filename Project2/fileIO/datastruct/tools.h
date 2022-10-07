@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <zlib.h>
 
 extern int keylen;
 
@@ -19,7 +20,7 @@ extern int keylen;
 // DJBHASH FUNCTION FOR HASH STRING
 extern uint64_t DJBHash(char *string);
 
-// GET THE FILE SIZE OF THE INDEX FILE
+// GET THE FILE SIZE OF THE TROVE FILE
 extern int file_getsize(FILE * file);
 
 // CHECK IF THE CHAR CAN KEEP BUILDING THE KEY
@@ -30,5 +31,18 @@ extern void change_keylen(int len);
 
 // CHECK IF THE WORD LEN IS GREATER THAN KEYLEN
 extern bool wordlen_check(char *word);
+
+// IF THE FILE IS NOT EXIST POP UP ERROR MESSAGE
+// IF THE FILE IS EXIST RETURN THE FILE POINTER
+extern FILE *openfile(char *filename);
+
+// CHECK IF THE FILE IS EXIST, IF EXIST DO NOTHING IF NOT EXIT POP ERROR MESSAGE
+extern void file_exist(char *filename);
+
+// GET THE REAL PATH OF THE FILE
+extern char *getRealPath(char *filename);
+
+// GET ONE LINE FROM THE FILE DINAMICALLY FROM A ZIPPED FILE USING ZCAT
+extern char *getLine(FILE *file);
 
 #endif

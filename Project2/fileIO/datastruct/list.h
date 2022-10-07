@@ -25,6 +25,9 @@ extern void list_remove(LIST *list, char *target);
 // PRINT THE LIST
 extern void list_print(LIST *list);
 
+// SPECIAL PRINT FUNCTION FOR FILELIST
+extern void list_file_print(LIST *list);
+
 // FREE THE MEMORY OF THE LIST
 extern void list_free(LIST *list);
 

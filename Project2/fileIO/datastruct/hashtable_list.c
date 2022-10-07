@@ -1,4 +1,5 @@
-#define _POSIX_C_SOURCE 200809L
+#define _POSIX_C_SOURCE 20089L
+#define _GNU_SOURCE
 
 #include "hashtable_list.h"
 
@@ -19,10 +20,6 @@ void hashtable_list_add(HASHTABLE_LIST *hashtable, char *string)
 {
     uint64_t hash = DJBHash(string) % HASHTABLE_LIST_SIZE;
 
-    if (hashtable[hash]->keyword != NULL) //delete
-    {
-        printf("Collision: %s\n", string);
-    }
     hashtable[hash] = list_add(hashtable[hash], string);
 }
 
@@ -37,22 +34,15 @@ bool hashtable_list_find(HASHTABLE_LIST *hashtable, char *string)
 // PRINT THE HASHTABLE
 void hashtable_list_print(HASHTABLE_LIST *hashtable)
 {
-    if (hashtable == NULL)
+    for (int i = 0; i < HASHTABLE_LIST_SIZE; i++)
     {
-        printf("HASHTABLE IS EMPTY\n");
-    }
-    else
-    {
-        for (int i = 0; i < HASHTABLE_LIST_SIZE; i++)
+        LIST *list = hashtable[i];
+        if (list != NULL)
         {
-            LIST *list = hashtable[i];
-            if (list != NULL)
-            {
-                list_print(list);
-            }
+            list_print(list);
         }
-        printf("\n");
     }
+    printf("\n");
 }
 
 // REMOVE A STRING FROM THE HASHTABLE

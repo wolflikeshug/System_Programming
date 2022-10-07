@@ -1,4 +1,5 @@
-#define _POSIX_C_SOURCE 200809L
+#define _POSIX_C_SOURCE 20089L
+#define _GNU_SOURCE
 
 #include "list.h"
 
@@ -70,19 +71,48 @@ void list_remove(LIST *list, char *target)
     }
 }
 
-// PRINT THE LIST,.,.
+// PRINT THE LIST
 void list_print(LIST *list)
 {
     if (list != NULL)
     {
         while (list->next != NULL)
         {
-            printf("%s, ", list->keyword);
+            if(list->keyword != NULL)
+            {
+                printf("%s, ", list->keyword);
+            }
             list = list->next;
         }
         if (list->next == NULL)
         {
-            printf("%s, ", list->keyword);
+            if(list->keyword != NULL)
+            {
+                printf("%s, ", list->keyword);
+            }
+        }
+    }
+}
+
+// SPECIAL PRINT FUNCTION FOR FILELIST
+void list_file_print(LIST *list)
+{
+    if (list != NULL)
+    {
+        while (list->next != NULL)
+        {
+            if(list->keyword != NULL)
+            {
+                printf("%s\n", list->keyword);
+            }
+            list = list->next;
+        }
+        if (list->next == NULL)
+        {
+            if(list->keyword != NULL)
+            {
+                printf("%s\n", list->keyword);
+            }
         }
     }
 }

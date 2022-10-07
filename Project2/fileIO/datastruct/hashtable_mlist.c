@@ -1,4 +1,5 @@
-#define _POSIX_C_SOURCE 200809L
+#define _POSIX_C_SOURCE 20089L
+#define _GNU_SOURCE
 
 #include "hashtable_mlist.h"
 
@@ -74,6 +75,14 @@ LIST *hashtable_mlist_have_key(HASHTABLE_MLIST *hashtable, char *keyword)
     return list;
 }
 
+//  PRINT LIST OF FILENAME HAVING THE KEYWORD UNDER THEIR HASHTABLE_LIST
+void hashtable_mlist_have_key_print(HASHTABLE_MLIST *hashtable, char *key)
+{
+    LIST *list = hashtable_mlist_have_key(hashtable, key);
+    list_file_print(list);
+    list_free(list);
+}
+
 // TRAVERSE THE HASHTABLE1 AND UPDATE THE CHAIN WITH THE SAME FILENAME IN HASHTABLE2
 void hashtable_mlist_update(HASHTABLE_MLIST *hashtable1, HASHTABLE_MLIST *hashtable2)
 {
@@ -116,7 +125,10 @@ void hashtable_mlist_print(HASHTABLE_MLIST *hashtable)
 {
     for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
     {
-        mlist_print(hashtable[i]);
+        if (hashtable[i] != NULL)
+        {
+            mlist_print(hashtable[i]);
+        }
     }
 }
 
