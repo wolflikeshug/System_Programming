@@ -3,6 +3,7 @@
 
 #include "tools.h"
 
+int ARG_MAX = 2097152;
 int keylen = 4;
 
 // DJBHASH FUNCTION FOR HASH STRING
@@ -75,6 +76,7 @@ FILE *openfile(char *filename)
     FILE *file = fopen(filename, "r+");
     if (file == NULL)
     {
+        printf("File %s does not exist\n", filename);
         perror("fopen");
         exit(EXIT_FAILURE);
     }
@@ -82,9 +84,15 @@ FILE *openfile(char *filename)
 }
 
 // CHECK IF THE FILE IS EXIST, IF EXIST DO NOTHING IF NOT EXIT POP ERROR MESSAGE
-void file_exist(char *filename)
+bool file_exist(char *filename)
 {
-    fclose(openfile(filename));
+    FILE *file = fopen(filename, "r+");
+    if (file == NULL)
+    {
+        return false;
+    }
+    fclose(file);
+    return true;
 }
 
 // GET THE REAL PATH OF THE FILE
@@ -95,12 +103,7 @@ char *getRealPath(char *filename)
     return fileRealPath;
 }
 
-// READ FILE USING ZCAT
-char *read_through_zcat(char *filename)
-{
-    return ""; // TODO
-}
-
+// GET ONE LINE FROM THE FILE DINAMICALLY
 char *getLine(FILE *file)
 {
     char *line = (char *)malloc(1);
@@ -123,3 +126,4 @@ char *getLine(FILE *file)
     }
     return line;
 }
+

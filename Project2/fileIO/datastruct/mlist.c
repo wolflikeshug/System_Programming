@@ -104,10 +104,6 @@ void mlist_print(MLIST *mlist)
                 hashtable_list_print(mlist->keys);
                 printf("\n");
             }
-            else
-            {
-                continue;
-            }
             mlist = mlist->next;
         }
         if (mlist->next == NULL && mlist->filename != NULL)
