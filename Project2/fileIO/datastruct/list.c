@@ -16,7 +16,7 @@ LIST *list_new(void)
 //  DETERMINE IF THE TARGET IS STORED IN A GIVEN LIST
 bool list_find(LIST *list, char *target)
 {
-    while (list != NULL && list->keyword != NULL)
+    while (list != NULL && list->keyword != NULL && target != NULL)
     {
         if (strcmp(list->keyword, target) == 0)
         {
@@ -58,9 +58,9 @@ LIST *list_add(LIST *list, char *newkeyword)
 // REMOVE CHAIN FROM THE LIST, DO NOTHING IF THE CHAIN IS NOT IN THE LIST
 void list_remove(LIST *list, char *target)
 {
-    while (list->next != NULL)
+    while (list->next != NULL && list->next->keyword != NULL && target != NULL)
     {
-        if (strcmp(list->next->keyword, target) == 0)
+        if (strcmp(list->keyword, target) == 0)
         {
             LIST *tmp = list->next;
             list->next = list->next->next;

@@ -3,163 +3,118 @@
 
 #include "trove.h"
 
-// fopen the target file and record all the words in the file
-void update_process(char *filename, HASHTABLE_MLIST *hashtable)
-{
-    FILE *fp = fopen(filename);
-    char *fileRealPath = (char *)malloc(PATH_MAX);
-    realpath(filename, fileRealPath);
-    recordWord(fp, filename, hashtable);
-    fclose(fp);
-}
-
 int main(int argc, char *argv[])
 {
-    int optind;
     int result;
-    int file_list_size = argc - 2;
+    bool end = false;
+    bool build = true;
+    bool remove = true;
+    bool update = true;
+    bool search = true;
 
-    bool trove_change = false;
-    bool length_change = false;
-    bool rebuild = false;
-    bool update = false;
-    bool remove = false;
+    HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
 
-    FILE *troveFile;
-
-    while ((result = getopt(argc, argv, "f:brul:")) != -1)
+    while ((result = getopt(argc, argv, "f:brul:")) != -1 && !end)
     {
         switch (result)
         {
         case 'f':
-            if (optarg != NULL)
-            {
-                trove_change = true;
-            }
-            else
-            {
-                perror("No trove file name");
-                exit(EXIT_FAILURE);
-            }
+
+            change_trove_file(optarg);
+            break;
+
         case 'l':
-            if (optarg != NULL)
+
+            if (!isNumber(optarg))
             {
-                for (int i = 0; i < strlen(optarg); i++)
-                {
-                    if (isdigit(optarg[i]) == 0)
-                    {
-                        perror("Invalid length number");
-                        exit(EXIT_FAILURE);
-                    }
-                }
-                length_change = true;
-            }
-            else
-            {
-                perror("No length number");
+                perror("Invalid length");
                 exit(EXIT_FAILURE);
             }
+            change_keylen(atoi(optarg));
+            search = false;
+            remove = false;
+            break;
+
         case 'b':
-            rebuild = true;
+
+            search = false;
+            remove = false;
+            update = false;
+
+            end = true;
             break;
+
         case 'r':
-            remove = true;
+
+            build = false;
+            search = false;
+            update = false;
+
+            end = true;
             break;
+
         case 'u':
-            update = true;
+
+            build = false;
+            search = false;
+            remove = false;
+
+            end = true;
             break;
-        case '?':
-            break;
         }
     }
 
-    if (trove_change)
+    if (search)
     {
-        change_trove_file(optarg);
-        file_list_size -= 2;
+        printf("Searching For Key: \"%s\"\n", argv[argc - 1]);
+        hashtable = trovefile_load();
+        hashtable_mlist_files_have_key_print(hashtable, argv[argc - 1]);
+        exit(EXIT_SUCCESS);
     }
-
-    if (length_change)
+    else if (build)
     {
-        change_keylen(atoi(optarg));
-        file_list_size -= 2;
-    }
-
-    char *filelist[file_list_size];
-    int i = 0;
-
-    for (; optind < argc; optind++)
-    {
-        filelist[i] = argv[optind];
-        i++;
-    }
-
-    if (rebuild)
-    {
-        troveFile = fopen(TROVE_FILE, "w");
-        HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
-        for (int i = 0; i < file_list_size; i++)
+        printf("Building Trove File:\n");
+        hashtable = hashtable_mlist_new();
+        for (; optind < argc; optind++)
         {
-            update_process(filelist[i], hashtable);
-        }
-        trovefile_replace(troveFile, hashtable);
-    }
-
-    if (update)
-    {
-        troveFile = fopen(TROVE_FILE, "r");
-        if (troveFile == NULL)
-        {
-            perror("No trove file");
-            exit(EXIT_FAILURE);
-        }
-        troveFile = fopen(TROVE_FILE, "w");
-        HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
-        trovefile_load(troveFile, hashtable);
-        for (int i = 0; i < file_list_size; i++)
-        {
-            update_process(filelist[i], hashtable);
-        }
-        trovefile_replace(troveFile, hashtable);
-    }
-
-    if (remove)
-    {
-        troveFile = fopen(TROVE_FILE, "r");
-        if (troveFile == NULL)
-        {
-            perror("No trove file");
-            exit(EXIT_FAILURE);
-        }
-        troveFile = fopen(TROVE_FILE, "w");
-        HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
-        trovefile_load(troveFile, hashtable);
-        for (int i = 0; i < file_list_size; i++)
-        {
-            hashtable_mlist_remove(hashtable, filelist[i]);
-        }
-        trovefile_replace(troveFile, hashtable);
-    }
-
-    if (!rebuild && !update && !remove && !length_change)
-    {
-        troveFile = fopen(TROVE_FILE, "r");
-        if (troveFile == NULL)
-        {
-            perror("No trove file");
-            exit(EXIT_FAILURE);
-        }
-        HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
-        trovefile_load(troveFile, hashtable);
-        for (int i = 0; i < file_list_size; i++)
-        {
-            if (hashtable_mlist_find(hashtable, filelist[i]))
+            if (isFile(argv[optind]))
             {
-                printf("%s\n", filelist[i]);
+                recordWord(argv[optind], hashtable);
             }
         }
+        trovefile_write(hashtable);
+        exit(EXIT_SUCCESS);
+    }
+    else if (remove)
+    {
+        printf("Remove the Content:\n");
+        hashtable = trovefile_load();
+        for (; optind < argc; optind++)
+        {
+            if (isFile(argv[optind]))
+            {
+                hashtable_mlist_remove(hashtable, argv[optind]);
+            }
+        }
+        trovefile_write(hashtable);
+        exit(EXIT_SUCCESS);
+    }
+    else if (update)
+    {
+        printf("Update the Content:\n");
+        hashtable = hashtable_mlist_new();
+        for (; optind < argc; optind++)
+        {
+            if (isFile(argv[optind]))
+            {
+                recordWord(argv[optind], hashtable);
+            }
+        }
+        trovefile_update(hashtable);
+        exit(EXIT_SUCCESS);
     }
 
-    fclose(troveFile);
+    perror("Argument Error");
+    exit(EXIT_FAILURE);
     return 0;
 }

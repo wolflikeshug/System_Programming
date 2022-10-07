@@ -20,7 +20,7 @@ MLIST *mlist_new(void)
 //  DETERMINE IF THE TARGET FILENAME IS STORED IN A GIVEN MLIST
 bool mlist_find(MLIST *mlist, char *target)
 {
-    while (mlist != NULL && mlist->filename != NULL)
+    while (mlist != NULL && mlist->filename != NULL && target != NULL)
     {
         if (strcmp(mlist->filename, target) == 0)
         {
@@ -78,9 +78,9 @@ void mlist_replace(MLIST *mlist1, MLIST *mlist2)
 // REMOVE CHAIN FROM THE MLIST, DO NOTHING IF THE FILENAME IS NOT IN THE MLIST
 void mlist_remove(MLIST *mlist, char *target)
 {
-    while (mlist->next != NULL)
+    while (mlist->next != NULL && mlist->filename != NULL && target != NULL)
     {
-        if (strcmp(mlist->next->filename, target) == 0)
+        if (strcmp(mlist->filename, target) == 0)
         {
             MLIST *tmp = mlist->next;
             mlist->next = mlist->next->next;

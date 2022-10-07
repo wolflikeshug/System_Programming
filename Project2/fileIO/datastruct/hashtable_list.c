@@ -50,7 +50,7 @@ extern void hashtable_list_remove(HASHTABLE_LIST *hashtable, char *string)
 {
     uint64_t hash = DJBHash(string) % HASHTABLE_LIST_SIZE;
     list_remove(hashtable[hash], string);
-    if (hashtable[hash]->next == NULL)
+    if (hashtable[hash]->next == NULL && hashtable[hash]->keyword != NULL && string != NULL)
     {
         if (strcmp(hashtable[hash]->keyword, string) == 0)
         {

@@ -22,7 +22,7 @@ void trovefile_open(void)
     strcat(cmd, "'");
     if (file_exist(TROVE_FILE))
     {
-        TROVE_FILE_P = popen(cmd, "r+");
+        TROVE_FILE_P = popen(cmd, "r");
     }
 }
 
@@ -44,15 +44,53 @@ void trovefile_gz_close(void)
     system(cmd);
 }
 
+// LOAD THE WORDS FROM THE TROVE FILE INTO THE HASHTABLE
+// SAME AS recordWord() BUT USING NOT FILE BUT STRING
+void loadWord_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hashtable)
+{
+    char *word = (char *)malloc(sizeof(char) * 1);
+    memset(word, '\0', 1);
+    int len = 0; // length of the word
+    char tmp[20000]; // store the word temporarily
+    tmp[0] = '\0';
+    char c = *wordslist;
+
+    while (c != '\0')
+    {
+        if (stillWord(c))
+        {
+            tmp[len] = c;
+            len++;
+        }
+        else
+        {
+            tmp[len] = '\0';
+            word = strdup(tmp);
+            len = 0;
+            tmp[len] = '\0';
+            if (wordlen_check(word))
+            {
+                hashtable_mlist_add(hashtable, filename, word);
+            }
+        }
+        c = *(++wordslist);
+    }
+
+    free(word);
+}
 
 HASHTABLE_MLIST *trovefile_load(void)
 {
     // TODO: implement this function
     HASHTABLE_MLIST *hashtable_mlist = hashtable_mlist_new();
-    TROVE_FILE_P = openfile(TROVE_FILE);
+    trovefile_open();
 
-
-
+    while (!feof(TROVE_FILE_P))
+    {
+        char *filename = getLine(TROVE_FILE_P);
+        char *wordslist = getLine(TROVE_FILE_P);
+        loadWord_from_troveFile(filename, wordslist, hashtable_mlist);
+    }
     fclose(TROVE_FILE_P);
     return hashtable_mlist;
 }
@@ -185,12 +223,7 @@ void trovefile_write(HASHTABLE_MLIST *hashtable)
 // UPDATE THE OLD HASHTABLE WHICH HAVING THE SAME FILE NAME AS IN NEW WHILE KEEPING THE OTHER DATA
 void trovefile_update(HASHTABLE_MLIST *hashtable)
 {
-    HASHTABLE_MLIST *old_hashtable = hashtable_mlist_new();
-    char* p = realloc(old_hashtable, file_getsize(TROVE_FILE_P));
-    old_hashtable = trovefile_load();
+    HASHTABLE_MLIST *old_hashtable = trovefile_load();
     hashtable_mlist_update(old_hashtable, hashtable);
     trovefile_write(old_hashtable);
-    hashtable_mlist_free(hashtable);
-    free(p);
 }
-

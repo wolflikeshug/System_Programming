@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <ctype.h>
-#include <zlib.h>
+#include <sys/stat.h>
 
 extern int keylen;
 extern int ARG_MAX;
@@ -46,6 +46,22 @@ extern char *getRealPath(char *filename);
 // GET ONE LINE FROM THE FILE DINAMICALLY
 extern char *getLine(FILE *file);
 
+// CREATE ONE NEW FILE UNDER A SECRET DIR WITH GIVEN FILENAME AND FILLED WITH GIVEN CONTENT
+extern void createFile(char *filename, char *content);
 
+// REMOVE THE GIVEN FILE
+extern void removeFile(char *filename);
+
+// REMOVE THE GIVEN DIR
+extern void removeDir(char *dirname);
+
+// A FUNCTION CHANGE THE GIVEN INT TO STRING
+extern char *itoa(int num);
+
+// CHECK IF THE GIVEN STRING IS A INTERGER
+extern bool isNumber(char *str);
+
+// CHECK IF THE GIVEN NAME IS A FILE
+extern bool isFile(char *name);
 
 #endif

@@ -89,7 +89,8 @@ bool file_exist(char *filename)
     FILE *file = fopen(filename, "r+");
     if (file == NULL)
     {
-        return false;
+        perror("fopen");
+        exit(EXIT_FAILURE);
     }
     fclose(file);
     return true;
@@ -127,3 +128,58 @@ char *getLine(FILE *file)
     return line;
 }
 
+// CREATE ONE NEW FILE UNDER A SECRET DIR WITH GIVEN FILENAME AND FILLED WITH GIVEN CONTENT
+void createFile(char *filename, char *content)
+{
+    FILE *file = fopen(filename, "w+");
+    fprintf(file, "%s", content);
+    fclose(file);
+}
+
+// REMOVE THE GIVEN FILE
+void removeFile(char *filename)
+{
+    char *cmd = strdup("rm ");
+    cmd = (char *)realloc(cmd, strlen(cmd) + strlen(filename) + 1);
+    strcat(cmd, filename);
+    system(cmd);
+}
+
+// REMOVE THE GIVEN DIR
+void removeDir(char *dirname)
+{
+    char *cmd = strdup("rm -rf ");
+    cmd = (char *)realloc(cmd, strlen(cmd) + strlen(dirname) + 1);
+    strcat(cmd, dirname);
+    system(cmd);
+}
+
+// A FUNCTION CHANGE THE GIVEN INT TO STRING
+char *itoa(int num)
+{
+    char *str = (char *)malloc(20); // 20 IS ENOUGH FOR INT
+    sprintf(str, "%d", num);
+    return str;
+}
+
+// CHECK IF THE GIVEN STRING IS A INTERGER
+bool isNumber(char *str)
+{
+    if (strcmp(itoa(atoi(str)), str) == 0)
+    {
+        return true;
+    }
+    return false;
+}
+
+// CHECK IF THE GIVEN NAME IS A FILE
+bool isFile(char *name)
+{
+    struct stat buf;
+    stat(name, &buf);
+    if (S_ISREG(buf.st_mode))
+    {
+        return true;
+    }
+    return false;
+}

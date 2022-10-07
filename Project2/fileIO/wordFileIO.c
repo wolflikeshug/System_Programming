@@ -7,10 +7,11 @@
 void recordWord(char *filename, HASHTABLE_MLIST *hashtable)
 {
     filename = getRealPath(filename);
+    printf("Recording File: \"%s\"\n", filename);
     FILE *fp = openfile(filename);
     char *word = (char *)malloc(sizeof(char) * 1);
     memset(word, '\0', 1);
-    int len = 0; // length of the word
+    int len = 0;     // length of the word
     char tmp[20000]; // store the word temporarily
     tmp[0] = '\0';
     char c = fgetc(fp);
@@ -34,7 +35,7 @@ void recordWord(char *filename, HASHTABLE_MLIST *hashtable)
         }
         c = fgetc(fp);
     }
+
     fclose(fp);
     free(word);
 }
-
