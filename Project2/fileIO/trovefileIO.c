@@ -1,6 +1,5 @@
-#define _POSIX_C_SOURCE 20089L
-#define _GNU_SOURCE
-
+//  CITS2002 Project 2 2022
+//  Student:   23006364   HU   ZHUO   100
 
 #include "trovefileIO.h"
 
@@ -30,7 +29,7 @@ void trovefile_open(void)
 void trovefile_gz_close(void)
 {
     fclose(TROVE_FILE_P);
-    
+
     char *cmd = (char *)malloc(sizeof(char) * ARG_MAX);
     strcpy(cmd, "gzip -9 '");
     strcat(cmd, TROVE_FILE);
@@ -45,19 +44,18 @@ void trovefile_gz_close(void)
 }
 
 // LOAD THE WORDS FROM THE TROVE FILE INTO THE HASHTABLE
-// SAME AS recordWord() BUT USING NOT FILE BUT STRING
-void loadWord_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hashtable)
+void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hashtable)
 {
     char *word = (char *)malloc(sizeof(char) * 1);
     memset(word, '\0', 1);
-    int len = 0; // length of the word
-    char tmp[20000]; // store the word temporarily
+    int len = 0;
+    char tmp[20000];
     tmp[0] = '\0';
     char c = *wordslist;
 
     while (c != '\0')
     {
-        if (stillWord(c))
+        if (isWord(c))
         {
             tmp[len] = c;
             len++;
@@ -81,7 +79,6 @@ void loadWord_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *h
 
 HASHTABLE_MLIST *trovefile_load(void)
 {
-    // TODO: implement this function
     HASHTABLE_MLIST *hashtable_mlist = hashtable_mlist_new();
     trovefile_open();
 
@@ -89,14 +86,14 @@ HASHTABLE_MLIST *trovefile_load(void)
     {
         char *filename = getLine(TROVE_FILE_P);
         char *wordslist = getLine(TROVE_FILE_P);
-        loadWord_from_troveFile(filename, wordslist, hashtable_mlist);
+        load_from_troveFile(filename, wordslist, hashtable_mlist);
     }
     fclose(TROVE_FILE_P);
     return hashtable_mlist;
 }
 
-// THE FOLLOWING FOUR FUNCTIONS ARE USED TO WRITE THE HASHTABLE TO THE TROVE FILE
-// THEY ARE JUST A DIFFERENT VERSION OF _print FUNCTIONS IN DATASTRUCT
+// THE FOLLOWING 4 FUNCTIONS ARE USED TO READ THE HASHTABLE
+// THEY ARE JUST A DIFFERENT VERSION OF XXX_print FUNCTIONS IN DATASTRUCT
 
 // READ THE LIST
 char *list_read(LIST *list)
@@ -108,21 +105,21 @@ char *list_read(LIST *list)
     {
         while (list->next != NULL)
         {
-            if(list->keyword != NULL)
+            if (list->word != NULL)
             {
-                str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(list->keyword) + 2));
+                str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(list->word) + 2));
                 strcat(str, space);
-                strcat(str, list->keyword);
+                strcat(str, list->word);
             }
             list = list->next;
         }
         if (list->next == NULL)
         {
-            if(list->keyword != NULL)
+            if (list->word != NULL)
             {
-                str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(list->keyword) + 1));
+                str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(list->word) + 1));
                 strcat(str, space);
-                strcat(str, list->keyword);
+                strcat(str, list->word);
             }
         }
     }
@@ -134,7 +131,6 @@ char *hashtable_list_read(HASHTABLE_LIST *hashtable)
 {
     char *str = strdup("");
     char *str_list;
-
 
     for (int i = 0; i < HASHTABLE_LIST_SIZE; i++)
     {
@@ -166,7 +162,7 @@ char *mlist_read(MLIST *mlist)
                 str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_filename) + 2));
                 strcat(str, str_filename);
                 strcat(str, linespace);
-                str_hashtable_list = hashtable_list_read(mlist->keys);
+                str_hashtable_list = hashtable_list_read(mlist->words);
                 str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_hashtable_list) + 2));
                 strcat(str, str_hashtable_list);
                 strcat(str, linespace);
@@ -179,7 +175,7 @@ char *mlist_read(MLIST *mlist)
             str_filename = realloc(str_filename, sizeof(char) * (strlen(str_filename) + strlen(mlist->filename) + 2));
             strcat(str, str_filename);
             strcat(str, linespace);
-            str_hashtable_list = hashtable_list_read(mlist->keys);
+            str_hashtable_list = hashtable_list_read(mlist->words);
             str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_hashtable_list) + 2));
             strcat(str, str_hashtable_list);
             strcat(str, linespace);
@@ -206,7 +202,6 @@ char *hashtable_mlist_read(HASHTABLE_MLIST *hashtable)
     return str;
 }
 
-
 // REMOVE THE OLD DATA AND REPLACE IT WITH THE NEW ONE
 void trovefile_write(HASHTABLE_MLIST *hashtable)
 {
@@ -226,4 +221,22 @@ void trovefile_update(HASHTABLE_MLIST *hashtable)
     HASHTABLE_MLIST *old_hashtable = trovefile_load();
     hashtable_mlist_update(old_hashtable, hashtable);
     trovefile_write(old_hashtable);
+}
+
+// PRINT EVERYTHING IN THE TROVE FILE
+void trovefile_print(void)
+{
+    HASHTABLE_MLIST *hashtable = trovefile_load();
+    hashtable_mlist_print(hashtable);
+    hashtable_mlist_free(hashtable);
+    printf("\n");
+}
+
+// PRINT ALL THE FILENAME IN THE TROVE FILE
+void trovefile_filename_print(void)
+{
+    HASHTABLE_MLIST *hashtable = trovefile_load();
+    hashtable_mlist_filename_print(hashtable);
+    hashtable_mlist_free(hashtable);
+    printf("\n");
 }

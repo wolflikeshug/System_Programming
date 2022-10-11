@@ -1,8 +1,5 @@
-#define _POSIX_C_SOURCE 20089L
-#define _GNU_SOURCE
-
-#include <stdlib.h>
-#include <string.h>
+//  CITS2002 Project 2 2022
+//  Student:   23006364   HU   ZHUO   100
 
 #include "mlist.h"
 
@@ -12,7 +9,7 @@ MLIST *mlist_new(void)
     MLIST *mlist = (MLIST *)malloc(sizeof(MLIST));
     CHECK_MEM(mlist);
     mlist->filename = NULL;
-    mlist->keys = hashtable_list_new();
+    mlist->words = hashtable_list_new();
     mlist->next = NULL;
     return mlist;
 }
@@ -32,29 +29,29 @@ bool mlist_find(MLIST *mlist, char *target)
 }
 
 //  ALLOCATE SPACE FOR A NEW MLIST ITEM AND CHECK IF ALLOCATION SUCCEEDS
-MLIST *mlist_new_item(char *newfilename)
+MLIST *mlist_new_item(char *filename)
 {
     MLIST *newMList = calloc(1, sizeof(MLIST));
     CHECK_MEM(newMList);
-    newMList->filename = strdup(newfilename);
+    newMList->filename = strdup(filename);
     CHECK_MEM(newMList->filename);
-    newMList->keys = hashtable_list_new();
-    CHECK_MEM(newMList->keys);
+    newMList->words = hashtable_list_new();
+    CHECK_MEM(newMList->words);
     newMList->next = mlist_new();
     CHECK_MEM(newMList->next);
     return newMList;
 }
 
 // ADD NEW FILENAME TO THE MLIST, REPLACE IT IF THE FILENAME IS ALREADY IN THE MLIST
-MLIST *mlist_add(MLIST *mlist, char *newfilename)
+MLIST *mlist_add(MLIST *mlist, char *filename)
 {
-    if (mlist_find(mlist, newfilename))
+    if (mlist_find(mlist, filename))
     {
         return mlist;
     }
     else
     {
-        MLIST *newMList = mlist_new_item(newfilename);
+        MLIST *newMList = mlist_new_item(filename);
         newMList->next = mlist;
         return newMList;
     }
@@ -68,7 +65,7 @@ void mlist_replace(MLIST *mlist1, MLIST *mlist2)
     {
         if (mlist_find(mlist2, mlist1->filename))
         {
-            mlist1->keys = mlist2->keys;
+            mlist1->words = mlist2->words;
         }
         mlist1 = mlist1->next;
     }
@@ -91,7 +88,7 @@ void mlist_remove(MLIST *mlist, char *target)
     }
 }
 
-// Print the MLIST,.,.
+// Print the MLIST
 void mlist_print(MLIST *mlist)
 {
     if (mlist != NULL)
@@ -101,7 +98,7 @@ void mlist_print(MLIST *mlist)
             if (mlist->filename != NULL)
             {
                 printf("%s:\n", mlist->filename);
-                hashtable_list_print(mlist->keys);
+                hashtable_list_print(mlist->words);
                 printf("\n");
             }
             mlist = mlist->next;
@@ -109,8 +106,28 @@ void mlist_print(MLIST *mlist)
         if (mlist->next == NULL && mlist->filename != NULL)
         {
             printf("%s:\n", mlist->filename);
-            hashtable_list_print(mlist->keys);
+            hashtable_list_print(mlist->words);
             printf("\n");
+        }
+    }
+}
+
+// PRINT THE FILE NAME IN THE MLIST
+void mlist_filename_print(MLIST *mlist)
+{
+    if (mlist != NULL)
+    {
+        while (mlist->next != NULL)
+        {
+            if (mlist->filename != NULL)
+            {
+                printf("%s\n", mlist->filename);
+            }
+            mlist = mlist->next;
+        }
+        if (mlist->next == NULL && mlist->filename != NULL)
+        {
+            printf("%s\n", mlist->filename);
         }
     }
 }
@@ -122,7 +139,7 @@ void mlist_free(MLIST *mlist)
     {
         MLIST *tmp = mlist;
         free(tmp->filename);
-        hashtable_list_free(mlist->keys);
+        hashtable_list_free(mlist->words);
         mlist = mlist->next;
         free(tmp);
         tmp = NULL;

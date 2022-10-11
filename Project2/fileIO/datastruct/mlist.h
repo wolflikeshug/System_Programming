@@ -1,3 +1,6 @@
+//  CITS2002 Project 2 2022
+//  Student:   23006364   HU   ZHUO   100
+
 #ifndef _MLIST_H
 #define _MLIST_H
 
@@ -9,7 +12,7 @@
 typedef struct mlist
 {
     char *filename;
-    HASHTABLE_LIST* keys;
+    HASHTABLE_LIST *words;
     struct mlist *next;
 } MLIST;
 
@@ -20,7 +23,7 @@ extern MLIST *mlist_new(void);
 extern bool mlist_find(MLIST *mlist, char *target);
 
 // ADD NEW FILENAME TO THE MLIST, DO NOTHING IF THE FILENAME IS ALREADY IN THE MLIST
-extern MLIST *mlist_add(MLIST *mlist, char *newfilename);
+extern MLIST *mlist_add(MLIST *mlist, char *filename);
 
 // REPLACE THE CHAIN WITH THE SAME FILENAME IN MLIST2
 extern void mlist_replace(MLIST *mlist1, MLIST *mlist2);
@@ -30,6 +33,9 @@ extern void mlist_remove(MLIST *mlist, char *target);
 
 // Print the MLIST
 extern void mlist_print(MLIST *mlist);
+
+// PRINT THE FILE NAME IN THE MLIST
+extern void mlist_filename_print(MLIST *mlist);
 
 // FREE THE MEMORY OF THE MLIST
 extern void mlist_free(MLIST *mlist);

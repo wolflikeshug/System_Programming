@@ -1,12 +1,12 @@
-#define _POSIX_C_SOURCE 20089L
-#define _GNU_SOURCE
+//  CITS2002 Project 2 2022
+//  Student:   23006364   HU   ZHUO   100
 
 #include "tools.h"
 
 int ARG_MAX = 2097152;
-int keylen = 4;
+int wordlen = 4;
 
-// DJBHASH FUNCTION FOR HASH STRING
+// DJBHASH FUNCTION FOR HASHING STRING
 uint64_t DJBHash(char *string)
 {
     uint64_t hash = 5381;
@@ -20,20 +20,8 @@ uint64_t DJBHash(char *string)
     return hash;
 }
 
-// GET THE FILE SIZE OF THE TROVE FILE
-int file_getsize(FILE *file)
-{
-    int size;
-    FILE *tmp = file;
-
-    fseek(tmp, 0, SEEK_END);
-    size = ftell(tmp);
-    fseek(tmp, 0, SEEK_SET);
-    return size;
-}
-
-// CHECK IF THE CHAR CAN KEEP BUILDING THE KEY
-bool stillWord(char c)
+// CHECK IF THE CHAR CAN BUILDING A WORD
+bool isWord(char c)
 {
     // ONLY TAKE 'A-Z', 'a-z', '0-9'
     if (c >= 'a' && c <= 'z')
@@ -51,10 +39,10 @@ bool stillWord(char c)
     return false;
 }
 
-// CHANGE THE KEYLEN
-void change_keylen(int len)
+// CHANGE THE WORDLEN
+void change_wordlen(int len)
 {
-    keylen = len;
+    wordlen = len;
 }
 
 // CHECK IF THE WORD LEN IS GREATER THAN KEYLEN
@@ -62,7 +50,7 @@ bool wordlen_check(char *word)
 {
     char *tmp = word;
     int len = strlen(tmp);
-    if (len >= keylen)
+    if (len >= wordlen)
     {
         return true;
     }
@@ -104,7 +92,7 @@ char *getRealPath(char *filename)
     return fileRealPath;
 }
 
-// GET ONE LINE FROM THE FILE DINAMICALLY
+// GET ONE LINE FROM THE FILE
 char *getLine(FILE *file)
 {
     char *line = (char *)malloc(1);
@@ -128,42 +116,16 @@ char *getLine(FILE *file)
     return line;
 }
 
-// CREATE ONE NEW FILE UNDER A SECRET DIR WITH GIVEN FILENAME AND FILLED WITH GIVEN CONTENT
-void createFile(char *filename, char *content)
-{
-    FILE *file = fopen(filename, "w+");
-    fprintf(file, "%s", content);
-    fclose(file);
-}
-
-// REMOVE THE GIVEN FILE
-void removeFile(char *filename)
-{
-    char *cmd = strdup("rm ");
-    cmd = (char *)realloc(cmd, strlen(cmd) + strlen(filename) + 1);
-    strcat(cmd, filename);
-    system(cmd);
-}
-
-// REMOVE THE GIVEN DIR
-void removeDir(char *dirname)
-{
-    char *cmd = strdup("rm -rf ");
-    cmd = (char *)realloc(cmd, strlen(cmd) + strlen(dirname) + 1);
-    strcat(cmd, dirname);
-    system(cmd);
-}
-
 // A FUNCTION CHANGE THE GIVEN INT TO STRING
 char *itoa(int num)
 {
-    char *str = (char *)malloc(20); // 20 IS ENOUGH FOR INT
+    char *str = (char *)malloc(20);
     sprintf(str, "%d", num);
     return str;
 }
 
 // CHECK IF THE GIVEN STRING IS A INTERGER
-bool isNumber(char *str)
+bool isInt(char *str)
 {
     if (strcmp(itoa(atoi(str)), str) == 0)
     {
@@ -175,11 +137,21 @@ bool isNumber(char *str)
 // CHECK IF THE GIVEN NAME IS A FILE
 bool isFile(char *name)
 {
-    struct stat buf;
-    stat(name, &buf);
-    if (S_ISREG(buf.st_mode))
+    struct stat statbuf;
+    if (stat(name, &statbuf) != 0)
     {
-        return true;
+        return false;
     }
-    return false;
+    return S_ISREG(statbuf.st_mode);
+}
+
+// CHECK IF THE GIVEN NAME IS DIRECTORY
+bool isDirectory(char *name)
+{
+    struct stat statbuf;
+    if (stat(name, &statbuf) != 0)
+    {
+        return false;
+    }
+    return S_ISDIR(statbuf.st_mode);
 }

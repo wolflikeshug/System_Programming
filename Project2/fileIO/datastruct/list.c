@@ -1,24 +1,24 @@
-#define _POSIX_C_SOURCE 20089L
-#define _GNU_SOURCE
+//  CITS2002 Project 2 2022
+//  Student:   23006364   HU   ZHUO   100
 
 #include "list.h"
 
-// CREATE A NEW, EMPTY LIST
+// MAKE A NFW BLANK LIST ITEM
 LIST *list_new(void)
 {
     LIST *new = calloc(1, sizeof(LIST));
     CHECK_MEM(new);
-    new->keyword = NULL;
+    new->word = NULL;
     new->next = NULL;
     return new;
 }
 
-//  DETERMINE IF THE TARGET IS STORED IN A GIVEN LIST
+// DETERMINE IF THE TARGET IS STORED IN A GIVEN LIST
 bool list_find(LIST *list, char *target)
 {
-    while (list != NULL && list->keyword != NULL && target != NULL)
+    while (target != NULL && list != NULL)
     {
-        if (strcmp(list->keyword, target) == 0)
+        if (list->word != NULL && strcmp(list->word, target) == 0)
         {
             return true;
         }
@@ -28,28 +28,28 @@ bool list_find(LIST *list, char *target)
 }
 
 //  ALLOCATE SPACE FOR A NEW LIST ITEM AND CHECK IF ALLOCATION SUCCEEDS
-LIST *list_new_item(char *newkeyword)
+LIST *list_new_item(char *word)
 {
     LIST *newList = calloc(1, sizeof(LIST));
     CHECK_MEM(newList);
-    newList->keyword = strdup(newkeyword);
-    CHECK_MEM(newList->keyword);
+    newList->word = strdup(word);
+    CHECK_MEM(newList->word);
     newList->next = list_new();
     CHECK_MEM(newList->next);
     return newList;
 }
 
 // ADD NEW CHAIN TO THE LIST, DO NOTHING IF THE CHAIN IS ALREADY IN THE LIST
-LIST *list_add(LIST *list, char *newkeyword)
+LIST *list_add(LIST *list, char *word)
 {
-    LIST * tmp = list;
-    if (list_find(list, newkeyword))
+    LIST *tmp = list;
+    if (list_find(list, word))
     {
         return tmp;
     }
     else
     {
-        LIST *newList = list_new_item(newkeyword);
+        LIST *newList = list_new_item(word);
         newList->next = tmp;
         return newList;
     }
@@ -58,9 +58,9 @@ LIST *list_add(LIST *list, char *newkeyword)
 // REMOVE CHAIN FROM THE LIST, DO NOTHING IF THE CHAIN IS NOT IN THE LIST
 void list_remove(LIST *list, char *target)
 {
-    while (list->next != NULL && list->next->keyword != NULL && target != NULL)
+    while (target != NULL && list != NULL)
     {
-        if (strcmp(list->keyword, target) == 0)
+        if (strcmp(list->word, target) == 0)
         {
             LIST *tmp = list->next;
             list->next = list->next->next;
@@ -74,46 +74,26 @@ void list_remove(LIST *list, char *target)
 // PRINT THE LIST
 void list_print(LIST *list)
 {
-    if (list != NULL)
+    while (list != NULL)
     {
-        while (list->next != NULL)
+        if (list->word != NULL)
         {
-            if(list->keyword != NULL)
-            {
-                printf("%s, ", list->keyword);
-            }
-            list = list->next;
+            printf("%s, ", list->word);
         }
-        if (list->next == NULL)
-        {
-            if(list->keyword != NULL)
-            {
-                printf("%s, ", list->keyword);
-            }
-        }
+        list = list->next;
     }
 }
 
-// SPECIAL PRINT FUNCTION FOR FILELIST
+// SPECIAL list_print
 void list_file_print(LIST *list)
 {
-    if (list != NULL)
+    while (list != NULL)
     {
-        while (list->next != NULL)
+        if (list->word != NULL)
         {
-            if(list->keyword != NULL)
-            {
-                printf("%s\n", list->keyword);
-            }
-            list = list->next;
+            printf("%s\n", list->word);
         }
-        if (list->next == NULL)
-        {
-            if(list->keyword != NULL)
-            {
-                printf("%s\n", list->keyword);
-            }
-        }
+        list = list->next;
     }
 }
 

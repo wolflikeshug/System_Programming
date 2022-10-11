@@ -1,93 +1,99 @@
-#define _POSIX_C_SOURCE 20089L
-#define _GNU_SOURCE
+//  CITS2002 Project 2 2022
+//  Student:   23006364   HU   ZHUO   100
 
 #include "trove.h"
+
+// IF THE ARGUMENT IS NOT CORRECT, PRINT THE USAGE AND EXIT
+void err_print(void)
+{
+    printf("%s\n%s\n\n%s\n%s\n%s\n%s\n%s\n%s\n",
+           "Usage:\t./trove [-f filename] [-b | -r | -u] [-l length] filelist",
+           "or\t./trove [-f filename] word",
+           "where options are",
+           "-b\t\tbuild a new trove-file",
+           "-f filename\tprovide the name of the trove-file to be built or searched",
+           "-l length\tspecify the minimum-length of words added to the trove-file",
+           "-r\t\tremove a trove-file",
+           "-u\t\tupdate a trove-file");
+    exit(EXIT_FAILURE);
+}
 
 int main(int argc, char *argv[])
 {
     int result;
-    bool end = false;
-    bool build = true;
-    bool remove = true;
-    bool update = true;
-    bool search = true;
+    int argc_cor = 2;
+    bool build = false;
+    bool remove = false;
+    bool update = false;
 
     HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
 
-    while ((result = getopt(argc, argv, "f:brul:")) != -1 && !end)
+    while ((result = getopt(argc, argv, "f:brul:")) != -1 && !build && !remove && !update)
     {
         switch (result)
         {
         case 'f':
 
             change_trove_file(optarg);
+            argc_cor += 2;
             break;
 
         case 'l':
 
-            if (!isNumber(optarg))
+            if (!isInt(optarg) || atoi(optarg) < 1)
             {
-                perror("Invalid length");
+                printf("Invalid length value\n");
                 exit(EXIT_FAILURE);
             }
-            change_keylen(atoi(optarg));
-            search = false;
-            remove = false;
+            change_wordlen(atoi(optarg));
+            argc_cor += 2;
             break;
 
         case 'b':
 
-            search = false;
-            remove = false;
-            update = false;
-
-            end = true;
+            if (argc > argc_cor++)
+            {
+                build = true;
+            }
             break;
 
         case 'r':
 
-            build = false;
-            search = false;
-            update = false;
-
-            end = true;
+            if (argc > argc_cor++)
+            {
+                remove = true;
+            }
             break;
 
         case 'u':
 
-            build = false;
-            search = false;
-            remove = false;
-
-            end = true;
+            if (argc > argc_cor++)
+            {
+                update = true;
+            }
             break;
         }
     }
 
-    if (search)
+    if (build)
     {
-        printf("Searching For Key: \"%s\"\n", argv[argc - 1]);
-        hashtable = trovefile_load();
-        hashtable_mlist_files_have_key_print(hashtable, argv[argc - 1]);
-        exit(EXIT_SUCCESS);
-    }
-    else if (build)
-    {
-        printf("Building Trove File:\n");
+        printf("\nBuilding:\t%s\n", TROVE_FILE);
+        printf("--------------------------Building--------------------------\n");
         hashtable = hashtable_mlist_new();
         for (; optind < argc; optind++)
         {
-            if (isFile(argv[optind]))
-            {
-                recordWord(argv[optind], hashtable);
-            }
+            recordWord(argv[optind], hashtable);
         }
         trovefile_write(hashtable);
+        printf("\nThe Trove File is now Containing:\n");
+        printf("----------------------Trove File Detail----------------------\n");
+        trovefile_print();
         exit(EXIT_SUCCESS);
     }
     else if (remove)
     {
-        printf("Remove the Content:\n");
+        printf("\nRemoving From:\t%s\n", TROVE_FILE);
+        printf("--------------------------Removing--------------------------\n");
         hashtable = trovefile_load();
         for (; optind < argc; optind++)
         {
@@ -97,11 +103,15 @@ int main(int argc, char *argv[])
             }
         }
         trovefile_write(hashtable);
+        printf("\nAfter Remove, The Trove File Containing:\n");
+        printf("-------------------------Trove File-------------------------\n");
+        trovefile_filename_print();
         exit(EXIT_SUCCESS);
     }
     else if (update)
     {
-        printf("Update the Content:\n");
+        printf("\nUpdating:\t%s\n", TROVE_FILE);
+        printf("--------------------------Updating--------------------------\n");
         hashtable = hashtable_mlist_new();
         for (; optind < argc; optind++)
         {
@@ -113,8 +123,18 @@ int main(int argc, char *argv[])
         trovefile_update(hashtable);
         exit(EXIT_SUCCESS);
     }
+    else if (argc == argc_cor)
+    {
+        printf("\nSearching...\nTarget Word:\t\t\"%s\"\nUsing Trove File:\t%s\n", argv[argc - 1], TROVE_FILE);
+        printf("--------------------------RESULT----------------------------\n");
+        hashtable = trovefile_load();
+        hashtable_mlist_files_have_word_print(hashtable, argv[argc - 1]);
+        exit(EXIT_SUCCESS);
+    }
+    else
+    {
+        err_print();
+    }
 
-    perror("Argument Error");
-    exit(EXIT_FAILURE);
     return 0;
 }

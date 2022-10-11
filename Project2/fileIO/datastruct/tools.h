@@ -1,3 +1,14 @@
+//  CITS2002 Project 2 2022
+//  Student:   23006364   HU   ZHUO   100
+
+#ifndef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE
+#endif
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+
 #ifndef _TOOLS_H
 #define _TOOLS_H
 
@@ -12,23 +23,27 @@
 #include <ctype.h>
 #include <sys/stat.h>
 
-extern int keylen;
+extern int wordlen;
 extern int ARG_MAX;
 
 // CHECK IF THE MEMORY ALLOCATION WAS SUCCESSFUL
-#define CHECK_MEM(p) if(p == NULL) { perror(__func__); exit(EXIT_FAILURE); }
+#ifndef CHECK_MEM
+#define CHECK_MEM(p)        \
+    if (p == NULL)          \
+    {                       \
+        perror(__func__);   \
+        exit(EXIT_FAILURE); \
+    }
+#endif
 
-// DJBHASH FUNCTION FOR HASH STRING
+// DJBHASH FUNCTION FOR HASHING STRING
 extern uint64_t DJBHash(char *string);
 
-// GET THE FILE SIZE OF THE TROVE FILE
-extern int file_getsize(FILE * file);
-
-// CHECK IF THE CHAR CAN KEEP BUILDING THE KEY
-extern bool stillWord(char word);
+// CHECK IF THE CHAR CAN BUILDING A WORD
+extern bool isWord(char c);
 
 // CHANGE THE KEYLEN
-extern void change_keylen(int len);
+extern void change_wordlen(int len);
 
 // CHECK IF THE WORD LEN IS GREATER THAN KEYLEN
 extern bool wordlen_check(char *word);
@@ -43,25 +58,19 @@ extern bool file_exist(char *filename);
 // GET THE REAL PATH OF THE FILE
 extern char *getRealPath(char *filename);
 
-// GET ONE LINE FROM THE FILE DINAMICALLY
+// GET ONE LINE FROM THE FILE
 extern char *getLine(FILE *file);
-
-// CREATE ONE NEW FILE UNDER A SECRET DIR WITH GIVEN FILENAME AND FILLED WITH GIVEN CONTENT
-extern void createFile(char *filename, char *content);
-
-// REMOVE THE GIVEN FILE
-extern void removeFile(char *filename);
-
-// REMOVE THE GIVEN DIR
-extern void removeDir(char *dirname);
 
 // A FUNCTION CHANGE THE GIVEN INT TO STRING
 extern char *itoa(int num);
 
 // CHECK IF THE GIVEN STRING IS A INTERGER
-extern bool isNumber(char *str);
+extern bool isInt(char *str);
 
 // CHECK IF THE GIVEN NAME IS A FILE
 extern bool isFile(char *name);
+
+// CHECK IF THE GIVEN NAME IS DIRECTORY
+extern bool isDirectory(char *name);
 
 #endif

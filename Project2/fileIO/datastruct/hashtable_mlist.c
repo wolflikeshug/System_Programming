@@ -1,9 +1,9 @@
-#define _POSIX_C_SOURCE 20089L
-#define _GNU_SOURCE
+//  CITS2002 Project 2 2022
+//  Student:   23006364   HU   ZHUO   100
 
 #include "hashtable_mlist.h"
 
-//  ALLOCATE AND INITIALISE SPACE FOR A NEW HASHTABLE (AN ARRAY OF MLISTS)
+// ALLOCATE SPACE AND INITIALISE A NEW HASHTABLE_MLIST
 HASHTABLE_MLIST *hashtable_mlist_new(void)
 {
     HASHTABLE_MLIST *new = calloc(HASHTABLE_MLIST_SIZE, sizeof(MLIST *));
@@ -15,20 +15,20 @@ HASHTABLE_MLIST *hashtable_mlist_new(void)
     return new;
 }
 
-//  ADD A NEW WORD TO THE FILENAME'S MLIST
+// ADD NEW FILENAME TO THE HASHTABLE_MLISTT
 void hashtable_mlist_add(HASHTABLE_MLIST *hashtable, char *filename, char *word)
 {
     uint64_t hash = DJBHash(filename) % HASHTABLE_MLIST_SIZE;
 
     hashtable[hash] = mlist_add(hashtable[hash], filename);
-    if (hashtable[hash]->keys == NULL)
+    if (hashtable[hash]->words == NULL)
     {
-        hashtable[hash]->keys = hashtable_list_new();
+        hashtable[hash]->words = hashtable_list_new();
     }
-    hashtable_list_add(hashtable[hash]->keys, word);
+    hashtable_list_add(hashtable[hash]->words, word);
 }
 
-//  DETERMINE IF A REQUIRED STRING ALREADY EXISTS IN A GIVEN HASHTABLE
+// CHECK IF THE FILENAME ALREADY EXISTS IN A GIVEN HASHTABLE_MLIST
 bool hashtable_mlist_find(HASHTABLE_MLIST *hashtable, char *filename)
 {
     uint64_t hash = DJBHash(filename) % HASHTABLE_MLIST_SIZE;
@@ -36,7 +36,7 @@ bool hashtable_mlist_find(HASHTABLE_MLIST *hashtable, char *filename)
     return mlist_find(hashtable[hash], filename);
 }
 
-// RETURN THE KEYWORD LIST OF THE GIVEN FILENAME IF NOT FOUND CREATE A NEW ONE
+// RETURN THE KEYWORD LIST OF THE GIVEN FILENAME
 HASHTABLE_LIST *hashtable_mlist_filename_list(HASHTABLE_MLIST *hashtable, char *filename)
 {
     uint64_t hash = DJBHash(filename) % HASHTABLE_MLIST_SIZE;
@@ -48,32 +48,16 @@ HASHTABLE_LIST *hashtable_mlist_filename_list(HASHTABLE_MLIST *hashtable, char *
         {
             if (strcmp(mlist->filename, filename) == 0)
             {
-                return mlist->keys;
+                return mlist->words;
             }
             mlist = mlist->next;
         }
     }
-    return mlist_add(hashtable[hash], filename)->keys;
+    return mlist_add(hashtable[hash], filename)->words;
 }
 
-//  RETURN THE LIST OF FILENAMES IN THE HASHTABLE
-LIST *hashtable_mlist_files(HASHTABLE_MLIST *hashtable)
-{
-    LIST *files = list_new();
-    for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
-    {
-        MLIST *mlist = hashtable[i];
-        while (mlist != NULL && mlist->filename != NULL)
-        {
-            list_add(files, mlist->filename);
-            mlist = mlist->next;
-        }
-    }
-    return files;
-}
-
-//  RETURN THE LIST OF FILENAME HAVING THE KEYWORD UNDER THEIR HASHTABLE_LIST
-LIST *hashtable_mlist_files_have_key(HASHTABLE_MLIST *hashtable, char *keyword)
+// RETURN THE LIST OF FILENAME HAVING THE KEYWORD UNDER THEIR HASHTABLE_LIST
+LIST *hashtable_mlist_files_have_word(HASHTABLE_MLIST *hashtable, char *keyword)
 {
     LIST *list = list_new();
     for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
@@ -81,7 +65,7 @@ LIST *hashtable_mlist_files_have_key(HASHTABLE_MLIST *hashtable, char *keyword)
         MLIST *mlist = hashtable[i];
         while (mlist != NULL)
         {
-            if (hashtable_list_find(mlist->keys, keyword))
+            if (hashtable_list_find(mlist->words, keyword))
             {
                 list = list_add(list, mlist->filename);
             }
@@ -91,21 +75,22 @@ LIST *hashtable_mlist_files_have_key(HASHTABLE_MLIST *hashtable, char *keyword)
     return list;
 }
 
-//  PRINT LIST OF FILENAME HAVING THE KEYWORD UNDER THEIR HASHTABLE_LIST
-void hashtable_mlist_files_have_key_print(HASHTABLE_MLIST *hashtable, char *key)
+// PRINT FILENAMES HAVING THE KEYWORD UNDER THEIR WORD LIST
+void hashtable_mlist_files_have_word_print(HASHTABLE_MLIST *hashtable, char *keyword)
 {
-    LIST *list = hashtable_mlist_files_have_key(hashtable, key);
+    LIST *list = hashtable_mlist_files_have_word(hashtable, keyword);
     list_file_print(list);
     list_free(list);
+    printf("\n");
 }
 
-// TRAVERSE THE HASHTABLE1 AND UPDATE THE CHAIN WITH THE SAME FILENAME IN HASHTABLE2
+// UPDATE HASHTABLE1 USING HASHTABLE2
 void hashtable_mlist_update(HASHTABLE_MLIST *hashtable1, HASHTABLE_MLIST *hashtable2)
 {
     for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
     {
         MLIST *list = hashtable1[i];
-        while (list != NULL && list ->filename != NULL)
+        while (list != NULL && list->filename != NULL)
         {
             if (hashtable_mlist_find(hashtable2, list->filename))
             {
@@ -120,11 +105,11 @@ void hashtable_mlist_update(HASHTABLE_MLIST *hashtable1, HASHTABLE_MLIST *hashta
     }
 }
 
-//  REMOVE A STRING FROM A GIVEN HASHTABLE
+//  REMOVE A MLIST HAVING GIVEN FILENAME FROM THE HASHTABLE_MLIST
 void hashtable_mlist_remove(HASHTABLE_MLIST *hashtable, char *filename)
 {
     filename = getRealPath(filename);
-    printf("Removing From Trove-File: \"%s\"\n", filename);
+    printf("%s\n", filename);
     uint64_t hash = DJBHash(filename) % HASHTABLE_MLIST_SIZE;
 
     mlist_remove(hashtable[hash], filename);
@@ -137,7 +122,7 @@ void hashtable_mlist_remove(HASHTABLE_MLIST *hashtable, char *filename)
     }
 }
 
-//  Print the hashtable
+//  PRINT EVERYTHING IN HASHTABLE_MLIST
 void hashtable_mlist_print(HASHTABLE_MLIST *hashtable)
 {
     for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
@@ -149,7 +134,17 @@ void hashtable_mlist_print(HASHTABLE_MLIST *hashtable)
     }
 }
 
-//  FREE THE SPACE ALLOCATED FOR A GIVEN HASHTABLE
+//  PRINT ALL OF FILENAMES IN THE HASHTABLE_MLIST
+void hashtable_mlist_filename_print(HASHTABLE_MLIST *hashtable)
+{
+    for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
+    {
+        MLIST *mlist = hashtable[i];
+        mlist_filename_print(mlist);
+    }
+}
+
+//  FREE THE SPACE ALLOCATED FOR A GIVEN HASHTABLE_MLIST
 void hashtable_mlist_free(HASHTABLE_MLIST *hashtable)
 {
     for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)

@@ -1,3 +1,6 @@
+#  CITS2002 Project 2 2022
+#  Student:   23006364   HU   ZHUO   100
+
 CC	= gcc -std=c99 -Wall -Werror
 
 trove: 	fileIO/datastruct/tools.c fileIO/datastruct/tools.h \
@@ -20,10 +23,11 @@ trove: 	fileIO/datastruct/tools.c fileIO/datastruct/tools.h \
 	rm -f *.o
 
 test:	trove
-	./trove -b  "./testFile/The Last Night of the World.txt" 
-	./trove scream
-	./trove -b  testFile/*
+	./trove -b testFile
 	./trove something
+	./trove -r "./testFile/The Last Night of the World.txt"
+	./trove -u -l 5 "./testFile/The Last Night of the World.txt" "./testFile/The Black Cat"
+	rm /tmp/trove
 
 clean:
 	rm -f trove

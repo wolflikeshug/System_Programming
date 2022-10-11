@@ -1,9 +1,9 @@
-#define _POSIX_C_SOURCE 20089L
-#define _GNU_SOURCE
+//  CITS2002 Project 2 2022
+//  Student:   23006364   HU   ZHUO   100
 
 #include "hashtable_list.h"
 
-//  ALLOCATE AND INITIALISE SPACE FOR A NEW HASHTABLE (AN ARRAY OF LISTS)
+// ALLOCATE SPACE AND INITIALISE A NEW HASHTABLE_LIST
 HASHTABLE_LIST *hashtable_list_new(void)
 {
     HASHTABLE_LIST *new = calloc(HASHTABLE_LIST_SIZE, sizeof(LIST *));
@@ -15,7 +15,7 @@ HASHTABLE_LIST *hashtable_list_new(void)
     return new;
 }
 
-//  ADD A NEW STRING TO A GIVEN HASHTABLE
+// ADD A NEW STRING TO A GIVEN HASHTABLE_LIST
 void hashtable_list_add(HASHTABLE_LIST *hashtable, char *string)
 {
     uint64_t hash = DJBHash(string) % HASHTABLE_LIST_SIZE;
@@ -23,15 +23,15 @@ void hashtable_list_add(HASHTABLE_LIST *hashtable, char *string)
     hashtable[hash] = list_add(hashtable[hash], string);
 }
 
-//  FIND OUT IF A REQUIRED STRING ALREADY EXISTS IN A GIVEN HASHTABLE
+// CHECK IF A REQUIRED STRING ALREADY EXISTS IN THE GIVEN HASHTABLE_LIST
 bool hashtable_list_find(HASHTABLE_LIST *hashtable, char *string)
 {
     uint64_t hash = DJBHash(string) % HASHTABLE_LIST_SIZE;
-    
+
     return list_find(hashtable[hash], string);
 }
 
-// PRINT THE HASHTABLE
+// PRINT THE HASHTABLE_LIST
 void hashtable_list_print(HASHTABLE_LIST *hashtable)
 {
     for (int i = 0; i < HASHTABLE_LIST_SIZE; i++)
@@ -45,21 +45,21 @@ void hashtable_list_print(HASHTABLE_LIST *hashtable)
     printf("\n");
 }
 
-// REMOVE A STRING FROM THE HASHTABLE
+// REMOVE A STRING FROM THE HASHTABLE_LIST
 extern void hashtable_list_remove(HASHTABLE_LIST *hashtable, char *string)
 {
     uint64_t hash = DJBHash(string) % HASHTABLE_LIST_SIZE;
     list_remove(hashtable[hash], string);
-    if (hashtable[hash]->next == NULL && hashtable[hash]->keyword != NULL && string != NULL)
+    if (hashtable[hash]->next == NULL && hashtable[hash]->word != NULL && string != NULL)
     {
-        if (strcmp(hashtable[hash]->keyword, string) == 0)
+        if (strcmp(hashtable[hash]->word, string) == 0)
         {
             hashtable[hash] = list_new();
         }
     }
 }
 
-// FREE THE HASHTABLE
+// FREE THE HASHTABLE_LIST
 void hashtable_list_free(HASHTABLE_LIST *hashtable)
 {
     for (int i = 0; i < HASHTABLE_LIST_SIZE; i++)

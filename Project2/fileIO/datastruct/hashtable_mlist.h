@@ -1,3 +1,6 @@
+//  CITS2002 Project 2 2022
+//  Student:   23006364   HU   ZHUO   100
+
 #ifndef _HASHTABLE_MLIST_H
 #define _HASHTABLE_MLIST_H
 
@@ -7,37 +10,31 @@
 
 typedef MLIST *HASHTABLE_MLIST;
 
-//  ALLOCATE AND INITIALISE SPACE FOR A NEW HASHTABLE (AN ARRAY OF MLISTS),.,.
+// ALLOCATE SPACE AND INITIALISE A NEW HASHTABLE_MLIST
 extern HASHTABLE_MLIST *hashtable_mlist_new(void);
 
-//  ADD NEW STRING TO A GIVEN HASHTABLE,.,.
+// ADD NEW FILENAME TO THE HASHTABLE_MLIST
 extern void hashtable_mlist_add(HASHTABLE_MLIST *hashtable, char *filename, char *word);
 
-//  FIND OUT IF A REQUIRED STRING ALREADY EXISTS IN A GIVEN HASHTABLE,.,.
-extern bool hashtable_mlist_find(HASHTABLE_MLIST *hashtable, char *filename);
-
-// RETURN THE KEYWORD LIST OF THE GIVEN FILENAME,.,.
+// RETURN THE KEYWORD LIST OF THE GIVEN FILENAME
 extern HASHTABLE_LIST *hashtable_mlist_filename_list(HASHTABLE_MLIST *hashtable, char *filename);
 
-//  RETURN THE LIST OF FILENAMES IN THE HASHTABLE
-extern LIST *hashtable_mlist_files(HASHTABLE_MLIST *hashtable);
+// PRINT FILENAMES HAVING THE KEYWORD UNDER THEIR WORD LIST
+extern void hashtable_mlist_files_have_word_print(HASHTABLE_MLIST *hashtable, char *keyword);
 
-//  RETURN THE LIST OF FILENAME HAVING THE KEYWORD UNDER THEIR HASHTABLE_LIST,.,.
-extern LIST *hashtable_mlist_files_have_key(HASHTABLE_MLIST *hashtable, char *key);
-
-//  PRINT LIST OF FILENAME HAVING THE KEYWORD UNDER THEIR HASHTABLE_LIST,.,.
-extern void hashtable_mlist_files_have_key_print(HASHTABLE_MLIST *hashtable, char *key);
-
-// TRAVERSE THE HASHTABLE1 AND UPDATE THE CHAIN WITH THE SAME FILENAME IN HASHTABLE2,.,.
+// UPDATE HASHTABLE1 USING HASHTABLE2
 extern void hashtable_mlist_update(HASHTABLE_MLIST *hashtable1, HASHTABLE_MLIST *hashtable2);
 
-//  REMOVE A FILE FROM THE GIVEN HASHTABLE,.,.
+//  REMOVE A MLIST HAVING GIVEN FILENAME FROM THE HASHTABLE_MLIST
 extern void hashtable_mlist_remove(HASHTABLE_MLIST *, char *filename);
 
-//  Print the hashtable,.,.
+//  PRINT EVERYTHING IN HASHTABLE_MLIST
 extern void hashtable_mlist_print(HASHTABLE_MLIST *hashtable);
 
-//  FREE THE SPACE ALLOCATED FOR A GIVEN HASHTABLE,.,.
+//  PRINT ALL OF FILENAMES IN THE HASHTABLE_MLIST
+extern void hashtable_mlist_filename_print(HASHTABLE_MLIST *hashtable);
+
+//  FREE THE SPACE ALLOCATED FOR A GIVEN HASHTABLE_MLIST
 extern void hashtable_mlist_free(HASHTABLE_MLIST *hashtable);
 
 #endif
