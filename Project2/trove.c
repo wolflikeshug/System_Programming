@@ -22,13 +22,11 @@ int main(int argc, char *argv[])
 {
     int result;
     int argc_cor = 2;
-    bool build = false;
-    bool remove = false;
-    bool update = false;
+    int function = 0;           // 0: default 1: build, 2: remove, 3: update
 
     HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
 
-    while ((result = getopt(argc, argv, "f:brul:")) != -1 && !build && !remove && !update)
+    while ((result = getopt(argc, argv, "f:brul:")) != -1 && function == 0)
     {
         switch (result)
         {
@@ -53,7 +51,7 @@ int main(int argc, char *argv[])
 
             if (argc > argc_cor++)
             {
-                build = true;
+                function = 1;
             }
             break;
 
@@ -61,7 +59,7 @@ int main(int argc, char *argv[])
 
             if (argc > argc_cor++)
             {
-                remove = true;
+                function = 2;
             }
             break;
 
@@ -69,13 +67,13 @@ int main(int argc, char *argv[])
 
             if (argc > argc_cor++)
             {
-                update = true;
+                function = 3;
             }
             break;
         }
     }
 
-    if (build)
+    if (function == 1)                  // BUILD FUNCTION
     {
         printf("\nBuilding:\t%s\n", TROVE_FILE);
         printf("--------------------------Building--------------------------\n");
@@ -90,7 +88,7 @@ int main(int argc, char *argv[])
         trovefile_print();
         exit(EXIT_SUCCESS);
     }
-    else if (remove)
+    else if (function == 2)             // REMOVE FUNCTION
     {
         printf("\nRemoving From:\t%s\n", TROVE_FILE);
         printf("--------------------------Removing--------------------------\n");
@@ -108,7 +106,7 @@ int main(int argc, char *argv[])
         trovefile_filename_print();
         exit(EXIT_SUCCESS);
     }
-    else if (update)
+    else if (function == 3)             // UPDATE FUNCTION
     {
         printf("\nUpdating:\t%s\n", TROVE_FILE);
         printf("--------------------------Updating--------------------------\n");
@@ -123,7 +121,7 @@ int main(int argc, char *argv[])
         trovefile_update(hashtable);
         exit(EXIT_SUCCESS);
     }
-    else if (argc == argc_cor)
+    else if (argc == argc_cor)          // SEARCH FUNCTION
     {
         printf("\nSearching...\nTarget Word:\t\t\"%s\"\nUsing Trove File:\t%s\n", argv[argc - 1], TROVE_FILE);
         printf("--------------------------RESULT----------------------------\n");
@@ -131,10 +129,7 @@ int main(int argc, char *argv[])
         hashtable_mlist_files_have_word_print(hashtable, argv[argc - 1]);
         exit(EXIT_SUCCESS);
     }
-    else
-    {
-        err_print();
-    }
 
-    return 0;
+    err_print();
+    return 1;
 }
