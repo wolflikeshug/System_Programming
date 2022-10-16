@@ -64,7 +64,7 @@ make
 
 ## Notes: (Strongly Suggest Reading This before you mark this work)
 
-- Please set up the environment for the program before building and running, It requires the following packages to run this project:
+- Please set up the environment for this project before building and running, The following packages are required to run this project:
   1. build-essential (I believe you have already install this)
   2. md5sum (This is required to check if the file has been modified after the trove-file has been built or updated)
 - Do not put the trove program file or any other opened file (or the directory containing these) into the file list while updating or building, The program will not be able to read from these files. Any attempt to build or update the trove-file using those will fail. The program will return an error and terminate without making any changes to trove-file.
