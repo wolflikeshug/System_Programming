@@ -28,6 +28,7 @@ test:	trove
 	./trove -r "./testFile/The Last Night of the World.txt"
 	./trove -u -l 5 "./testFile/The Last Night of the World.txt" "./testFile/The Black Cat"
 	rm /tmp/trove
+	rm trove
 
 clean:
 	rm -f trove

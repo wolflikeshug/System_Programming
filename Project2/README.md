@@ -58,7 +58,7 @@ make test
 
 
 
-## The following command-line options are to be supported:
+## The following command-line options are supported:
 
 ------
 
