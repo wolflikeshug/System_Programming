@@ -4,6 +4,10 @@ Program Trove provides a similar function to Spotlight indexing the contents of 
 
 Trove makes it easier to search for certain words from a list of files.
 
+[TOC]
+
+
+
 ## Features:
 
 - Indexing a list of files
