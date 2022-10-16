@@ -58,7 +58,7 @@ make test
 
 
 
-The following command-line options are to be supported:
+### The following command-line options are to be supported:
 
 -b					build a new trove-file from the contents of a *filelist*. The new trove-file will replace an existing trove-file of the same name.
 
