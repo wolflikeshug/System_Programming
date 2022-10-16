@@ -22,14 +22,6 @@ trove: 	fileIO/datastruct/tools.c fileIO/datastruct/tools.h \
 	$(CC) -o trove tools.o list.o hashtable_list.o mlist.o hashtable_mlist.o trovefileIO.o wordFileIO.o trove.o
 	rm -f *.o
 
-test:	trove
-	./trove -b testFile
-	./trove something
-	./trove -r "./testFile/The Last Night of the World.txt"
-	./trove -u -l 5 "./testFile/The Last Night of the World.txt" "./testFile/The Black Cat"
-	rm /tmp/trove
-	rm trove
-
 clean:
 	rm -f trove
 	rm -f /tmp/trove

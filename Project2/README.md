@@ -20,12 +20,6 @@ sudo apt install build-essential
 make
 ```
 
-## Test:
-
-```
-make test
-```
-
 ## Executing:
 
 1.  
