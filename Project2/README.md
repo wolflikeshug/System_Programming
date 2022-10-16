@@ -16,13 +16,13 @@ Trove makes it easier to search for certain words from a list of files.
 - Searching the word from Index File
 - Change the limitation of word length
 
-## Building:
+## Building
 
 ```
 make
 ```
 
-## Executing:
+## Executing
 
 1.  
 
@@ -52,7 +52,7 @@ make
 
 
 
-## The following command-line options are supported:
+## The following command-line options are supported
 
 ------
 
@@ -66,7 +66,7 @@ make
 
 
 
-## Notes: (Strongly Suggest Reading This before you mark this work)
+## Notes  (Strongly Suggest Reading This before you mark this work)
 
 - Please set up the environment for this project before building and running, The following packages are required to run this project:
   1. build-essential (I believe you have already install this)
