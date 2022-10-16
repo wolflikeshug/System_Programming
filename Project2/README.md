@@ -46,8 +46,6 @@ make / make trove
 
    If the requested action can be performed successfully, then the *trove* will exit with success; otherwise with failure.
 
-
-
 ## The following command-line options are supported
 
 ------
@@ -59,8 +57,6 @@ make / make trove
 | -l length    | only words of at least the indicated length should be added to the trove-file. *length* must be a positive integer, for example: *-l 6*.  If the -l option is not provided, the default length is **4**. |
 | -r           | if any of the files from the *filelist* appear in the trove-file, remove all of their information from the trove-file. |
 | -u           | update the trove-file with the contents of all files in the *filelist*. If the information from any of the files already exists in the trove-file, then that (old) information is first removed. |
-
-
 
 ## Notes  (Strongly Suggest Reading This before you mark this work)
 
