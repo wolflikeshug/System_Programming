@@ -9,6 +9,7 @@ MLIST *mlist_new(void)
     MLIST *mlist = (MLIST *)malloc(sizeof(MLIST));
     CHECK_MEM(mlist);
     mlist->filename = NULL;
+    mlist->md5 = NULL;
     mlist->words = hashtable_list_new();
     mlist->next = NULL;
     return mlist;
@@ -34,11 +35,9 @@ MLIST *mlist_new_item(char *filename)
     MLIST *newMList = calloc(1, sizeof(MLIST));
     CHECK_MEM(newMList);
     newMList->filename = strdup(filename);
-    CHECK_MEM(newMList->filename);
+    newMList->md5 = strdup(md5sum(filename));
     newMList->words = hashtable_list_new();
-    CHECK_MEM(newMList->words);
     newMList->next = mlist_new();
-    CHECK_MEM(newMList->next);
     return newMList;
 }
 
@@ -57,18 +56,24 @@ MLIST *mlist_add(MLIST *mlist, char *filename)
     }
 }
 
-// REPLACE THE CHAIN WITH THE SAME FILENAME IN MLIST2
-void mlist_replace(MLIST *mlist1, MLIST *mlist2)
+// REPLACE THE CHAIN IN MLIST1 WITH THE SAME FILENAME IN MLIST2, INSERT A NEW CHAIN IF THE FILENAME IN MLIST2 IS NOT IN MLIST1
+void mlist_update(MLIST *mlist1, MLIST *mlist2)
 {
     MLIST *tmp = mlist1;
-    while (mlist1 != NULL)
+    while (mlist1 != NULL && mlist1->filename != NULL)
     {
-        if (mlist_find(mlist2, mlist1->filename))
+        while (mlist2 != NULL && mlist2->filename != NULL)
         {
-            mlist1->words = mlist2->words;
+            if (strcmp(mlist2->filename, mlist1->filename) == 0)
+            {
+                mlist1->words = mlist2->words;
+                mlist_remove(mlist2, mlist1->filename);
+            }
+            mlist2 = mlist2->next;
         }
         mlist1 = mlist1->next;
     }
+    mlist1->next = mlist2;
     mlist1 = tmp;
 }
 
@@ -98,6 +103,7 @@ void mlist_print(MLIST *mlist)
             if (mlist->filename != NULL)
             {
                 printf("%s:\n", mlist->filename);
+                printf("MD5: %s\n", mlist->md5);
                 hashtable_list_print(mlist->words);
                 printf("\n");
             }
@@ -139,6 +145,7 @@ void mlist_free(MLIST *mlist)
     {
         MLIST *tmp = mlist;
         free(tmp->filename);
+        free(tmp->md5);
         hashtable_list_free(mlist->words);
         mlist = mlist->next;
         free(tmp);

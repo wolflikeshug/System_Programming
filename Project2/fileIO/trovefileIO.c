@@ -23,6 +23,11 @@ void trovefile_open(void)
     {
         TROVE_FILE_P = popen(cmd, "r");
     }
+    else
+    {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
 }
 
 // CLOSE THE TROVE FILE AND GZIP IT
@@ -49,7 +54,7 @@ void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hasht
     char *word = (char *)malloc(sizeof(char) * 1);
     memset(word, '\0', 1);
     int len = 0;
-    char tmp[20000];
+    char *tmp = (char *)malloc(sizeof(char) * 1);
     tmp[0] = '\0';
     char c = *wordslist;
 
@@ -57,6 +62,7 @@ void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hasht
     {
         if (isWord(c))
         {
+            tmp = realloc(tmp, sizeof(char) * (len + 1));
             tmp[len] = c;
             len++;
         }
@@ -65,7 +71,9 @@ void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hasht
             tmp[len] = '\0';
             word = strdup(tmp);
             len = 0;
-            tmp[len] = '\0';
+            free(tmp);
+            tmp = (char *)malloc(sizeof(char) * 1);
+            tmp[0] = '\0';
             if (wordlen_check(word))
             {
                 hashtable_mlist_add(hashtable, filename, word);
@@ -85,7 +93,12 @@ HASHTABLE_MLIST *trovefile_load(void)
     while (!feof(TROVE_FILE_P))
     {
         char *filename = getLine(TROVE_FILE_P);
+        char *md5 = getLine(TROVE_FILE_P);
         char *wordslist = getLine(TROVE_FILE_P);
+        if (!file_exist(filename) || !md5check(md5, filename))
+        {
+            continue;
+        }
         load_from_troveFile(filename, wordslist, hashtable_mlist);
     }
     fclose(TROVE_FILE_P);
@@ -150,6 +163,8 @@ char *mlist_read(MLIST *mlist)
 {
     char *str = strdup("");
     char *str_hashtable_list;
+    char *str_filename;
+    char *md5;
     char *linespace = "\n";
 
     if (mlist != NULL)
@@ -158,9 +173,13 @@ char *mlist_read(MLIST *mlist)
         {
             if (mlist->filename != NULL)
             {
-                char *str_filename = strdup(mlist->filename);
-                str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_filename) + 2));
+                str_filename = strdup(mlist->filename);
+                str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(mlist->filename) + 2));
                 strcat(str, str_filename);
+                strcat(str, linespace);
+                md5 = strdup(mlist->md5);
+                str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(mlist->md5) + 2));
+                strcat(str, md5);
                 strcat(str, linespace);
                 str_hashtable_list = hashtable_list_read(mlist->words);
                 str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_hashtable_list) + 2));
@@ -171,9 +190,13 @@ char *mlist_read(MLIST *mlist)
         }
         if (mlist->next == NULL && mlist->filename != NULL)
         {
-            char *str_filename = strdup(mlist->filename);
-            str_filename = realloc(str_filename, sizeof(char) * (strlen(str_filename) + strlen(mlist->filename) + 2));
+            str_filename = strdup(mlist->filename);
+            str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(mlist->filename) + 2));
             strcat(str, str_filename);
+            strcat(str, linespace);
+            md5 = strdup(mlist->md5);
+            str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(mlist->md5) + 2));
+            strcat(str, md5);
             strcat(str, linespace);
             str_hashtable_list = hashtable_list_read(mlist->words);
             str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_hashtable_list) + 2));
@@ -192,11 +215,12 @@ char *hashtable_mlist_read(HASHTABLE_MLIST *hashtable)
 
     for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
     {
-        if (hashtable[i] != NULL)
+        while (hashtable[i] != NULL)
         {
             str_mlist = mlist_read(hashtable[i]);
             str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_mlist) + 1));
             strcat(str, str_mlist);
+            hashtable[i] = hashtable[i]->next;
         }
     }
     return str;

@@ -16,6 +16,12 @@ extern HASHTABLE_MLIST *hashtable_mlist_new(void);
 // ADD NEW FILENAME TO THE HASHTABLE_MLIST
 extern void hashtable_mlist_add(HASHTABLE_MLIST *hashtable, char *filename, char *word);
 
+// RETURN THE A LIST CONTIANING ALL THE FILENAMES IN HASHTABLE_MLIST
+extern LIST *hashtable_mlist_filename(HASHTABLE_MLIST *hashtable);
+
+//  PRINT ALL OF FILENAMES IN THE HASHTABLE_MLIST
+extern void hashtable_mlist_filename_print(HASHTABLE_MLIST *hashtable);
+
 // RETURN THE KEYWORD LIST OF THE GIVEN FILENAME
 extern HASHTABLE_LIST *hashtable_mlist_filename_list(HASHTABLE_MLIST *hashtable, char *filename);
 
@@ -30,9 +36,6 @@ extern void hashtable_mlist_remove(HASHTABLE_MLIST *, char *filename);
 
 //  PRINT EVERYTHING IN HASHTABLE_MLIST
 extern void hashtable_mlist_print(HASHTABLE_MLIST *hashtable);
-
-//  PRINT ALL OF FILENAMES IN THE HASHTABLE_MLIST
-extern void hashtable_mlist_filename_print(HASHTABLE_MLIST *hashtable);
 
 //  FREE THE SPACE ALLOCATED FOR A GIVEN HASHTABLE_MLIST
 extern void hashtable_mlist_free(HASHTABLE_MLIST *hashtable);

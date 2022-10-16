@@ -63,12 +63,12 @@ void update_trove(int argc, char *argv[],  HASHTABLE_MLIST *hashtable)
     hashtable = hashtable_mlist_new();
     for (; optind < argc; optind++)
     {
-        if (isFile(argv[optind]))
-        {
-            recordWord(argv[optind], hashtable);
-        }
+        recordWord(argv[optind], hashtable);
     }
     trovefile_update(hashtable);
+    printf("\nThe Trove File is now Containing:\n");
+    printf("----------------------Trove File Detail----------------------\n");
+    trovefile_print();
     exit(EXIT_SUCCESS);
 }
 
@@ -79,6 +79,7 @@ void search_func(int argc, char *argv[],  HASHTABLE_MLIST *hashtable)
     printf("-----------------------SEARCH RESULT------------------------\n");
     hashtable = trovefile_load();
     hashtable_mlist_files_have_word_print(hashtable, argv[argc - 1]);
+    trovefile_write(hashtable);
     exit(EXIT_SUCCESS);
 }
 
@@ -140,11 +141,18 @@ int main(int argc, char *argv[])
             }
             function = 3;                               // 3: update
             break;
+        
+        default:
+            err_print();
         }
     }
 
     if (argc == argc_cor && function == 0)              // SEARCH FUNCTION
     {
+        if(!isString(argv[argc - 1]))
+        {
+            err_print();
+        }
         search_func(argc, argv, hashtable);
     }
     else if (function == 1)                             // BUILD FUNCTION

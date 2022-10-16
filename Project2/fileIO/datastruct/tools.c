@@ -39,6 +39,21 @@ bool isWord(char c)
     return false;
 }
 
+// CHECK IF THE STRING IS A WORD
+bool isString(char *string)
+{
+    char c = *string;
+    while (c != '\0')
+    {
+        if (!isWord(c))
+        {
+            return false;
+        }
+        c = *++string;
+    }
+    return true;
+}
+
 // CHANGE THE WORDLEN
 void change_wordlen(int len)
 {
@@ -77,8 +92,7 @@ bool file_exist(char *filename)
     FILE *file = fopen(filename, "r+");
     if (file == NULL)
     {
-        perror("fopen");
-        exit(EXIT_FAILURE);
+        return false;
     }
     fclose(file);
     return true;
@@ -154,4 +168,32 @@ bool isDirectory(char *name)
         return false;
     }
     return S_ISDIR(statbuf.st_mode);
+}
+
+// CALCULATE MD5 HASH OF THE GIVEN FILE
+char *md5sum(char *filename)
+{
+    char *md5 = (char *)malloc(33);
+    char *cmd = strdup("md5sum '");
+    cmd = realloc(cmd, strlen(cmd) + strlen(filename) + 2);
+    strcat(cmd, filename);
+    strcat(cmd, "'");
+    FILE *terminal = popen(cmd, "r");
+    md5 = getLine(terminal);
+    md5[32] = '\0';
+    pclose(terminal);
+    return md5;
+}
+
+// CHECK IF THE STORED MD5 HASH IS THE SAME AS THE MD5 HASH OF THE FILE
+bool md5check(char *md5, char *filename)
+{
+    char *md5new = md5sum(filename);
+    if (strcmp(md5, md5new) == 0)
+    {
+        free(md5new);
+        return true;
+    }
+    free(md5new);
+    return false;
 }

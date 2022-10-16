@@ -5,6 +5,7 @@
 #define _TROVEFILEIO_H
 
 #include "datastruct/hashtable_mlist.h"
+#include "wordFileIO.h"
 
 extern char *TROVE_FILE;
 extern FILE *TROVE_FILE_P;

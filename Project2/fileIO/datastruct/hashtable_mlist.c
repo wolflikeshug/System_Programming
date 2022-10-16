@@ -28,6 +28,32 @@ void hashtable_mlist_add(HASHTABLE_MLIST *hashtable, char *filename, char *word)
     hashtable_list_add(hashtable[hash]->words, word);
 }
 
+// RETURN THE A LIST CONTIANING ALL THE FILENAMES IN HASHTABLE_MLIST
+LIST *hashtable_mlist_filename(HASHTABLE_MLIST *hashtable)
+{
+    LIST *list = list_new();
+    for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
+    {
+        MLIST *mlist = hashtable[i];
+        while (mlist != NULL && mlist->filename != NULL)
+        {
+            list = list_add(list, mlist->filename);
+            mlist = mlist->next;
+        }
+    }
+    return list;
+}
+
+//  PRINT ALL OF FILENAMES IN THE HASHTABLE_MLIST
+void hashtable_mlist_filename_print(HASHTABLE_MLIST *hashtable)
+{
+    for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
+    {
+        MLIST *mlist = hashtable[i];
+        mlist_filename_print(mlist);
+    }
+}
+
 // CHECK IF THE FILENAME ALREADY EXISTS IN A GIVEN HASHTABLE_MLIST
 bool hashtable_mlist_find(HASHTABLE_MLIST *hashtable, char *filename)
 {
@@ -79,6 +105,10 @@ LIST *hashtable_mlist_files_have_word(HASHTABLE_MLIST *hashtable, char *keyword)
 void hashtable_mlist_files_have_word_print(HASHTABLE_MLIST *hashtable, char *keyword)
 {
     LIST *list = hashtable_mlist_files_have_word(hashtable, keyword);
+    if (list == NULL || list->word == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
     list_file_print(list);
     list_free(list);
     printf("\n");
@@ -89,19 +119,9 @@ void hashtable_mlist_update(HASHTABLE_MLIST *hashtable1, HASHTABLE_MLIST *hashta
 {
     for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
     {
-        MLIST *list = hashtable1[i];
-        while (list != NULL && list->filename != NULL)
-        {
-            if (hashtable_mlist_find(hashtable2, list->filename))
-            {
-                mlist_replace(list, hashtable2[i]);
-            }
-            else
-            {
-                list->next = hashtable2[i];
-            }
-            list = list->next;
-        }
+        MLIST *mlist1 = hashtable1[i];
+        MLIST *mlist2 = hashtable2[i];
+        mlist_update(mlist1, mlist2);
     }
 }
 
@@ -131,16 +151,6 @@ void hashtable_mlist_print(HASHTABLE_MLIST *hashtable)
         {
             mlist_print(hashtable[i]);
         }
-    }
-}
-
-//  PRINT ALL OF FILENAMES IN THE HASHTABLE_MLIST
-void hashtable_mlist_filename_print(HASHTABLE_MLIST *hashtable)
-{
-    for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
-    {
-        MLIST *mlist = hashtable[i];
-        mlist_filename_print(mlist);
     }
 }
 

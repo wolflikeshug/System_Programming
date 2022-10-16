@@ -12,6 +12,7 @@
 typedef struct mlist
 {
     char *filename;
+    char *md5;
     HASHTABLE_LIST *words;
     struct mlist *next;
 } MLIST;
@@ -25,8 +26,8 @@ extern bool mlist_find(MLIST *mlist, char *target);
 // ADD NEW FILENAME TO THE MLIST, DO NOTHING IF THE FILENAME IS ALREADY IN THE MLIST
 extern MLIST *mlist_add(MLIST *mlist, char *filename);
 
-// REPLACE THE CHAIN WITH THE SAME FILENAME IN MLIST2
-extern void mlist_replace(MLIST *mlist1, MLIST *mlist2);
+// REPLACE THE CHAIN IN MLIST1 WITH THE SAME FILENAME IN MLIST2, INSERT A NEW CHAIN IF THE FILENAME IN MLIST2 IS NOT IN MLIST1
+extern void mlist_update(MLIST *mlist1, MLIST *mlist2);
 
 // REMOVE FILENAME FROM THE MLIST, DO NOTHING IF THE FILENAME IS NOT IN THE MLIST
 extern void mlist_remove(MLIST *mlist, char *target);

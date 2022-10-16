@@ -42,6 +42,9 @@ extern uint64_t DJBHash(char *string);
 // CHECK IF THE CHAR CAN BUILDING A WORD
 extern bool isWord(char c);
 
+// CHECK IF THE STRING IS A WORD
+extern bool isString(char *string);
+
 // CHANGE THE KEYLEN
 extern void change_wordlen(int len);
 
@@ -72,5 +75,11 @@ extern bool isFile(char *name);
 
 // CHECK IF THE GIVEN NAME IS DIRECTORY
 extern bool isDirectory(char *name);
+
+// CALCULATE MD5 HASH OF THE GIVEN FILE
+extern char *md5sum(char *filename);
+
+// CHECK IF THE STORED MD5 HASH IS THE SAME AS THE MD5 HASH OF THE FILE
+extern bool md5check(char *md5, char *filename);
 
 #endif
