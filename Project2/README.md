@@ -48,13 +48,13 @@ make test
    prompt.2> ./trove [-f trovefile] [-b | -r | -u] [-l length]  filelist
    ```
 
-   The second invocation requests *trove* to build a new index, to remove information from an existing index, **or** to update an existing index.
+   The second invocation requests a *trove* to build a new index, remove information from an existing index, **or** to update an existing indexfile list
 
    A *filelist* is a sequence of one-or-more filenames or directory names. The contents of each named file should be indexed, and each named directory (and its subdirectories) should be traversed to locate files to be indexed.
 
    Note that the files do not have to be text-files - they could equally be, for example, executable programs or object files.
 
-   If the requested action can be performed successfully, then *trove* will exit with success; otherwise with failure.
+   If the requested action can be performed successfully, then the *trove* will exit with success; otherwise with failure.
 
 
 
@@ -63,7 +63,6 @@ make test
 ------
 
 | -b           | build a new trove-file from the contents of a *filelist*. The new trove-file will replace an existing trove-file of the same name. |
-| ------------ | ------------------------------------------------------------ |
 | -f trovefile | provides the name of the trove-file to be built or searched. If the -f option is not provided, the default name of the trove-file is **/tmp/trove** |
 | -l length    | only words of at least the indicated length should be added to the trove-file. *length* must be a positive integer, for example: *-l 6*.  If the -l option is not provided, the default length is **4**. |
 | -r           | if any of the files from the *filelist* appear in the trove-file, remove all of their information from the trove-file. |
