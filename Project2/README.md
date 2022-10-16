@@ -58,14 +58,13 @@ make test
 
 
 
-### The following command-line options are to be supported:
+## The following command-line options are to be supported:
 
--b					build a new trove-file from the contents of a *filelist*. The new trove-file will replace an existing trove-file of the same name.
+------
 
--f *trovefile*        provide the name of the trove-file to be built or searched. If the -f option is not provided, the default name of the trove-file is **/tmp/trove**
-
--l *length*		   only words of at least the indicated length should be added to the trove-file. *length* must be a positive integer, for example: *-l 6*.  If the -l option is 						not provided, the default length is **4**.
-
--r					 if any of the files from the *filelist* appear in the trove-file, remove all of their information from the trove-file.
-
--u					update the trove-file with the contents of all files in the *filelist*. If the information from any of the files already exists in the trove-file, then that (old) 					    information is first removed.
+| -b             | build a new trove-file from the contents of a *filelist*. The new trove-file will replace an existing trove-file of the same name. |
+| -------------- | ------------------------------------------------------------ |
+| -f *trovefile* | provide the name of the trove-file to be built or searched. If the -f option is not provided, the default name of the trove-file is **/tmp/trove** |
+| -l *length*    | only words of at least the indicated length should be added to the trove-file. *length* must be a positive integer, for example: *-l 6*.  If the -l option is not provided, the default length is **4**. |
+| -r             | if any of the files from the *filelist* appear in the trove-file, remove all of their information from the trove-file. |
+| -u             | update the trove-file with the contents of all files in the *filelist*. If the information from any of the files already exists in the trove-file, then that (old) information is first removed. |
