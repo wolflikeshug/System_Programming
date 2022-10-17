@@ -11,7 +11,7 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
     FILE *fp = openfile(filename);
     char *word = (char *)malloc(sizeof(char) * 1);
     memset(word, '\0', 1);
-    unsigned long long len = 0;                     // originally using int, but it will overflow when the file is too large so using unsiginded long long instead
+    unsigned long long len = 0;
     char *tmp = (char *)malloc(sizeof(char) * 1);
     tmp[0] = '\0';
 
