@@ -53,14 +53,14 @@ void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hasht
 {
     char *word = (char *)malloc(sizeof(char) * 1);
     memset(word, '\0', 1);
-    unsigned long long len = 0;
+    unsigned long long len = 0;                     // originally using int, but it will overflow when the file is too large so using unsiginded long long instead
     char *tmp = (char *)malloc(sizeof(char) * 1);
     tmp[0] = '\0';
     char c = *wordslist;
 
     while (c != '\0')
     {
-        if (isWord(c))
+        if (isalnum(c))
         {
             tmp = realloc(tmp, sizeof(char) * (len + 2));
             tmp[len] = c;

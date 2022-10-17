@@ -11,14 +11,16 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
     FILE *fp = openfile(filename);
     char *word = (char *)malloc(sizeof(char) * 1);
     memset(word, '\0', 1);
-    int len = 0;
-    char tmp[2000];
+    unsigned long long len = 0;                     // originally using int, but it will overflow when the file is too large so using unsiginded long long instead
+    char *tmp = (char *)malloc(sizeof(char) * 1);
     tmp[0] = '\0';
+
     char c = fgetc(fp);
     while (!feof(fp))
     {
-        if (isWord(c))
+        if (isalnum(c))
         {
+            tmp = realloc(tmp, sizeof(char) * (len + 2));
             tmp[len] = c;
             len++;
         }
@@ -27,7 +29,9 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
             tmp[len] = '\0';
             word = strdup(tmp);
             len = 0;
-            tmp[len] = '\0';
+            free(tmp);
+            tmp = (char *)malloc(sizeof(char) * 1);
+            tmp[0] = '\0';
             if (wordlen_check(word))
             {
                 hashtable_mlist_add(hashtable, filename, word);

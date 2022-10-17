@@ -3,8 +3,8 @@
 
 #include "tools.h"
 
-int ARG_MAX = 2097152;
-int wordlen = 4;
+int  ARG_MAX = 2097152;
+int  wordlen = 4;          // hopefully no one will make the word limit larger than 2147483647
 
 // DJBHASH FUNCTION FOR HASHING STRING
 uint64_t DJBHash(char *string)
@@ -20,32 +20,13 @@ uint64_t DJBHash(char *string)
     return hash;
 }
 
-// CHECK IF THE CHAR CAN BUILDING A WORD
-bool isWord(char c)
-{
-    // ONLY TAKE 'A-Z', 'a-z', '0-9'
-    if (c >= 'a' && c <= 'z')
-    {
-        return true;
-    }
-    if (c >= 'A' && c <= 'Z')
-    {
-        return true;
-    }
-    if (c >= '0' && c <= '9')
-    {
-        return true;
-    }
-    return false;
-}
-
 // CHECK IF THE STRING IS A WORD
 bool isString(char *string)
 {
     char c = *string;
     while (c != '\0')
     {
-        if (!isWord(c))
+        if (!isalnum(c))
         {
             return false;
         }
@@ -64,7 +45,7 @@ void change_wordlen(int len)
 bool wordlen_check(char *word)
 {
     char *tmp = word;
-    int len = strlen(tmp);
+    unsigned long long len = strlen(tmp);
     if (len >= wordlen)
     {
         return true;
@@ -72,8 +53,7 @@ bool wordlen_check(char *word)
     return false;
 }
 
-// IF THE FILE IS NOT EXIST POP UP ERROR MESSAGE
-// IF THE FILE IS EXIST RETURN THE FILE POINTER
+// IF THE FILE IS EXIST RETURN THE FILE POINTER OTHERWISE POP UP ERROR MESSAGE
 FILE *openfile(char *filename)
 {
     FILE *file = fopen(filename, "r+");
@@ -111,7 +91,7 @@ char *getLine(FILE *file)
 {
     char *line = (char *)malloc(1);
     char c;
-    int i = 0;
+    unsigned long long i = 0;
     while (!feof(file))
     {
         c = fgetc(file);

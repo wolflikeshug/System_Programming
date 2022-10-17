@@ -24,7 +24,7 @@ void err_print(void)
 // BUILD FUNCTION
 void build_trove(int argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
-    printf("\nBuilding:\t%s\n", TROVE_FILE);
+    printf("\nBuilding:\t%s\nWordlen limit:\t%d\n", TROVE_FILE, wordlen);
     printf("--------------------------Building--------------------------\n");
     hashtable = hashtable_mlist_new();
     for (; optind < argc; optind++)
@@ -67,7 +67,7 @@ void remove_func(int argc, char *argv[], HASHTABLE_MLIST *hashtable)
 // UPDATE FUNCTION
 void update_trove(int argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
-    printf("\nUpdating:\t%s\n", TROVE_FILE);
+    printf("\nUpdating:\t%s\nWordlen limit:\t%d\n", TROVE_FILE, wordlen);
     printf("--------------------------Updating--------------------------\n");
     hashtable = hashtable_mlist_new();
     for (; optind < argc; optind++)
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
 
         case 'l':
 
-            if (!isInt(optarg) || atoi(optarg) < 1)
+            if (!isInt(optarg) || atoi(optarg) < 1)     // if the length is not a positive integer
             {
                 err_print();
             }

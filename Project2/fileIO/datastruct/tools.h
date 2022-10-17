@@ -39,9 +39,6 @@ extern int ARG_MAX;
 // DJBHASH FUNCTION FOR HASHING STRING
 extern uint64_t DJBHash(char *string);
 
-// CHECK IF THE CHAR CAN BUILDING A WORD
-extern bool isWord(char c);
-
 // CHECK IF THE STRING IS A WORD
 extern bool isString(char *string);
 
@@ -51,8 +48,7 @@ extern void change_wordlen(int len);
 // CHECK IF THE WORD LEN IS GREATER THAN KEYLEN
 extern bool wordlen_check(char *word);
 
-// IF THE FILE IS NOT EXIST POP UP ERROR MESSAGE
-// IF THE FILE IS EXIST RETURN THE FILE POINTER
+// IF THE FILE IS EXIST RETURN THE FILE POINTER OTHERWISE POP UP ERROR MESSAGE
 extern FILE *openfile(char *filename);
 
 // CHECK IF THE FILE IS EXIST RETURN TRUE IF THE FILE IS EXIST
