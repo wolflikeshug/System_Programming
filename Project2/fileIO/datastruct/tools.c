@@ -4,7 +4,7 @@
 #include "tools.h"
 
 int  ARG_MAX = 2097152;
-int  wordlen = 4;          // hopefully no one will make the word limit larger than 2147483647
+int  wordlen = 4;          // word limit cannot larger than 2^31-1
 
 // DJBHASH FUNCTION FOR HASHING STRING
 uint64_t DJBHash(char *string)

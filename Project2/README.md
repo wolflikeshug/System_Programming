@@ -18,7 +18,7 @@ Trove makes it easier to search for certain words from a list of files.
 
 ## Building
 
-```
+```shell
 make / make trove
 ```
 
@@ -26,8 +26,8 @@ make / make trove
 
 1.  
 
-   ```
-   prompt.1> ./trove [-f trovefile]  word
+   ```shell
+   ./trove [-f trovefile]  word
    ```
 
    If any file does not exist at the time of the search (it may have been deleted since the trove-file was built), then the file is *not* listed.
@@ -38,8 +38,8 @@ make / make trove
 
 2.  
 
-   ```
-   prompt.2> ./trove [-f trovefile] [-b | -r | -u] [-l length]  filelist
+   ```shell
+   ./trove [-f trovefile] [-b | -r | -u] [-l length]  filelist
    ```
 
    A *filelist* is a sequence of one-or-more filenames or directory names. The contents of each named file should be indexed, and each named directory (and its subdirectories) should be traversed to locate files to be indexed.
@@ -65,9 +65,8 @@ make / make trove
   1. build-essential (I believe you have already installed this)
   2. md5sum (This is required to check if the file has been modified after the trove-file has been built or updated)
 - Do not put the trove program file or any other opened file (or the directory containing these) into the file list while updating or building, The program will not be able to read from these files. Any attempt to build or update the trove-file using those will fail. The program will return an error and terminate without making any changes to trove-file.
-- Please notice that 'l' argument only accepted positive integer less than 2147483647! (I hope no one will need word length limit larger than that)
-- Please notice that if you add 'l' argument when you using the program, the search function and remove function will be disabled. Because it is not making sense to search with certain words or remove files while providing a word length change, Therefore it is only accepted for building and updating functions.
+- Please notice that 'l' argument only accepted positive integer less than 2147483647 (2^31-1)! (I hope no one will need word length limit larger than that)
+- Please notice that if you add 'l' argument when you using the program, the search function and remove function will be disabled.
 - Although the build and update function accepts a directory as input for the file list, the remove function does not support a directory as input. You can remove all the files under a certain directory using the * sign (but it wouldn't remove the files under the subdirectory of it)
 - Please notice that files that are deleted or modified since the trove-file was built or updated, will be permanently removed from trove-file the next time you use the trove program. And this removal will not be resumed even if the deletion or changes made to these files are revocated, you will need to rebuild or update the trove-file to reinclude those files back into the trove-file( index file ) and make it rebecome searchable.
 - There is a new argument 'v' added to the program, which is not required in the project outline. But I found it will make the terminal looks messy if the program always prints out the debug info, so this argument has been introduced to allow print information about trove-file after the user makes any changes to trove-file and if you don't use this argument those debug info will not show up. This is mainly used during debugging, but it would be helpful if you want to quickly find out what changes are made to the trove-file after operations like 'building'. Please notice this argument also disables the search function.
-
