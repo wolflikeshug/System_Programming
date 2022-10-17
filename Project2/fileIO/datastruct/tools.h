@@ -1,10 +1,9 @@
-//  CITS2002 Project 2 2022
-//  Student:   23006364   HU   ZHUO   100
+/*  
+*   CITS2002  Project 2  2022-sem2
+*   Student:  23006364   HU ZHUO   100
+*/
 
-#ifndef _POSIX_C_SOURCE
-#define _POSIX_C_SOURCE
-#endif
-
+// open up all features including POSIX_C_SOURCE
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
@@ -12,19 +11,20 @@
 #ifndef _TOOLS_H
 #define _TOOLS_H
 
+#include <ctype.h>
 #include <dirent.h>
 #include <limits.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <unistd.h>
-#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
-extern int wordlen;
-extern int ARG_MAX;
+
+extern uint32_t wordlen;
+extern uint32_t ARG_MAX;
 
 // CHECK IF THE MEMORY ALLOCATION WAS SUCCESSFUL
 #ifndef CHECK_MEM
@@ -37,13 +37,13 @@ extern int ARG_MAX;
 #endif
 
 // DJBHASH FUNCTION FOR HASHING STRING
-extern uint64_t DJBHash(char *string);
+extern uint16_t DJBHash(char *string);
 
 // CHECK IF THE STRING IS A WORD
 extern bool isString(char *string);
 
 // CHANGE THE KEYLEN
-extern void change_wordlen(int len);
+extern void change_wordlen(uint32_t len);
 
 // CHECK IF THE WORD LEN IS GREATER THAN KEYLEN
 extern bool wordlen_check(char *word);
@@ -59,9 +59,6 @@ extern char *getRealPath(char *filename);
 
 // GET ONE LINE FROM THE FILE
 extern char *getLine(FILE *file);
-
-// A FUNCTION CHANGE THE GIVEN INT TO STRING
-extern char *itoa(int num);
 
 // CHECK IF THE GIVEN STRING IS A INTERGER
 extern bool isInt(char *str);

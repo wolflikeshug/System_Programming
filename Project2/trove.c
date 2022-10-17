@@ -1,5 +1,7 @@
-//  CITS2002 Project 2 2022
-//  Student:   23006364   HU   ZHUO   100
+/*  
+*   CITS2002  Project 2  2022-sem2
+*   Student:  23006364   HU ZHUO   100
+*/
 
 #include "trove.h"
 
@@ -22,9 +24,9 @@ void err_print(void)
 }
 
 // BUILD FUNCTION
-void build_trove(int argc, char *argv[], HASHTABLE_MLIST *hashtable)
+void build_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
-    printf("\nBuilding:\t%s\nWordlen limit:\t%d\n", TROVE_FILE, wordlen);
+    printf("\nTrove-File:\t%s\nWordlen limit:\t%d\n", TROVE_FILE, wordlen);
     printf("--------------------------Building--------------------------\n");
     hashtable = hashtable_mlist_new();
     for (; optind < argc; optind++)
@@ -42,9 +44,9 @@ void build_trove(int argc, char *argv[], HASHTABLE_MLIST *hashtable)
 }
 
 // REMOVE FUNCTION
-void remove_func(int argc, char *argv[], HASHTABLE_MLIST *hashtable)
+void remove_func(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
-    printf("\nRemoving From:\t%s\n", TROVE_FILE);
+    printf("\nTrove-File:\t%s\n", TROVE_FILE);
     printf("--------------------------Removing--------------------------\n");
     hashtable = trovefile_load();
     for (; optind < argc; optind++)
@@ -65,9 +67,9 @@ void remove_func(int argc, char *argv[], HASHTABLE_MLIST *hashtable)
 }
 
 // UPDATE FUNCTION
-void update_trove(int argc, char *argv[], HASHTABLE_MLIST *hashtable)
+void update_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
-    printf("\nUpdating:\t%s\nWordlen limit:\t%d\n", TROVE_FILE, wordlen);
+    printf("\nTrove-File:\t%s\nWordlen limit:\t%d\n", TROVE_FILE, wordlen);
     printf("--------------------------Updating--------------------------\n");
     hashtable = hashtable_mlist_new();
     for (; optind < argc; optind++)
@@ -85,9 +87,9 @@ void update_trove(int argc, char *argv[], HASHTABLE_MLIST *hashtable)
 }
 
 // SERACH FUNCTION
-void search_func(int argc, char *argv[], HASHTABLE_MLIST *hashtable)
+void search_func(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
-    printf("\nSearching...\nTarget Word:\t\t\"%s\"\nUsing Trove File:\t%s\n", argv[argc - 1], TROVE_FILE);
+    printf("\nSearching...\nTrove File:\t%s\nTarget Word:\t\"%s\"\n", TROVE_FILE, argv[argc - 1]);
     printf("-----------------------SEARCH RESULT------------------------\n");
     hashtable = trovefile_load();
     hashtable_mlist_files_have_word_print(hashtable, argv[argc - 1]);
@@ -97,9 +99,9 @@ void search_func(int argc, char *argv[], HASHTABLE_MLIST *hashtable)
 
 int main(int argc, char *argv[])
 {
-    int result;
-    int argc_cor = 2;
-    int function = 0; // 0: search 1: build, 2: remove, 3: update
+    uint32_t result;
+    uint16_t argc_cor = 2;
+    uint16_t function = 0; // 0: search 1: build, 2: remove, 3: update
 
     HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
 
@@ -115,7 +117,7 @@ int main(int argc, char *argv[])
 
         case 'l':
 
-            if (!isInt(optarg) || atoi(optarg) < 1)     // if the length is not a positive integer
+            if (!isInt(optarg) || atoi(optarg) < 1)     // if the length is not a positive integer or larger than 255
             {
                 err_print();
             }
@@ -138,7 +140,7 @@ int main(int argc, char *argv[])
 
         case 'r':
 
-            if (function != 0 || function == 4 || argc <= argc_cor++)
+            if ((function != 0 && function != 4) || argc <= argc_cor++)
             {
                 err_print();
             }

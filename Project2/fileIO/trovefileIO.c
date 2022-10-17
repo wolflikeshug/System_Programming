@@ -1,5 +1,7 @@
-//  CITS2002 Project 2 2022
-//  Student:   23006364   HU   ZHUO   100
+/*  
+*   CITS2002  Project 2  2022-sem2
+*   Student:  23006364   HU ZHUO   100
+*/
 
 #include "trovefileIO.h"
 
@@ -46,6 +48,7 @@ void trovefile_gz_close(void)
     strcat(cmd, TROVE_FILE);
     strcat(cmd, "'");
     system(cmd);
+    free(cmd);
 }
 
 // LOAD THE WORDS FROM THE TROVE FILE INTO THE HASHTABLE
@@ -53,7 +56,7 @@ void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hasht
 {
     char *word = (char *)malloc(sizeof(char) * 1);
     memset(word, '\0', 1);
-    unsigned long long len = 0;                     // originally using int, but it will overflow when the file is too large so using unsiginded long long instead
+    uint32_t len = 0;
     char *tmp = (char *)malloc(sizeof(char) * 1);
     tmp[0] = '\0';
     char c = *wordslist;
@@ -83,6 +86,7 @@ void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hasht
     }
 
     free(word);
+    free(tmp);
 }
 
 HASHTABLE_MLIST *trovefile_load(void)
@@ -105,8 +109,11 @@ HASHTABLE_MLIST *trovefile_load(void)
     return hashtable_mlist;
 }
 
-// THE FOLLOWING 4 FUNCTIONS ARE USED TO READ THE HASHTABLE
-// THEY ARE JUST A DIFFERENT VERSION OF XXX_print FUNCTIONS IN DATASTRUCT
+/* THE FOLLOWING 4 FUNCTIONS ARE USED TO READ FROM THE HASHTABLE
+*  YOU MAY FIND THEM FAMILIAR AND THAT IS BECAUSE
+*  THEY ARE JUST A DIFFERENT VERSION OF XXX_print FUNCTIONS 
+*  FROM list.c, mlist.c, hastable_list.c, hashtable_mlist.c
+*/
 
 // READ THE LIST
 char *list_read(LIST *list)
@@ -145,7 +152,7 @@ char *hashtable_list_read(HASHTABLE_LIST *hashtable)
     char *str = strdup("");
     char *str_list;
 
-    for (int i = 0; i < HASHTABLE_LIST_SIZE; i++)
+    for (uint16_t i = 0; i < HASHTABLE_LIST_SIZE; i++)
     {
         LIST *list = hashtable[i];
         if (list != NULL)
@@ -213,7 +220,7 @@ char *hashtable_mlist_read(HASHTABLE_MLIST *hashtable)
     char *str = strdup("");
     char *str_mlist;
 
-    for (int i = 0; i < HASHTABLE_MLIST_SIZE; i++)
+    for (uint16_t i = 0; i < HASHTABLE_MLIST_SIZE; i++)
     {
         while (hashtable[i] != NULL)
         {

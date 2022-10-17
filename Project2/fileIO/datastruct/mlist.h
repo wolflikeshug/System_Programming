@@ -1,5 +1,7 @@
-//  CITS2002 Project 2 2022
-//  Student:   23006364   HU   ZHUO   100
+/*  
+*   CITS2002  Project 2  2022-sem2
+*   Student:  23006364   HU ZHUO   100
+*/
 
 #ifndef _MLIST_H
 #define _MLIST_H

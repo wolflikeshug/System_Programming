@@ -1,5 +1,7 @@
-//  CITS2002 Project 2 2022
-//  Student:   23006364   HU   ZHUO   100
+/*  
+*   CITS2002  Project 2  2022-sem2
+*   Student:  23006364   HU ZHUO   100
+*/
 
 #include "hashtable_list.h"
 
@@ -8,7 +10,7 @@ HASHTABLE_LIST *hashtable_list_new(void)
 {
     HASHTABLE_LIST *new = calloc(HASHTABLE_LIST_SIZE, sizeof(LIST *));
     CHECK_MEM(new);
-    for (int i = 0; i < HASHTABLE_LIST_SIZE; i++)
+    for (uint16_t i = 0; i < HASHTABLE_LIST_SIZE; i++)
     {
         new[i] = list_new();
     }
@@ -18,7 +20,7 @@ HASHTABLE_LIST *hashtable_list_new(void)
 // ADD A NEW STRING TO A GIVEN HASHTABLE_LIST
 void hashtable_list_add(HASHTABLE_LIST *hashtable, char *string)
 {
-    uint64_t hash = DJBHash(string) % HASHTABLE_LIST_SIZE;
+    uint16_t hash = DJBHash(string) % HASHTABLE_LIST_SIZE;
 
     hashtable[hash] = list_add(hashtable[hash], string);
 }
@@ -26,7 +28,7 @@ void hashtable_list_add(HASHTABLE_LIST *hashtable, char *string)
 // CHECK IF A REQUIRED STRING ALREADY EXISTS IN THE GIVEN HASHTABLE_LIST
 bool hashtable_list_find(HASHTABLE_LIST *hashtable, char *string)
 {
-    uint64_t hash = DJBHash(string) % HASHTABLE_LIST_SIZE;
+    uint16_t hash = DJBHash(string) % HASHTABLE_LIST_SIZE;
 
     return list_find(hashtable[hash], string);
 }
@@ -34,7 +36,7 @@ bool hashtable_list_find(HASHTABLE_LIST *hashtable, char *string)
 // PRINT THE HASHTABLE_LIST
 void hashtable_list_print(HASHTABLE_LIST *hashtable)
 {
-    for (int i = 0; i < HASHTABLE_LIST_SIZE; i++)
+    for (uint16_t i = 0; i < HASHTABLE_LIST_SIZE; i++)
     {
         LIST *list = hashtable[i];
         if (list != NULL)
@@ -48,7 +50,7 @@ void hashtable_list_print(HASHTABLE_LIST *hashtable)
 // REMOVE A STRING FROM THE HASHTABLE_LIST
 extern void hashtable_list_remove(HASHTABLE_LIST *hashtable, char *string)
 {
-    uint64_t hash = DJBHash(string) % HASHTABLE_LIST_SIZE;
+    uint16_t hash = DJBHash(string) % HASHTABLE_LIST_SIZE;
     list_remove(hashtable[hash], string);
     if (hashtable[hash]->next == NULL && hashtable[hash]->word != NULL && string != NULL)
     {
@@ -62,7 +64,7 @@ extern void hashtable_list_remove(HASHTABLE_LIST *hashtable, char *string)
 // FREE THE HASHTABLE_LIST
 void hashtable_list_free(HASHTABLE_LIST *hashtable)
 {
-    for (int i = 0; i < HASHTABLE_LIST_SIZE; i++)
+    for (uint16_t i = 0; i < HASHTABLE_LIST_SIZE; i++)
     {
         list_free(hashtable[i]);
         hashtable[i] = NULL;

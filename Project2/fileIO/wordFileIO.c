@@ -1,5 +1,7 @@
-//  CITS2002 Project 2 2022
-//  Student:   23006364   HU   ZHUO   100
+/*  
+*   CITS2002  Project 2  2022-sem2
+*   Student:  23006364   HU ZHUO   100
+*/
 
 #include "wordFileIO.h"
 
@@ -11,7 +13,7 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
     FILE *fp = openfile(filename);
     char *word = (char *)malloc(sizeof(char) * 1);
     memset(word, '\0', 1);
-    unsigned long long len = 0;
+    uint32_t len = 0;
     char *tmp = (char *)malloc(sizeof(char) * 1);
     tmp[0] = '\0';
 
@@ -42,6 +44,8 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
 
     fclose(fp);
     free(word);
+    free(tmp);
+    free(filename);
 }
 
 // IF THE NAME INPUTED IS A DIRECTORY, TRAVESE THE DIRECTORY AND RECORD ALL THE FILES AND DO recordWord_dir() TO THE SUB DIRECTORIES

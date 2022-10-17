@@ -1,15 +1,17 @@
-//  CITS2002 Project 2 2022
-//  Student:   23006364   HU   ZHUO   100
+/*  
+*   CITS2002  Project 2  2022-sem2
+*   Student:  23006364   HU ZHUO   100
+*/
 
 #include "tools.h"
 
-int  ARG_MAX = 2097152;
-int  wordlen = 4;          // word limit cannot larger than 2^31-1
+uint32_t ARG_MAX = 2097152;
+uint32_t wordlen = 4;
 
 // DJBHASH FUNCTION FOR HASHING STRING
-uint64_t DJBHash(char *string)
+uint16_t DJBHash(char *string)
 {
-    uint64_t hash = 5381;
+    uint16_t hash = 5381;
     char c = *string;
 
     while (c != '\0')
@@ -36,7 +38,7 @@ bool isString(char *string)
 }
 
 // CHANGE THE WORDLEN
-void change_wordlen(int len)
+void change_wordlen(uint32_t len)
 {
     wordlen = len;
 }
@@ -45,7 +47,7 @@ void change_wordlen(int len)
 bool wordlen_check(char *word)
 {
     char *tmp = word;
-    unsigned long long len = strlen(tmp);
+    uint32_t len = strlen(tmp);
     if (len >= wordlen)
     {
         return true;
@@ -91,19 +93,19 @@ char *getLine(FILE *file)
 {
     char *line = (char *)malloc(1);
     char c;
-    unsigned long long i = 0;
+    uint64_t len = 0;
     while (!feof(file))
     {
         c = fgetc(file);
         if (c != '\n')
         {
-            line[i] = c;
-            i++;
-            line = (char *)realloc(line, i + 1);
+            line[len] = c;
+            len++;
+            line = (char *)realloc(line, sizeof(char) * (len + 1));
         }
         else
         {
-            line[i] = '\0';
+            line[len] = '\0';
             break;
         }
     }
@@ -111,7 +113,7 @@ char *getLine(FILE *file)
 }
 
 // A FUNCTION CHANGE THE GIVEN INT TO STRING
-char *itoa(int num)
+char *itoa(uint16_t num)
 {
     char *str = (char *)malloc(20);
     sprintf(str, "%d", num);
@@ -153,15 +155,21 @@ bool isDirectory(char *name)
 // CALCULATE MD5 HASH OF THE GIVEN FILE
 char *md5sum(char *filename)
 {
-    char *md5 = (char *)malloc(33);
+    char *md5 = (char *)malloc(sizeof(char) * 33);
     char *cmd = strdup("md5sum '");
-    cmd = realloc(cmd, strlen(cmd) + strlen(filename) + 2);
+
+    cmd = (char *)realloc(cmd, sizeof(char) * (strlen(cmd) + strlen(filename) + 2));
     strcat(cmd, filename);
     strcat(cmd, "'");
+    
     FILE *terminal = popen(cmd, "r");
-    md5 = getLine(terminal);
+
+    fgets(md5, sizeof(char) * 33, terminal);
     md5[32] = '\0';
+
     pclose(terminal);
+    free(cmd);
+
     return md5;
 }
 
