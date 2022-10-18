@@ -2,7 +2,7 @@
 
 ## v 2.0
 
-- Introduced multi-thread and multi-processes to boost the running speed of the program
+- Introduced multi-thread to boost the running speed of the program
 
 ## v 1.0
 
