@@ -18,18 +18,20 @@ void change_trove_file(char *filename)
 void trovefile_open(void)
 {
     char *cmd = (char *)malloc(sizeof(char) * ARG_MAX);
+    CHECK_MEM(cmd);
+    memset(cmd, '\0', ARG_MAX);
+
     strcpy(cmd, "zcat '");
     strcat(cmd, TROVE_FILE);
     strcat(cmd, "'");
-    if (file_exist(TROVE_FILE))
+
+    if (access(TROVE_FILE, R_OK))
     {
-        TROVE_FILE_P = popen(cmd, "r");
-    }
-    else
-    {
-        perror("fopen");
+        perror("access");
         exit(EXIT_FAILURE);
+
     }
+    TROVE_FILE_P = popen(cmd, "r");
 }
 
 // CLOSE THE TROVE FILE AND GZIP IT
@@ -38,15 +40,21 @@ void trovefile_gz_close(void)
     fclose(TROVE_FILE_P);
 
     char *cmd = (char *)malloc(sizeof(char) * ARG_MAX);
+    CHECK_MEM(cmd);
+    memset(cmd, '\0', ARG_MAX);
+
     strcpy(cmd, "gzip -9 '");
     strcat(cmd, TROVE_FILE);
     strcat(cmd, "'");
+
     system(cmd);
+
     strcpy(cmd, "mv '");
     strcat(cmd, TROVE_FILE);
     strcat(cmd, ".gz' '");
     strcat(cmd, TROVE_FILE);
     strcat(cmd, "'");
+
     system(cmd);
     free(cmd);
 }
@@ -55,11 +63,15 @@ void trovefile_gz_close(void)
 void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hashtable)
 {
     char *word = (char *)malloc(sizeof(char) * 1);
+    CHECK_MEM(word);
     memset(word, '\0', 1);
-    uint32_t len = 0;
+
     char *tmp = (char *)malloc(sizeof(char) * 1);
-    tmp[0] = '\0';
+    CHECK_MEM(tmp);
+    memset(tmp, '\0', 1);
     char c = *wordslist;
+
+    uint32_t len = 0;
 
     while (c != '\0')
     {
@@ -74,9 +86,13 @@ void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hasht
             tmp[len] = '\0';
             word = strdup(tmp);
             len = 0;
+
             free(tmp);
+
             tmp = (char *)malloc(sizeof(char) * 1);
-            tmp[0] = '\0';
+            CHECK_MEM(tmp);
+            memset(tmp, '\0', 1);
+
             if (wordlen_check(word))
             {
                 hashtable_mlist_add(hashtable, filename, word);
@@ -99,7 +115,7 @@ HASHTABLE_MLIST *trovefile_load(void)
         char *filename = getLine(TROVE_FILE_P);
         char *md5 = getLine(TROVE_FILE_P);
         char *wordslist = getLine(TROVE_FILE_P);
-        if (!file_exist(filename) || !md5check(md5, filename))
+        if (access(filename, R_OK) || !md5check(md5, filename))
         {
             continue;
         }
@@ -184,10 +200,12 @@ char *mlist_read(MLIST *mlist)
                 str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(mlist->filename) + 2));
                 strcat(str, str_filename);
                 strcat(str, linespace);
+
                 md5 = strdup(mlist->md5);
                 str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(mlist->md5) + 2));
                 strcat(str, md5);
                 strcat(str, linespace);
+
                 str_hashtable_list = hashtable_list_read(mlist->words);
                 str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_hashtable_list) + 2));
                 strcat(str, str_hashtable_list);
@@ -201,10 +219,12 @@ char *mlist_read(MLIST *mlist)
             str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(mlist->filename) + 2));
             strcat(str, str_filename);
             strcat(str, linespace);
+
             md5 = strdup(mlist->md5);
             str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(mlist->md5) + 2));
             strcat(str, md5);
             strcat(str, linespace);
+            
             str_hashtable_list = hashtable_list_read(mlist->words);
             str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_hashtable_list) + 2));
             strcat(str, str_hashtable_list);

@@ -18,11 +18,11 @@
 *  it is fine to remove them if you want
 */
 
-#include "datastruct/tools.h"
-#include "datastruct/list.h"
-#include "datastruct/hashtable_list.h"
-#include "datastruct/mlist.h"
-#include "datastruct/hashtable_mlist.h"
+#include "../dataStruct/tools.h"
+#include "../dataStruct/list.h"
+#include "../dataStruct/hashtable_list.h"
+#include "../dataStruct/mlist.h"
+#include "../dataStruct/hashtable_mlist.h"
 
 extern char *TROVE_FILE;
 extern FILE *TROVE_FILE_P;

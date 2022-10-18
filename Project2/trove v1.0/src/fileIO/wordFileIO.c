@@ -9,13 +9,18 @@
 void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
 {
     filename = getRealPath(filename);
-    printf("%s\n", filename);
+    printf("\t%s\n", filename);
     FILE *fp = openfile(filename);
+
     char *word = (char *)malloc(sizeof(char) * 1);
+    CHECK_MEM(word);
     memset(word, '\0', 1);
-    uint32_t len = 0;
+    
     char *tmp = (char *)malloc(sizeof(char) * 1);
-    tmp[0] = '\0';
+    CHECK_MEM(tmp);
+    memset(tmp, '\0', 1);
+
+    uint32_t len = 0;
 
     char c = fgetc(fp);
     while (!feof(fp))
@@ -31,9 +36,13 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
             tmp[len] = '\0';
             word = strdup(tmp);
             len = 0;
+
             free(tmp);
+
             tmp = (char *)malloc(sizeof(char) * 1);
-            tmp[0] = '\0';
+            CHECK_MEM(tmp);
+            memset(tmp, '\0', 1);
+
             if (wordlen_check(word))
             {
                 hashtable_mlist_add(hashtable, filename, word);
@@ -45,7 +54,6 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
     fclose(fp);
     free(word);
     free(tmp);
-    free(filename);
 }
 
 // IF THE NAME INPUTED IS A DIRECTORY, TRAVESE THE DIRECTORY AND RECORD ALL THE FILES AND DO recordWord_dir() TO THE SUB DIRECTORIES
@@ -55,7 +63,7 @@ void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
     struct dirent *ptr;
     char path[PATH_MAX];
 
-    printf("Opening Directory:\t%s\n", filename);
+    printf("\tOpening Directory:\t%s\n", filename);
     dir = opendir(filename);
 
     if (dir == NULL)
@@ -66,7 +74,7 @@ void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
 
     while ((ptr = readdir(dir)) != NULL)
     {
-        if (strcmp(ptr->d_name, ".") == 0 || strcmp(ptr->d_name, "..") == 0)
+        if (!strcmp(ptr->d_name, ".") || !strcmp(ptr->d_name, ".."))
         {
             continue;
         }
@@ -87,6 +95,7 @@ void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
             strcat(path, "/");
             strcat(path, ptr->d_name);
             printf("\n");
+            
             recordWord_dir(path, hashtable);
         }
     }
@@ -96,17 +105,18 @@ void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
 // THE OVERALL FUNTION FOR RECORDING
 void recordWord(char *filename, HASHTABLE_MLIST *hashtable)
 {
-    if (isDirectory(filename))
-    {
-        recordWord_dir(filename, hashtable);
-    }
-    else if (isFile(filename))
-    {
-        recordWord_file(filename, hashtable);
-    }
-    else
+    struct stat statbuf;
+    if (stat(filename, &statbuf))
     {
         perror("fopen");
         exit(EXIT_FAILURE);
+    }
+    else if (S_ISDIR(statbuf.st_mode))
+    {
+        recordWord_dir(filename, hashtable);
+    }
+    else if (S_ISREG(statbuf.st_mode))
+    {
+        recordWord_file(filename, hashtable);
     }
 }

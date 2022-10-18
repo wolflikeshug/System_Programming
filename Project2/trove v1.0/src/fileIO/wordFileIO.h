@@ -3,11 +3,10 @@
 *   Student:  23006364   HU ZHUO   100
 */
 
-#ifndef _TROVE_H
-#define _TROVE_H
+#ifndef _WORDFILEIO_H
+#define _WORDFILEIO_H
 
-#include "fileIO/wordFileIO.h"
-#include "fileIO/trovefileIO.h"
+#include "../dataStruct/hashtable_mlist.h"
 
 /* The following include does nothing, 
 *  These header files are included here just to show 
@@ -19,7 +18,11 @@
 *  it is fine to remove them if you want
 */
 
-#include "fileIO/datastruct/tools.h"
-#include "fileIO/datastruct/hashtable_mlist.h"
+#include "../dataStruct/tools.h"
+#include "../dataStruct/hashtable_mlist.h"
+
+
+// RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
+extern void recordWord(char *filename, HASHTABLE_MLIST *hashtable);
 
 #endif

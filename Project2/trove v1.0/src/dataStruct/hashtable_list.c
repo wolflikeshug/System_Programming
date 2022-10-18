@@ -8,8 +8,10 @@
 // ALLOCATE SPACE AND INITIALISE A NEW HASHTABLE_LIST
 HASHTABLE_LIST *hashtable_list_new(void)
 {
-    HASHTABLE_LIST *new = calloc(HASHTABLE_LIST_SIZE, sizeof(LIST *));
+    HASHTABLE_LIST *new = (HASHTABLE_LIST *)malloc(sizeof(LIST *) *HASHTABLE_LIST_SIZE);
     CHECK_MEM(new);
+    memset(new, 0, sizeof(LIST *) *HASHTABLE_LIST_SIZE);
+    
     for (uint16_t i = 0; i < HASHTABLE_LIST_SIZE; i++)
     {
         new[i] = list_new();
@@ -54,7 +56,7 @@ extern void hashtable_list_remove(HASHTABLE_LIST *hashtable, char *string)
     list_remove(hashtable[hash], string);
     if (hashtable[hash]->next == NULL && hashtable[hash]->word != NULL && string != NULL)
     {
-        if (strcmp(hashtable[hash]->word, string) == 0)
+        if (!strcmp(hashtable[hash]->word, string))
         {
             hashtable[hash] = list_new();
         }

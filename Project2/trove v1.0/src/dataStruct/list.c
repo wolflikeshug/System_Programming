@@ -8,10 +8,13 @@
 // MAKE A NFW BLANK LIST ITEM
 LIST *list_new(void)
 {
-    LIST *new = calloc(1, sizeof(LIST));
+    LIST *new = (LIST *)malloc(sizeof(LIST) * 1);
     CHECK_MEM(new);
+    memset(new, 0, sizeof(LIST) * 1);
+
     new->word = NULL;
     new->next = NULL;
+
     return new;
 }
 
@@ -20,7 +23,7 @@ bool list_find(LIST *list, char *target)
 {
     while (target != NULL && list != NULL)
     {
-        if (list->word != NULL && strcmp(list->word, target) == 0)
+        if (list->word != NULL && !strcmp(list->word, target))
         {
             return true;
         }
@@ -32,12 +35,13 @@ bool list_find(LIST *list, char *target)
 //  ALLOCATE SPACE FOR A NEW LIST ITEM AND CHECK IF ALLOCATION SUCCEEDS
 LIST *list_new_item(char *word)
 {
-    LIST *newList = calloc(1, sizeof(LIST));
+    LIST *newList = (LIST *)malloc(sizeof(LIST) * 1);
     CHECK_MEM(newList);
+    memset(newList, 0, sizeof(LIST) * 1);
+
     newList->word = strdup(word);
-    CHECK_MEM(newList->word);
     newList->next = list_new();
-    CHECK_MEM(newList->next);
+
     return newList;
 }
 
@@ -62,7 +66,7 @@ void list_remove(LIST *list, char *target)
 {
     while (target != NULL && list != NULL)
     {
-        if (strcmp(list->word, target) == 0)
+        if (!strcmp(list->word, target))
         {
             LIST *tmp = list->next;
             list->next = list->next->next;
@@ -80,7 +84,7 @@ void list_print(LIST *list)
     {
         if (list->word != NULL)
         {
-            printf("%s, ", list->word);
+            printf("\t%s,", list->word);
         }
         list = list->next;
     }

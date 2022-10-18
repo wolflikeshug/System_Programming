@@ -51,9 +51,6 @@ extern bool wordlen_check(char *word);
 // IF THE FILE IS EXIST RETURN THE FILE POINTER OTHERWISE POP UP ERROR MESSAGE
 extern FILE *openfile(char *filename);
 
-// CHECK IF THE FILE IS EXIST RETURN TRUE IF THE FILE IS EXIST
-extern bool file_exist(char *filename);
-
 // GET THE REAL PATH OF THE FILE
 extern char *getRealPath(char *filename);
 

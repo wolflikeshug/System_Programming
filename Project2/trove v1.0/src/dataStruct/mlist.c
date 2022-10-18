@@ -10,10 +10,13 @@ MLIST *mlist_new(void)
 {
     MLIST *mlist = (MLIST *)malloc(sizeof(MLIST));
     CHECK_MEM(mlist);
+    memset(mlist, 0, sizeof(MLIST));
+
     mlist->filename = NULL;
     mlist->md5 = NULL;
     mlist->words = hashtable_list_new();
     mlist->next = NULL;
+
     return mlist;
 }
 
@@ -22,7 +25,7 @@ bool mlist_find(MLIST *mlist, char *target)
 {
     while (mlist != NULL && mlist->filename != NULL && target != NULL)
     {
-        if (strcmp(mlist->filename, target) == 0)
+        if (!strcmp(mlist->filename, target))
         {
             return true;
         }
@@ -34,12 +37,15 @@ bool mlist_find(MLIST *mlist, char *target)
 //  ALLOCATE SPACE FOR A NEW MLIST ITEM AND CHECK IF ALLOCATION SUCCEEDS
 MLIST *mlist_new_item(char *filename)
 {
-    MLIST *newMList = calloc(1, sizeof(MLIST));
+    MLIST *newMList = (MLIST *)malloc(sizeof(MLIST) * 1);
     CHECK_MEM(newMList);
+    memset(newMList, 0, sizeof(MLIST) * 1);
+
     newMList->filename = strdup(filename);
     newMList->md5 = strdup(md5sum(filename));
     newMList->words = hashtable_list_new();
     newMList->next = mlist_new();
+
     return newMList;
 }
 
@@ -66,7 +72,7 @@ void mlist_update(MLIST *mlist1, MLIST *mlist2)
     {
         while (mlist2 != NULL && mlist2->filename != NULL)
         {
-            if (strcmp(mlist2->filename, mlist1->filename) == 0)
+            if (!strcmp(mlist2->filename, mlist1->filename))
             {
                 mlist1->words = mlist2->words;
                 mlist_remove(mlist2, mlist1->filename);
@@ -84,7 +90,7 @@ void mlist_remove(MLIST *mlist, char *target)
 {
     while (mlist->next != NULL && mlist->filename != NULL && target != NULL)
     {
-        if (strcmp(mlist->filename, target) == 0)
+        if (!strcmp(mlist->filename, target))
         {
             MLIST *tmp = mlist->next;
             mlist->next = mlist->next->next;
@@ -104,8 +110,8 @@ void mlist_print(MLIST *mlist)
         {
             if (mlist->filename != NULL)
             {
-                printf("%s:\n", mlist->filename);
-                printf("MD5: %s\n", mlist->md5);
+                printf("\t%s:\n", mlist->filename);
+                printf("\tMD5: %s\n", mlist->md5);
                 hashtable_list_print(mlist->words);
                 printf("\n");
             }
@@ -113,7 +119,7 @@ void mlist_print(MLIST *mlist)
         }
         if (mlist->next == NULL && mlist->filename != NULL)
         {
-            printf("%s:\n", mlist->filename);
+            printf("\t%s:\n", mlist->filename);
             hashtable_list_print(mlist->words);
             printf("\n");
         }
@@ -129,13 +135,13 @@ void mlist_filename_print(MLIST *mlist)
         {
             if (mlist->filename != NULL)
             {
-                printf("%s\n", mlist->filename);
+                printf("\t%s\n", mlist->filename);
             }
             mlist = mlist->next;
         }
         if (mlist->next == NULL && mlist->filename != NULL)
         {
-            printf("%s\n", mlist->filename);
+            printf("\t%s\n", mlist->filename);
         }
     }
 }

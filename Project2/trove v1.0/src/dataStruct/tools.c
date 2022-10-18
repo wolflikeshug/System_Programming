@@ -68,22 +68,12 @@ FILE *openfile(char *filename)
     return file;
 }
 
-// CHECK IF THE FILE IS EXIST, IF EXIST DO NOTHING IF NOT EXIT POP ERROR MESSAGE
-bool file_exist(char *filename)
-{
-    FILE *file = fopen(filename, "r+");
-    if (file == NULL)
-    {
-        return false;
-    }
-    fclose(file);
-    return true;
-}
-
 // GET THE REAL PATH OF THE FILE
 char *getRealPath(char *filename)
 {
     char *fileRealPath = (char *)malloc(PATH_MAX);
+    CHECK_MEM(fileRealPath);
+
     realpath(filename, fileRealPath);
     return fileRealPath;
 }
@@ -92,11 +82,13 @@ char *getRealPath(char *filename)
 char *getLine(FILE *file)
 {
     char *line = (char *)malloc(1);
-    char c;
+    CHECK_MEM(line);
+
+    char c = fgetc(file);
     uint64_t len = 0;
+
     while (!feof(file))
     {
-        c = fgetc(file);
         if (c != '\n')
         {
             line[len] = c;
@@ -108,6 +100,7 @@ char *getLine(FILE *file)
             line[len] = '\0';
             break;
         }
+        c = fgetc(file);
     }
     return line;
 }
@@ -115,7 +108,10 @@ char *getLine(FILE *file)
 // A FUNCTION CHANGE THE GIVEN INT TO STRING
 char *itoa(uint16_t num)
 {
-    char *str = (char *)malloc(20);
+    char *str = (char *)malloc(sizeof(char) * 20);
+    CHECK_MEM(str);
+    memset(str, 0, sizeof(char) * 20);
+
     sprintf(str, "%d", num);
     return str;
 }
@@ -123,7 +119,7 @@ char *itoa(uint16_t num)
 // CHECK IF THE GIVEN STRING IS A INTERGER
 bool isInt(char *str)
 {
-    if (strcmp(itoa(atoi(str)), str) == 0)
+    if (!strcmp(itoa(atoi(str)), str))
     {
         return true;
     }
@@ -134,7 +130,7 @@ bool isInt(char *str)
 bool isFile(char *name)
 {
     struct stat statbuf;
-    if (stat(name, &statbuf) != 0)
+    if (stat(name, &statbuf))
     {
         return false;
     }
@@ -145,7 +141,7 @@ bool isFile(char *name)
 bool isDirectory(char *name)
 {
     struct stat statbuf;
-    if (stat(name, &statbuf) != 0)
+    if (stat(name, &statbuf))
     {
         return false;
     }
@@ -156,12 +152,14 @@ bool isDirectory(char *name)
 char *md5sum(char *filename)
 {
     char *md5 = (char *)malloc(sizeof(char) * 33);
+    CHECK_MEM(md5);
+    memset(md5, 0, sizeof(char) * 33);
     char *cmd = strdup("md5sum '");
 
     cmd = (char *)realloc(cmd, sizeof(char) * (strlen(cmd) + strlen(filename) + 2));
     strcat(cmd, filename);
     strcat(cmd, "'");
-    
+
     FILE *terminal = popen(cmd, "r");
 
     fgets(md5, sizeof(char) * 33, terminal);
@@ -177,7 +175,7 @@ char *md5sum(char *filename)
 bool md5check(char *md5, char *filename)
 {
     char *md5new = md5sum(filename);
-    if (strcmp(md5, md5new) == 0)
+    if (!strcmp(md5, md5new))
     {
         free(md5new);
         return true;

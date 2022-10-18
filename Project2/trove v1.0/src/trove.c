@@ -26,8 +26,8 @@ void err_print(void)
 // BUILD FUNCTION
 void build_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
-    printf("\nTrove-File:\t%s\nWordlen limit:\t%d\n", TROVE_FILE, wordlen);
-    printf("--------------------------Building--------------------------\n");
+    printf("\tTrove-File:\t%s\n\tWordlen limit:\t%d\n", TROVE_FILE, wordlen);
+    printf("\t--------------------------Building--------------------------\n");
     hashtable = hashtable_mlist_new();
     for (; optind < argc; optind++)
     {
@@ -36,8 +36,8 @@ void build_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
     trovefile_write(hashtable);
     if (info)
     {
-        printf("\nThe Trove File is now Containing:\n");
-        printf("----------------------Trove File Detail----------------------\n");
+        printf("\tThe Trove File is now Containing:\n");
+        printf("\t----------------------Trove File Detail----------------------\n");
         trovefile_print();
     }
     exit(EXIT_SUCCESS);
@@ -46,12 +46,12 @@ void build_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 // REMOVE FUNCTION
 void remove_func(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
-    printf("\nTrove-File:\t%s\n", TROVE_FILE);
-    printf("--------------------------Removing--------------------------\n");
+    printf("\tTrove-File:\t%s\n", TROVE_FILE);
+    printf("\t--------------------------Removing--------------------------\n");
     hashtable = trovefile_load();
     for (; optind < argc; optind++)
     {
-        if (isFile(argv[optind]))
+        if (!access(argv[optind], R_OK))
         {
             hashtable_mlist_remove(hashtable, argv[optind]);
         }
@@ -59,8 +59,8 @@ void remove_func(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
     trovefile_write(hashtable);
     if (info)
     {
-        printf("\nAfter Remove, The Trove File Containing:\n");
-        printf("-------------------------Trove File-------------------------\n");
+        printf("\tAfter Remove, The Trove File Containing:\n");
+        printf("\t-------------------------Trove File-------------------------\n");
         trovefile_filename_print();
     }
     exit(EXIT_SUCCESS);
@@ -69,8 +69,8 @@ void remove_func(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 // UPDATE FUNCTION
 void update_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
-    printf("\nTrove-File:\t%s\nWordlen limit:\t%d\n", TROVE_FILE, wordlen);
-    printf("--------------------------Updating--------------------------\n");
+    printf("\tTrove-File:\t%s\n\tWordlen limit:\t%d\n", TROVE_FILE, wordlen);
+    printf("\t--------------------------Updating--------------------------\n");
     hashtable = hashtable_mlist_new();
     for (; optind < argc; optind++)
     {
@@ -79,8 +79,8 @@ void update_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
     trovefile_update(hashtable);
     if (info)
     {
-        printf("\nThe Trove File is now Containing:\n");
-        printf("----------------------Trove File Detail----------------------\n");
+        printf("\tThe Trove File is now Containing:\n");
+        printf("\t----------------------Trove File Detail----------------------\n");
         trovefile_print();
     }
     exit(EXIT_SUCCESS);
@@ -89,15 +89,15 @@ void update_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 // SERACH FUNCTION
 void search_func(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
-    printf("\nSearching...\nTrove File:\t%s\nTarget Word:\t\"%s\"\n", TROVE_FILE, argv[argc - 1]);
-    printf("-----------------------SEARCH RESULT------------------------\n");
+    printf("\tSearching...\n\tTrove File:\t%s\n\tTarget Word:\t\"%s\"\n", TROVE_FILE, argv[argc - 1]);
+    printf("\t-----------------------SEARCH RESULT------------------------\n");
     hashtable = trovefile_load();
     hashtable_mlist_files_have_word_print(hashtable, argv[argc - 1]);
     trovefile_write(hashtable);
     exit(EXIT_SUCCESS);
 }
 
-int main(int argc, char *argv[])
+int32_t main(int32_t argc, char *argv[])
 {
     uint32_t result;
     uint16_t argc_cor = 2;
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 
         case 'b':
 
-            if ((function != 0 && function != 4) || argc <= argc_cor++)
+            if ((function && function != 4) || argc <= argc_cor++)
             {
                 err_print();
             }
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 
         case 'r':
 
-            if ((function != 0 && function != 4) || argc <= argc_cor++)
+            if ((function && function != 4) || argc <= argc_cor++)
             {
                 err_print();
             }
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 
         case 'u':
 
-            if ((function != 0 && function != 4) || argc <= argc_cor++)
+            if ((function && function != 4) || argc <= argc_cor++)
             {
                 err_print();
             }
@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (argc == argc_cor && function == 0 && !info) // SEARCH FUNCTION
+    if (argc == argc_cor && !function && !info) // SEARCH FUNCTION
     {
         if (!isString(argv[argc - 1]))
         {

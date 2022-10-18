@@ -6,7 +6,7 @@
 #ifndef _WORDFILEIO_H
 #define _WORDFILEIO_H
 
-#include "datastruct/hashtable_mlist.h"
+#include "../dataStruct/hashtable_mlist.h"
 
 /* The following include does nothing, 
 *  These header files are included here just to show 
@@ -18,8 +18,8 @@
 *  it is fine to remove them if you want
 */
 
-#include "datastruct/tools.h"
-#include "datastruct/hashtable_mlist.h"
+#include "../dataStruct/tools.h"
+#include "../dataStruct/hashtable_mlist.h"
 
 
 // RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE

@@ -8,8 +8,10 @@
 // ALLOCATE SPACE AND INITIALISE A NEW HASHTABLE_MLIST
 HASHTABLE_MLIST *hashtable_mlist_new(void)
 {
-    HASHTABLE_MLIST *new = calloc(HASHTABLE_MLIST_SIZE, sizeof(MLIST *));
+    HASHTABLE_MLIST *new = (HASHTABLE_MLIST *)malloc(sizeof(MLIST *) * HASHTABLE_MLIST_SIZE);
     CHECK_MEM(new);
+    memset(new, 0, sizeof(MLIST *) * HASHTABLE_MLIST_SIZE);
+
     for (uint16_t i = 0; i < HASHTABLE_MLIST_SIZE; i++)
     {
         new[i] = mlist_new();
@@ -74,7 +76,7 @@ HASHTABLE_LIST *hashtable_mlist_filename_list(HASHTABLE_MLIST *hashtable, char *
     {
         while (mlist != NULL && mlist->filename != NULL && filename != NULL)
         {
-            if (strcmp(mlist->filename, filename) == 0)
+            if (!strcmp(mlist->filename, filename))
             {
                 return mlist->words;
             }
@@ -131,13 +133,13 @@ void hashtable_mlist_update(HASHTABLE_MLIST *hashtable1, HASHTABLE_MLIST *hashta
 void hashtable_mlist_remove(HASHTABLE_MLIST *hashtable, char *filename)
 {
     filename = getRealPath(filename);
-    printf("%s\n", filename);
+    printf("\t%s\n", filename);
     uint16_t hash = DJBHash(filename) % HASHTABLE_MLIST_SIZE;
 
     mlist_remove(hashtable[hash], filename);
     if (hashtable[hash]->next == NULL && hashtable[hash]->filename != NULL && filename != NULL)
     {
-        if (strcmp(hashtable[hash]->filename, filename) == 0)
+        if (!strcmp(hashtable[hash]->filename, filename))
         {
             hashtable[hash] = mlist_new();
         }
