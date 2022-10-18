@@ -5,83 +5,15 @@
 
 #include "wordFileIO.h"
 
-HASHTABLE_MLIST *hashtable;
+HASHTABLE_MLIST *hashtable_global;
 
 // RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
-void recordWord_file(char *filename)
+void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
 {
     filename = getRealPath(filename);
     printf("\t%s\n", filename);
+    FILE *fp = openfile(filename);
 
-    FILE *fp = fopen(filename, "r");
-    if (fp == NULL)
-    {
-        fclose(fp);
-    }
-    else
-    {
-        char *word = (char *)malloc(sizeof(char) * 1);
-        CHECK_MEM(word);
-        memset(word, '\0', 1);
-
-        char *tmp = (char *)malloc(sizeof(char) * 1);
-        CHECK_MEM(tmp);
-        memset(tmp, '\0', 1);
-
-        uint32_t len = 0;
-
-        char c = fgetc(fp);
-        while (!feof(fp))
-        {
-            if (isalnum(c))
-            {
-                tmp = realloc(tmp, sizeof(char) * (len + 2));
-                tmp[len] = c;
-                len++;
-            }
-            else
-            {
-                tmp[len] = '\0';
-                word = strdup(tmp);
-                len = 0;
-
-                free(tmp);
-
-                tmp = (char *)malloc(sizeof(char) * 1);
-                CHECK_MEM(tmp);
-                memset(tmp, '\0', 1);
-
-                if (wordlen_check(word))
-                {
-                    hashtable_mlist_add(hashtable, filename, word);
-                }
-            }
-            c = fgetc(fp);
-        }
-
-        fclose(fp);
-        free(word);
-        free(tmp);
-    }
-}
-
-// RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE MULTI-THREAD
-void *recordWord_file_thread(void *thread_data)
-{
-    WORDIO_THREAD_DATA *data = (WORDIO_THREAD_DATA *)thread_data;
-    char *filename = data->filename;
-
-    filename = getRealPath(filename);
-    printf("\t%s\n", filename);
-
-    FILE *fp = fopen(filename, "r");
-    if (fp == NULL)
-    {
-        fclose(fp);
-        pthread_exit(NULL);
-    }
-    else
-    {
     char *word = (char *)malloc(sizeof(char) * 1);
     CHECK_MEM(word);
     memset(word, '\0', 1);
@@ -124,20 +56,72 @@ void *recordWord_file_thread(void *thread_data)
     fclose(fp);
     free(word);
     free(tmp);
-    pthread_exit(NULL);
+}
+
+// RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
+void *recordWord_file_thread(void *thread_data)
+{
+    char *filename = (char *)thread_data;
+    filename = getRealPath(filename);
+    printf("\t%s\n", filename);
+    FILE *fp = openfile(filename);
+
+    char *word = (char *)malloc(sizeof(char) * 1);
+    CHECK_MEM(word);
+    memset(word, '\0', 1);
+
+    char *tmp = (char *)malloc(sizeof(char) * 1);
+    CHECK_MEM(tmp);
+    memset(tmp, '\0', 1);
+
+    uint32_t len = 0;
+
+    char c = fgetc(fp);
+    while (!feof(fp))
+    {
+        if (isalnum(c))
+        {
+            tmp = realloc(tmp, sizeof(char) * (len + 2));
+            tmp[len] = c;
+            len++;
+        }
+        else
+        {
+            tmp[len] = '\0';
+            word = strdup(tmp);
+            len = 0;
+
+            free(tmp);
+
+            tmp = (char *)malloc(sizeof(char) * 1);
+            CHECK_MEM(tmp);
+            memset(tmp, '\0', 1);
+
+            if (wordlen_check(word))
+            {
+                hashtable_mlist_add(hashtable_global, filename, word);
+            }
+        }
+        c = fgetc(fp);
     }
+
+    fclose(fp);
+    free(word);
+    free(tmp);
+    pthread_exit(NULL);
 }
 
 // IF THE NAME INPUTED IS A DIRECTORY, TRAVESE THE DIRECTORY AND RECORD ALL THE FILES AND DO recordWord_dir() TO THE SUB DIRECTORIES
-void recordWord_dir(char *filename)
+void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
 {
     DIR *dir;
     struct dirent *ptr;
     char path[PATH_MAX];
+    uint32_t NUM_THREADS = SHRT_MAX;
+    pthread_t threads[NUM_THREADS];
+    uint32_t tid = 0;
 
-    uint32_t NUM_THREADS = 0;
-    LIST *fileList = list_new();
-
+    printf("\tOpening Directory:\t%s\n", filename);
     dir = opendir(filename);
 
     if (dir == NULL)
@@ -157,8 +141,18 @@ void recordWord_dir(char *filename)
             strcpy(path, filename);
             strcat(path, "/");
             strcat(path, ptr->d_name);
-            fileList = list_add(fileList, strdup(path));
-            NUM_THREADS++;
+            char * thread_data = strdup(path);
+            
+            int32_t rc = pthread_create(&threads[tid], NULL, recordWord_file_thread, (void *)thread_data);
+
+            if (rc != 0)
+            {
+                printf("ERROR; return code from pthread_create() is %d\n", rc);
+                exit(EXIT_FAILURE);
+            }
+            tid ++;
+
+            usleep(2 *1000);
         }
         else if (ptr->d_type == 10)
         {
@@ -169,71 +163,31 @@ void recordWord_dir(char *filename)
             strcpy(path, filename);
             strcat(path, "/");
             strcat(path, ptr->d_name);
-            recordWord_dir(path);
+            printf("\n");
+
+            recordWord_dir(path, hashtable);
         }
     }
-
-    WORDIO_THREAD_DATA thread_data_array[NUM_THREADS];
-    pthread_t threads[NUM_THREADS];
-
-    for (uint32_t tid = 0; tid < NUM_THREADS; tid++)
-    {
-        if (fileList != NULL && fileList->word != NULL)
-        {
-            thread_data_array[tid].filename = strdup(fileList->word);
-            fileList = fileList->next;
-        }
-    }
-
-    uint32_t end = NUM_THREADS - 1;
-    uint32_t tid = 0;
-    while (tid < end)
-    {
-        int rc0 = pthread_create(&threads[tid], NULL, recordWord_file_thread, (void *)&thread_data_array[tid]);
-
-        if (rc0 != 0)
-        {
-            printf("Error: return code from pthread_create() is %d", rc0);
-            exit(EXIT_FAILURE);
-        }
-
-        int rc1 = pthread_create(&threads[end], NULL, recordWord_file_thread, (void *)&thread_data_array[end]);
-
-        if (rc1 != 0)
-        {
-            printf("Error: return code from pthread_create() is %d", rc1);
-            exit(EXIT_FAILURE);
-        }
-
-        tid++;
-        end--;
-    }
-
     closedir(dir);
 }
 
 // THE OVERALL FUNTION FOR RECORDING
-void *recordWord(void *thread_data)
+void recordWord(char *filename, HASHTABLE_MLIST *hashtable)
 {
-    struct wordIO_thread_data *data;
-    data = (struct wordIO_thread_data *)thread_data;
-    hashtable = data->hashtable;
-
-    // printf(" %s:\n", data->filename);
+    hashtable_global = hashtable;
 
     struct stat statbuf;
-    if (stat(data->filename, &statbuf))
+    if (stat(filename, &statbuf))
     {
-        perror("stat");
+        perror("fopen");
         exit(EXIT_FAILURE);
     }
     else if (S_ISDIR(statbuf.st_mode))
     {
-        recordWord_dir(data->filename);
+        recordWord_dir(filename, hashtable);
     }
     else if (S_ISREG(statbuf.st_mode))
     {
-        recordWord_file(data->filename);
+        recordWord_file(filename, hashtable);
     }
-    pthread_exit(NULL);
 }

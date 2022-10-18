@@ -108,7 +108,7 @@ void recordWord(char *filename, HASHTABLE_MLIST *hashtable)
     struct stat statbuf;
     if (stat(filename, &statbuf))
     {
-        perror("fopen");
+        perror("stat");
         exit(EXIT_FAILURE);
     }
     else if (S_ISDIR(statbuf.st_mode))

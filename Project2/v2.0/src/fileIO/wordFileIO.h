@@ -20,15 +20,9 @@
 
 #include "../dataStruct/tools.h"
 #include "../dataStruct/hashtable_mlist.h"
-#include "trovefileIO.h"
 
-typedef struct wordIO_thread_data 
-{
-    char *filename;
-    HASHTABLE_MLIST *hashtable;
-} WORDIO_THREAD_DATA;
 
 // RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
-extern void *recordWord(void *thread_data);
+extern void recordWord(char *filename, HASHTABLE_MLIST *hashtable);
 
 #endif

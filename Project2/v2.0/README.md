@@ -15,7 +15,6 @@ Trove makes it easier to search for certain words from a list of files.
 - Remove certain files from the Index file
 - Searching the word from Index File
 - Change the limitation of word length
-- Using multi-tread, would run faster on multi-thread processor
 
 ## Building
 

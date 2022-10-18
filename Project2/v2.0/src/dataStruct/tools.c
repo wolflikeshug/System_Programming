@@ -37,7 +37,6 @@ bool isString(char *string)
     return true;
 }
 
-
 // CHANGE THE WORDLEN
 void change_wordlen(uint32_t len)
 {
@@ -59,7 +58,14 @@ bool wordlen_check(char *word)
 // IF THE FILE IS EXIST RETURN THE FILE POINTER OTHERWISE POP UP ERROR MESSAGE
 FILE *openfile(char *filename)
 {
-    return fopen(filename, "r");
+    FILE *file = fopen(filename, "r+");
+    if (file == NULL)
+    {
+        printf("File %s does not exist\n", filename);
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+    return file;
 }
 
 // GET THE REAL PATH OF THE FILE

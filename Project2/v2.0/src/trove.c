@@ -1,12 +1,11 @@
-/*
- *   CITS2002  Project 2  2022-sem2
- *   Student:  23006364   HU ZHUO   100
- */
+/*  
+*   CITS2002  Project 2  2022-sem2
+*   Student:  23006364   HU ZHUO   100
+*/
 
 #include "trove.h"
 
 bool info = false;
-uint32_t NUM_THREADS = 1;
 
 // IF THE ARGUMENT IS NOT CORRECT, PRINT THE USAGE AND EXIT
 void err_print(void)
@@ -29,38 +28,18 @@ void build_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
     printf("\tTrove-File:\t%s\n\tWordlen limit:\t%d\n", TROVE_FILE, wordlen);
     printf("\t--------------------------Building--------------------------\n");
-
     hashtable = hashtable_mlist_new();
-
-    uint32_t tid = 0;
-    pthread_t threads[NUM_THREADS];
-    WORDIO_THREAD_DATA thread_data_array[NUM_THREADS];
-
     for (; optind < argc; optind++)
     {
-        thread_data_array[tid].filename = strdup(argv[optind]);
-        thread_data_array[tid].hashtable = hashtable;
-    }
-
-    for (int tid = 0; tid < NUM_THREADS; tid ++)
-    {
-        int rc = pthread_create(&threads[tid], NULL, recordWord, (void *)&thread_data_array[tid]);
-        
-        if (rc != 0)
-        {
-            printf("Error: return code from pthread_create() is %d", rc);
-            exit(EXIT_FAILURE);
-        }
+        recordWord(argv[optind], hashtable);
     }
     trovefile_write(hashtable);
-
     if (info)
     {
         printf("\tThe Trove File is now Containing:\n");
         printf("\t----------------------Trove File Detail----------------------\n");
         trovefile_print();
     }
-    pthread_exit(NULL);
     exit(EXIT_SUCCESS);
 }
 
@@ -77,9 +56,7 @@ void remove_func(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
             hashtable_mlist_remove(hashtable, argv[optind]);
         }
     }
-
     trovefile_write(hashtable);
-
     if (info)
     {
         printf("\tAfter Remove, The Trove File Containing:\n");
@@ -94,38 +71,18 @@ void update_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
     printf("\tTrove-File:\t%s\n\tWordlen limit:\t%d\n", TROVE_FILE, wordlen);
     printf("\t--------------------------Updating--------------------------\n");
-
     hashtable = hashtable_mlist_new();
-
-    uint32_t tid = 0;
-    pthread_t threads[NUM_THREADS];
-    WORDIO_THREAD_DATA thread_data_array[NUM_THREADS];
-
     for (; optind < argc; optind++)
     {
-        thread_data_array[tid].filename = argv[optind];
-        thread_data_array[tid].hashtable = hashtable;
-    }
-
-    for (int tid = 0; tid < NUM_THREADS; tid ++)
-    {
-        int rc = pthread_create(&threads[tid], NULL, recordWord, (void *)&thread_data_array[tid]);
-        
-        if (rc != 0)
-        {
-            printf("Error: return code from pthread_create() is %d", rc);
-            exit(EXIT_FAILURE);
-        }
+        recordWord(argv[optind], hashtable);
     }
     trovefile_update(hashtable);
-
     if (info)
     {
         printf("\tThe Trove File is now Containing:\n");
         printf("\t----------------------Trove File Detail----------------------\n");
         trovefile_print();
     }
-    pthread_exit(NULL);
     exit(EXIT_SUCCESS);
 }
 
@@ -147,6 +104,8 @@ int32_t main(int32_t argc, char *argv[])
     uint16_t function = 0; // 0: search 1: build, 2: remove, 3: update
 
     HASHTABLE_MLIST *hashtable = hashtable_mlist_new();
+    char *cmd = "ulimit -n 2048\n";
+    system(cmd);
 
     while ((result = getopt(argc, argv, "f:brul:v")) != -1)
     {
@@ -160,7 +119,7 @@ int32_t main(int32_t argc, char *argv[])
 
         case 'l':
 
-            if (!isInt(optarg) || atoi(optarg) < 1) // if the length is not a positive integer or larger than 255
+            if (!isInt(optarg) || atoi(optarg) < 1)     // if the length is not a positive integer or larger than 255
             {
                 err_print();
             }
@@ -209,8 +168,6 @@ int32_t main(int32_t argc, char *argv[])
             err_print();
         }
     }
-
-    NUM_THREADS = argc - optind;
 
     if (argc == argc_cor && !function && !info) // SEARCH FUNCTION
     {
