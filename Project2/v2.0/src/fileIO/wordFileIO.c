@@ -1,60 +1,68 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 #include "wordFileIO.h"
 
+HASHTABLE_MLIST *hashtable;
+
 // RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
-void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
+void recordWord_file(char *filename)
 {
     filename = getRealPath(filename);
     printf("\t%s\n", filename);
-    
-    FILE *fp = openfile(filename);
 
-    char *word = (char *)malloc(sizeof(char) * 1);
-    CHECK_MEM(word);
-    memset(word, '\0', 1);
-    
-    char *tmp = (char *)malloc(sizeof(char) * 1);
-    CHECK_MEM(tmp);
-    memset(tmp, '\0', 1);
-
-    uint32_t len = 0;
-
-    char c = fgetc(fp);
-    while (!feof(fp))
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL)
     {
-        if (isalnum(c))
-        {
-            tmp = realloc(tmp, sizeof(char) * (len + 2));
-            tmp[len] = c;
-            len++;
-        }
-        else
-        {
-            tmp[len] = '\0';
-            word = strdup(tmp);
-            len = 0;
-
-            free(tmp);
-
-            tmp = (char *)malloc(sizeof(char) * 1);
-            CHECK_MEM(tmp);
-            memset(tmp, '\0', 1);
-
-            if (wordlen_check(word))
-            {
-                hashtable_mlist_add(hashtable, filename, word);
-            }
-        }
-        c = fgetc(fp);
+        fclose(fp);
     }
+    else
+    {
+        char *word = (char *)malloc(sizeof(char) * 1);
+        CHECK_MEM(word);
+        memset(word, '\0', 1);
 
-    fclose(fp);
-    free(word);
-    free(tmp);
+        char *tmp = (char *)malloc(sizeof(char) * 1);
+        CHECK_MEM(tmp);
+        memset(tmp, '\0', 1);
+
+        uint32_t len = 0;
+
+        char c = fgetc(fp);
+        while (!feof(fp))
+        {
+            if (isalnum(c))
+            {
+                tmp = realloc(tmp, sizeof(char) * (len + 2));
+                tmp[len] = c;
+                len++;
+            }
+            else
+            {
+                tmp[len] = '\0';
+                word = strdup(tmp);
+                len = 0;
+
+                free(tmp);
+
+                tmp = (char *)malloc(sizeof(char) * 1);
+                CHECK_MEM(tmp);
+                memset(tmp, '\0', 1);
+
+                if (wordlen_check(word))
+                {
+                    hashtable_mlist_add(hashtable, filename, word);
+                }
+            }
+            c = fgetc(fp);
+        }
+
+        fclose(fp);
+        free(word);
+        free(tmp);
+    }
 }
 
 // RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE MULTI-THREAD
@@ -62,16 +70,22 @@ void *recordWord_file_thread(void *thread_data)
 {
     WORDIO_THREAD_DATA *data = (WORDIO_THREAD_DATA *)thread_data;
     char *filename = data->filename;
-    HASHTABLE_MLIST *hashtable = data->hashtable;
 
     filename = getRealPath(filename);
     printf("\t%s\n", filename);
-    FILE *fp = openfile(filename);
 
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL)
+    {
+        fclose(fp);
+        pthread_exit(NULL);
+    }
+    else
+    {
     char *word = (char *)malloc(sizeof(char) * 1);
     CHECK_MEM(word);
     memset(word, '\0', 1);
-    
+
     char *tmp = (char *)malloc(sizeof(char) * 1);
     CHECK_MEM(tmp);
     memset(tmp, '\0', 1);
@@ -111,10 +125,11 @@ void *recordWord_file_thread(void *thread_data)
     free(word);
     free(tmp);
     pthread_exit(NULL);
+    }
 }
 
 // IF THE NAME INPUTED IS A DIRECTORY, TRAVESE THE DIRECTORY AND RECORD ALL THE FILES AND DO recordWord_dir() TO THE SUB DIRECTORIES
-void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
+void recordWord_dir(char *filename)
 {
     DIR *dir;
     struct dirent *ptr;
@@ -122,7 +137,7 @@ void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
 
     uint32_t NUM_THREADS = 0;
     LIST *fileList = list_new();
-    
+
     dir = opendir(filename);
 
     if (dir == NULL)
@@ -154,7 +169,7 @@ void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
             strcpy(path, filename);
             strcat(path, "/");
             strcat(path, ptr->d_name);
-            recordWord_dir(path, hashtable);
+            recordWord_dir(path);
         }
     }
 
@@ -163,18 +178,35 @@ void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
 
     for (uint32_t tid = 0; tid < NUM_THREADS; tid++)
     {
-        if(fileList != NULL && fileList->word != NULL)
+        if (fileList != NULL && fileList->word != NULL)
         {
             thread_data_array[tid].filename = strdup(fileList->word);
-            thread_data_array[tid].hashtable = hashtable;
             fileList = fileList->next;
-            int rc = pthread_create(&threads[tid], NULL, recordWord_file_thread, (void *)&thread_data_array[tid]);
-            if (rc != 0)
-            {
-                printf("Error: return code from pthread_create() is %d", rc);
-                exit(EXIT_FAILURE);
-            }
         }
+    }
+
+    uint32_t end = NUM_THREADS - 1;
+    uint32_t tid = 0;
+    while (tid < end)
+    {
+        int rc0 = pthread_create(&threads[tid], NULL, recordWord_file_thread, (void *)&thread_data_array[tid]);
+
+        if (rc0 != 0)
+        {
+            printf("Error: return code from pthread_create() is %d", rc0);
+            exit(EXIT_FAILURE);
+        }
+
+        int rc1 = pthread_create(&threads[end], NULL, recordWord_file_thread, (void *)&thread_data_array[end]);
+
+        if (rc1 != 0)
+        {
+            printf("Error: return code from pthread_create() is %d", rc1);
+            exit(EXIT_FAILURE);
+        }
+
+        tid++;
+        end--;
     }
 
     closedir(dir);
@@ -185,8 +217,9 @@ void *recordWord(void *thread_data)
 {
     struct wordIO_thread_data *data;
     data = (struct wordIO_thread_data *)thread_data;
+    hashtable = data->hashtable;
 
-    //printf(" %s:\n", data->filename);
+    // printf(" %s:\n", data->filename);
 
     struct stat statbuf;
     if (stat(data->filename, &statbuf))
@@ -196,12 +229,11 @@ void *recordWord(void *thread_data)
     }
     else if (S_ISDIR(statbuf.st_mode))
     {
-        recordWord_dir(data->filename, data->hashtable);
+        recordWord_dir(data->filename);
     }
     else if (S_ISREG(statbuf.st_mode))
     {
-        recordWord_file(data->filename, data->hashtable);
+        recordWord_file(data->filename);
     }
-    
     pthread_exit(NULL);
 }

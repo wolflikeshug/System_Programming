@@ -37,6 +37,7 @@ bool isString(char *string)
     return true;
 }
 
+
 // CHANGE THE WORDLEN
 void change_wordlen(uint32_t len)
 {
@@ -58,11 +59,6 @@ bool wordlen_check(char *word)
 // IF THE FILE IS EXIST RETURN THE FILE POINTER OTHERWISE POP UP ERROR MESSAGE
 FILE *openfile(char *filename)
 {
-    if (access(filename, R_OK))
-    {
-        perror("access");
-        exit(EXIT_FAILURE);
-   }
     return fopen(filename, "r");
 }
 

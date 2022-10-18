@@ -40,7 +40,10 @@ void build_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
     {
         thread_data_array[tid].filename = strdup(argv[optind]);
         thread_data_array[tid].hashtable = hashtable;
-        
+    }
+
+    for (int tid = 0; tid < NUM_THREADS; tid ++)
+    {
         int rc = pthread_create(&threads[tid], NULL, recordWord, (void *)&thread_data_array[tid]);
         
         if (rc != 0)
@@ -48,9 +51,7 @@ void build_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
             printf("Error: return code from pthread_create() is %d", rc);
             exit(EXIT_FAILURE);
         }
-        tid++;
     }
-    pthread_exit(NULL);
     trovefile_write(hashtable);
 
     if (info)
@@ -59,6 +60,7 @@ void build_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
         printf("\t----------------------Trove File Detail----------------------\n");
         trovefile_print();
     }
+    pthread_exit(NULL);
     exit(EXIT_SUCCESS);
 }
 
@@ -103,7 +105,10 @@ void update_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
     {
         thread_data_array[tid].filename = argv[optind];
         thread_data_array[tid].hashtable = hashtable;
-        
+    }
+
+    for (int tid = 0; tid < NUM_THREADS; tid ++)
+    {
         int rc = pthread_create(&threads[tid], NULL, recordWord, (void *)&thread_data_array[tid]);
         
         if (rc != 0)
@@ -111,9 +116,7 @@ void update_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
             printf("Error: return code from pthread_create() is %d", rc);
             exit(EXIT_FAILURE);
         }
-        tid++;
     }
-    pthread_exit(NULL);
     trovefile_update(hashtable);
 
     if (info)
@@ -122,6 +125,7 @@ void update_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
         printf("\t----------------------Trove File Detail----------------------\n");
         trovefile_print();
     }
+    pthread_exit(NULL);
     exit(EXIT_SUCCESS);
 }
 
