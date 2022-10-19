@@ -1,7 +1,7 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 #include "tools.h"
 
@@ -71,7 +71,7 @@ FILE *openfile(char *filename)
 // GET THE REAL PATH OF THE FILE
 char *getRealPath(char *filename)
 {
-    char *fileRealPath = (char *)malloc(PATH_MAX);
+    char *fileRealPath = (char *)calloc(PATH_MAX, sizeof(char));
     CHECK_MEM(fileRealPath);
 
     realpath(filename, fileRealPath);
@@ -81,7 +81,7 @@ char *getRealPath(char *filename)
 // GET ONE LINE FROM THE FILE
 char *getLine(FILE *file)
 {
-    char *line = (char *)malloc(1);
+    char *line = (char *)calloc(1000, sizeof(char));
     CHECK_MEM(line);
 
     char c = fgetc(file);
@@ -93,7 +93,10 @@ char *getLine(FILE *file)
         {
             line[len] = c;
             len++;
-            line = (char *)realloc(line, sizeof(char) * (len + 1));
+            if (len > 1000)
+            {
+                line = (char *)realloc(line, sizeof(char) * (len + 2));
+            }
         }
         else
         {
@@ -108,9 +111,8 @@ char *getLine(FILE *file)
 // A FUNCTION CHANGE THE GIVEN INT TO STRING
 char *itoa(uint16_t num)
 {
-    char *str = (char *)malloc(sizeof(char) * 20);
+    char *str = (char *)calloc(20, sizeof(char));
     CHECK_MEM(str);
-    memset(str, 0, sizeof(char) * 20);
 
     sprintf(str, "%d", num);
     return str;
@@ -151,9 +153,8 @@ bool isDirectory(char *name)
 // CALCULATE MD5 HASH OF THE GIVEN FILE
 char *md5sum(char *filename)
 {
-    char *md5 = (char *)malloc(sizeof(char) * 33);
+    char *md5 = (char *)calloc(33, sizeof(char));
     CHECK_MEM(md5);
-    memset(md5, 0, sizeof(char) * 33);
     char *cmd = strdup("md5sum '");
 
     cmd = (char *)realloc(cmd, sizeof(char) * (strlen(cmd) + strlen(filename) + 2));

@@ -1,7 +1,7 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 #include "trovefileIO.h"
 
@@ -17,9 +17,8 @@ void change_trove_file(char *filename)
 // OPEN THE TROVE FILE
 void trovefile_open(void)
 {
-    char *cmd = (char *)malloc(sizeof(char) * ARG_MAX);
+    char *cmd = (char *)calloc(ARG_MAX, sizeof(char));
     CHECK_MEM(cmd);
-    memset(cmd, '\0', ARG_MAX);
 
     strcpy(cmd, "zcat '");
     strcat(cmd, TROVE_FILE);
@@ -38,9 +37,8 @@ void trovefile_gz_close(void)
 {
     fclose(TROVE_FILE_P);
 
-    char *cmd = (char *)malloc(sizeof(char) * ARG_MAX);
+    char *cmd = (char *)calloc(ARG_MAX, sizeof(char));
     CHECK_MEM(cmd);
-    memset(cmd, '\0', ARG_MAX);
 
     strcpy(cmd, "gzip -9 '");
     strcat(cmd, TROVE_FILE);
@@ -61,13 +59,11 @@ void trovefile_gz_close(void)
 // LOAD THE WORDS FROM THE TROVE FILE INTO THE HASHTABLE
 void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hashtable)
 {
-    char *word = (char *)malloc(sizeof(char) * 1);
+    char *word = (char *)calloc(1, sizeof(char));
     CHECK_MEM(word);
-    memset(word, '\0', 1);
 
-    char *tmp = (char *)malloc(sizeof(char) * 1);
+    char *tmp = (char *)calloc(20, sizeof(char));
     CHECK_MEM(tmp);
-    memset(tmp, '\0', 1);
     char c = *wordslist;
 
     uint32_t len = 0;
@@ -76,7 +72,10 @@ void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hasht
     {
         if (isalnum(c))
         {
-            tmp = realloc(tmp, sizeof(char) * (len + 2));
+            if (len > 19)
+            {
+                tmp = realloc(tmp, sizeof(char) * (len + 2));
+            }
             tmp[len] = c;
             len++;
         }
@@ -88,9 +87,8 @@ void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hasht
 
             free(tmp);
 
-            tmp = (char *)malloc(sizeof(char) * 1);
+            tmp = (char *)calloc(20, sizeof(char));
             CHECK_MEM(tmp);
-            memset(tmp, '\0', 1);
 
             if (wordlen_check(word))
             {
@@ -125,10 +123,10 @@ HASHTABLE_MLIST *trovefile_load(void)
 }
 
 /* THE FOLLOWING 4 FUNCTIONS ARE USED TO READ FROM THE HASHTABLE
-*  YOU MAY FIND THEM FAMILIAR AND THAT IS BECAUSE
-*  THEY ARE JUST A DIFFERENT VERSION OF XXX_print FUNCTIONS 
-*  FROM list.c, mlist.c, hastable_list.c, hashtable_mlist.c
-*/
+ *  YOU MAY FIND THEM FAMILIAR AND THAT IS BECAUSE
+ *  THEY ARE JUST A DIFFERENT VERSION OF XXX_print FUNCTIONS
+ *  FROM list.c, mlist.c, hastable_list.c, hashtable_mlist.c
+ */
 
 // READ THE LIST
 char *list_read(LIST *list)
@@ -223,7 +221,7 @@ char *mlist_read(MLIST *mlist)
             str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(mlist->md5) + 2));
             strcat(str, md5);
             strcat(str, linespace);
-            
+
             str_hashtable_list = hashtable_list_read(mlist->words);
             str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_hashtable_list) + 2));
             strcat(str, str_hashtable_list);

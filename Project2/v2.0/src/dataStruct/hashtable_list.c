@@ -8,9 +8,8 @@
 // ALLOCATE SPACE AND INITIALISE A NEW HASHTABLE_LIST
 HASHTABLE_LIST *hashtable_list_new(void)
 {
-    HASHTABLE_LIST *new = (HASHTABLE_LIST *)malloc(sizeof(LIST *) *HASHTABLE_LIST_SIZE);
+    HASHTABLE_LIST *new = (HASHTABLE_LIST *)calloc(HASHTABLE_LIST_SIZE, sizeof(LIST *));
     CHECK_MEM(new);
-    memset(new, 0, sizeof(LIST *) *HASHTABLE_LIST_SIZE);
     
     for (uint16_t i = 0; i < HASHTABLE_LIST_SIZE; i++)
     {

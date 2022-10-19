@@ -56,7 +56,7 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
     free(tmp);
 }
 
-// IF THE NAME INPUTED IS A DIRECTORY, TRAVESE THE DIRECTORY AND RECORD ALL THE FILES AND DO recordWord_dir() TO THE SUB DIRECTORIES
+// TRAVESE THE DIRECTORY AND RECORD ALL THE FILES USE recordWord_file
 void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
 {
     DIR *dir;

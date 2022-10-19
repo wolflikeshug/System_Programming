@@ -1,16 +1,15 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 #include "mlist.h"
 
 // MAKE A BLANK MLIST ITEM
 MLIST *mlist_new(void)
 {
-    MLIST *mlist = (MLIST *)malloc(sizeof(MLIST));
+    MLIST *mlist = (MLIST *)calloc(1, sizeof(MLIST));
     CHECK_MEM(mlist);
-    memset(mlist, 0, sizeof(MLIST));
 
     mlist->filename = NULL;
     mlist->md5 = NULL;
@@ -37,9 +36,8 @@ bool mlist_find(MLIST *mlist, char *target)
 //  ALLOCATE SPACE FOR A NEW MLIST ITEM AND CHECK IF ALLOCATION SUCCEEDS
 MLIST *mlist_new_item(char *filename)
 {
-    MLIST *newMList = (MLIST *)malloc(sizeof(MLIST) * 1);
+    MLIST *newMList = (MLIST *)calloc(1, sizeof(MLIST));
     CHECK_MEM(newMList);
-    memset(newMList, 0, sizeof(MLIST) * 1);
 
     newMList->filename = strdup(filename);
     newMList->md5 = strdup(md5sum(filename));
