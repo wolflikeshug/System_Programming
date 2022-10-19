@@ -6,8 +6,7 @@
 #ifndef _TROVE_H
 #define _TROVE_H
 
-#include "fileIO/wordFileIO.h"
-#include "fileIO/trovefileIO.h"
+#include "trovefileIO.h"
 
 /* The following include does nothing,
  *  These header files are included here just to show
@@ -19,7 +18,8 @@
  *  it is fine to remove them if you want
  */
 
-#include "dataStruct/tools.h"
-#include "dataStruct/hashtable_mlist.h"
+#include "wordFileIO.h"
+#include "tools.h"
+#include "hashtable_mlist.h"
 
 #endif

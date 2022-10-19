@@ -3,7 +3,7 @@
  *   Student:  23006364   HU ZHUO   100
  */
 
-#include "trovefileIO.h"
+#include "../inc/trovefileIO.h"
 
 char *TROVE_FILE = "/tmp/trove";
 FILE *TROVE_FILE_P = NULL;

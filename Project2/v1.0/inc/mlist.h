@@ -6,8 +6,6 @@
 #ifndef _MLIST_H
 #define _MLIST_H
 
-#include <stdbool.h>
-
 #include "hashtable_list.h"
 
 // A MOTHER LIST HAS TWO LINKS, ONE FOR A SIMPLE LIST, ONE FOR THE NEXT MOTHER LIST

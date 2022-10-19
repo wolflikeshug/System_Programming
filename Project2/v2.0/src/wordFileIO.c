@@ -3,7 +3,7 @@
  *   Student:  23006364   HU ZHUO   100
  */
 
-#include "wordFileIO.h"
+#include "../inc/wordFileIO.h"
 
 HASHTABLE_MLIST *hashtable_global;
 

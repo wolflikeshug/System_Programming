@@ -3,13 +3,14 @@
  *   Student:  23006364   HU ZHUO   100
  */
 
-#include "list.h"
+#include "../inc/list.h"
 
 // MAKE A NFW BLANK LIST ITEM
 LIST *list_new(void)
 {
-    LIST *new = (LIST *)calloc(1, sizeof(LIST *));
+    LIST *new = (LIST *)malloc(sizeof(LIST) * 1);
     CHECK_MEM(new);
+    memset(new, 0, sizeof(LIST) * 1);
 
     new->word = NULL;
     new->next = NULL;
@@ -34,8 +35,9 @@ bool list_find(LIST *list, char *target)
 //  ALLOCATE SPACE FOR A NEW LIST ITEM AND CHECK IF ALLOCATION SUCCEEDS
 LIST *list_new_item(char *word)
 {
-    LIST *newList = (LIST *)calloc(1, sizeof(LIST));
+    LIST *newList = (LIST *)malloc(sizeof(LIST) * 1);
     CHECK_MEM(newList);
+    memset(newList, 0, sizeof(LIST) * 1);
 
     newList->word = strdup(word);
     newList->next = list_new();

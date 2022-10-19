@@ -3,7 +3,7 @@
  *   Student:  23006364   HU ZHUO   100
  */
 
-#include "trove.h"
+#include "../inc/trove.h"
 
 bool info = false;
 

@@ -3,7 +3,7 @@
  *   Student:  23006364   HU ZHUO   100
  */
 
-#include "tools.h"
+#include "../inc/tools.h"
 
 uint32_t ARG_MAX = 2097152;
 uint32_t wordlen = 4;

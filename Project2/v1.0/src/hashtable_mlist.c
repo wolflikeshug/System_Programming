@@ -3,7 +3,7 @@
  *   Student:  23006364   HU ZHUO   100
  */
 
-#include "hashtable_mlist.h"
+#include "../inc/hashtable_mlist.h"
 
 // ALLOCATE SPACE AND INITIALISE A NEW HASHTABLE_MLIST
 HASHTABLE_MLIST *hashtable_mlist_new(void)

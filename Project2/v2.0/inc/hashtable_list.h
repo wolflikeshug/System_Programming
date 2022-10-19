@@ -19,7 +19,6 @@
  */
 
 #include "tools.h"
-#include "list.h"
 
 #define HASHTABLE_LIST_SIZE 2999
 

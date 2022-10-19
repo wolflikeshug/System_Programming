@@ -3,7 +3,7 @@
  *   Student:  23006364   HU ZHUO   100
  */
 
-#include "wordFileIO.h"
+#include "../inc/wordFileIO.h"
 
 // RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
 void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
