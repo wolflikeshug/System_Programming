@@ -25,4 +25,7 @@
 // RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
 extern void recordWord(char *filename, HASHTABLE_MLIST *hashtable);
 
+// RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
+extern void recordWord_MULTI(char *filename, HASHTABLE_MLIST *hashtable);
+
 #endif

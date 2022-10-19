@@ -29,7 +29,6 @@ void trovefile_open(void)
     {
         perror("access");
         exit(EXIT_FAILURE);
-
     }
     TROVE_FILE_P = popen(cmd, "r");
 }

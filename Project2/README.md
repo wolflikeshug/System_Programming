@@ -4,7 +4,7 @@
 
 - Introduced multi-thread to boost the running speed of the Build / Update Function of the program 
 - (can save up to 60% time, works especially well with millions of files smaller than 300 Kbytes, this depends on the machine you are using)
-- (Warning, This version is not very stable: the program will potentially crash when reading multiple huge files, If you wish to read a large number of tens of Mega Byte large Files please use stabler version v1.0)
+- (Warning, This version is not very stable: the program will potentially Please read the README.md instruction in v2.0)
 
 ## v 1.0
 

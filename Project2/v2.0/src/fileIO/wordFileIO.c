@@ -62,52 +62,7 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
 void *recordWord_file_thread(void *thread_data)
 {
     char *filename = (char *)thread_data;
-    filename = getRealPath(filename);
-    printf("\t%s\n", filename);
-    FILE *fp = openfile(filename);
-
-    char *word = (char *)malloc(sizeof(char) * 1);
-    CHECK_MEM(word);
-    memset(word, '\0', 1);
-
-    char *tmp = (char *)malloc(sizeof(char) * 1);
-    CHECK_MEM(tmp);
-    memset(tmp, '\0', 1);
-
-    uint32_t len = 0;
-
-    char c = fgetc(fp);
-    while (!feof(fp))
-    {
-        if (isalnum(c))
-        {
-            tmp = realloc(tmp, sizeof(char) * (len + 2));
-            tmp[len] = c;
-            len++;
-        }
-        else
-        {
-            tmp[len] = '\0';
-            word = strdup(tmp);
-            len = 0;
-
-            free(tmp);
-
-            tmp = (char *)malloc(sizeof(char) * 1);
-            CHECK_MEM(tmp);
-            memset(tmp, '\0', 1);
-
-            if (wordlen_check(word))
-            {
-                hashtable_mlist_add(hashtable_global, filename, word);
-            }
-        }
-        c = fgetc(fp);
-    }
-
-    fclose(fp);
-    free(word);
-    free(tmp);
+    recordWord(filename, hashtable_global);
     pthread_exit(NULL);
 }
 
@@ -142,7 +97,14 @@ void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
             strcat(path, "/");
             strcat(path, ptr->d_name);
             char * thread_data = strdup(path);
-            
+            struct stat statbuf;
+            int ret = stat (filename, &statbuf);
+            if (ret)
+            {
+                perror("stat");
+                exit(EXIT_FAILURE);
+            }
+
             int32_t rc = pthread_create(&threads[tid], NULL, recordWord_file_thread, (void *)thread_data);
 
             if (rc != 0)
@@ -150,9 +112,8 @@ void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
                 printf("ERROR; return code from pthread_create() is %d\n", rc);
                 exit(EXIT_FAILURE);
             }
+            usleep(statbuf.st_size%10);
             tid ++;
-
-            usleep(2 *1000);
         }
         else if (ptr->d_type == 10)
         {
@@ -191,3 +152,4 @@ void recordWord(char *filename, HASHTABLE_MLIST *hashtable)
         recordWord_file(filename, hashtable);
     }
 }
+

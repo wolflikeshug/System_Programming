@@ -1,4 +1,4 @@
-# Trove Program
+# Trove Program v1.0
 
 Program Trove provides a similar function to Spotlight indexing the contents of files.
 
