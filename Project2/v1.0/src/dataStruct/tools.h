@@ -1,7 +1,7 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 // open up all features including POSIX_C_SOURCE
 #ifndef _GNU_SOURCE
@@ -21,7 +21,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
 
 extern uint32_t wordlen;
 extern uint32_t ARG_MAX;

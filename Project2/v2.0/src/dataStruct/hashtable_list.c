@@ -1,7 +1,7 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 #include "hashtable_list.h"
 
@@ -10,7 +10,7 @@ HASHTABLE_LIST *hashtable_list_new(void)
 {
     HASHTABLE_LIST *new = (HASHTABLE_LIST *)calloc(HASHTABLE_LIST_SIZE, sizeof(LIST *));
     CHECK_MEM(new);
-    
+
     for (uint16_t i = 0; i < HASHTABLE_LIST_SIZE; i++)
     {
         new[i] = list_new();

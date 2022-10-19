@@ -1,7 +1,7 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 #include "wordFileIO.h"
 
@@ -15,7 +15,7 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
     char *word = (char *)malloc(sizeof(char) * 1);
     CHECK_MEM(word);
     memset(word, '\0', 1);
-    
+
     char *tmp = (char *)malloc(sizeof(char) * 1);
     CHECK_MEM(tmp);
     memset(tmp, '\0', 1);
@@ -95,7 +95,7 @@ void recordWord_dir(char *filename, HASHTABLE_MLIST *hashtable)
             strcat(path, "/");
             strcat(path, ptr->d_name);
             printf("\n");
-            
+
             recordWord_dir(path, hashtable);
         }
     }

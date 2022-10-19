@@ -1,17 +1,17 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 #include "hashtable_list.h"
 
 // ALLOCATE SPACE AND INITIALISE A NEW HASHTABLE_LIST
 HASHTABLE_LIST *hashtable_list_new(void)
 {
-    HASHTABLE_LIST *new = (HASHTABLE_LIST *)malloc(sizeof(LIST *) *HASHTABLE_LIST_SIZE);
+    HASHTABLE_LIST *new = (HASHTABLE_LIST *)malloc(sizeof(LIST *) * HASHTABLE_LIST_SIZE);
     CHECK_MEM(new);
-    memset(new, 0, sizeof(LIST *) *HASHTABLE_LIST_SIZE);
-    
+    memset(new, 0, sizeof(LIST *) * HASHTABLE_LIST_SIZE);
+
     for (uint16_t i = 0; i < HASHTABLE_LIST_SIZE; i++)
     {
         new[i] = list_new();

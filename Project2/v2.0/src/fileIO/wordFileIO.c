@@ -12,10 +12,10 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
 {
     filename = getRealPath(filename);
 
-    printf("\t%s\n", filename);         // Print the name of the file
+    printf("\t%s\n", filename); // Print the name of the file
     FILE *fp = openfile(filename);
 
-    char *word = (char *)calloc(20, sizeof(char));
+    char *word = (char *)calloc(2, sizeof(char));
     CHECK_MEM(word);
 
     char *tmp = (char *)calloc(1, sizeof(char));
@@ -28,7 +28,7 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
     {
         if (isalnum(c))
         {
-            if (len > 20)
+            if (len >= 20)
             {
                 tmp = realloc(tmp, sizeof(char) * (len + 2));
             }
@@ -43,7 +43,7 @@ void recordWord_file(char *filename, HASHTABLE_MLIST *hashtable)
 
             free(tmp);
 
-            tmp = (char *)calloc(20, sizeof(char));
+            tmp = (char *)calloc(2, sizeof(char));
             CHECK_MEM(tmp);
 
             if (wordlen_check(word))

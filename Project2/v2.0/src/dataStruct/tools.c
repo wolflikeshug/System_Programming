@@ -93,7 +93,7 @@ char *getLine(FILE *file)
         {
             line[len] = c;
             len++;
-            if (len > 1000)
+            if (len > 999)
             {
                 line = (char *)realloc(line, sizeof(char) * (len + 2));
             }

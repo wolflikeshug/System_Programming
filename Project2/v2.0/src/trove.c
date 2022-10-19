@@ -1,7 +1,7 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 #include "trove.h"
 
@@ -119,7 +119,7 @@ int32_t main(int32_t argc, char *argv[])
 
         case 'l':
 
-            if (!isInt(optarg) || atoi(optarg) < 1)     // if the length is not a positive integer or larger than 255
+            if (!isInt(optarg) || atoi(optarg) < 1) // if the length is not a positive integer or larger than 255
             {
                 err_print();
             }

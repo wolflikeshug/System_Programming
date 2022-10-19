@@ -1,7 +1,7 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 #include "trovefileIO.h"
 
@@ -29,7 +29,6 @@ void trovefile_open(void)
     {
         perror("access");
         exit(EXIT_FAILURE);
-
     }
     TROVE_FILE_P = popen(cmd, "r");
 }
@@ -126,10 +125,10 @@ HASHTABLE_MLIST *trovefile_load(void)
 }
 
 /* THE FOLLOWING 4 FUNCTIONS ARE USED TO READ FROM THE HASHTABLE
-*  YOU MAY FIND THEM FAMILIAR AND THAT IS BECAUSE
-*  THEY ARE JUST A DIFFERENT VERSION OF XXX_print FUNCTIONS 
-*  FROM list.c, mlist.c, hastable_list.c, hashtable_mlist.c
-*/
+ *  YOU MAY FIND THEM FAMILIAR AND THAT IS BECAUSE
+ *  THEY ARE JUST A DIFFERENT VERSION OF XXX_print FUNCTIONS
+ *  FROM list.c, mlist.c, hastable_list.c, hashtable_mlist.c
+ */
 
 // READ THE LIST
 char *list_read(LIST *list)
@@ -224,7 +223,7 @@ char *mlist_read(MLIST *mlist)
             str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(mlist->md5) + 2));
             strcat(str, md5);
             strcat(str, linespace);
-            
+
             str_hashtable_list = hashtable_list_read(mlist->words);
             str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_hashtable_list) + 2));
             strcat(str, str_hashtable_list);

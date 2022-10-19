@@ -1,14 +1,14 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 #include "list.h"
 
 // MAKE A NFW BLANK LIST ITEM
 LIST *list_new(void)
 {
-    LIST *new = (LIST *)calloc(1, sizeof(LIST));
+    LIST *new = (LIST *)calloc(1, sizeof(LIST *));
     CHECK_MEM(new);
 
     new->word = NULL;

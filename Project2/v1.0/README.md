@@ -71,4 +71,5 @@ make / make trove
 - You may find that in my source files, there is no int type variable, instead they are replaced by many uint_t. In fact in the previous version of my work int is often used instead of uint_t, but if trove file records a huge file, the total length of the words recorded from that file gets greater than 2147483647(2^31-1), my program will crash, and pop up segment fault. So it recalls me to use various data types for different situations instead of just using int for everything. But unsigned short, int, unsigned int,  long long... there are too many names, Therefore I include stdint.h to give them a uniform format.
 - The trove program using PATH_MAX which is the POSIX equivalent for Microsoft's MAX_PATH, includes 255 characters plus one for a terminating NUL.
 - Although I used malloc and realloc to implement dynamic memory control of my program, I cannot help to notice that the efficiency of this technic is very slow, especially when I dynamically allocate memory one letter by one for each word, the program will spend minutes to read a 10MByte file.
+- The Larger the trove-file gets, the slower Upadate, Remove, Search functions will be.
 
