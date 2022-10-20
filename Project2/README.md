@@ -48,7 +48,7 @@ sudo apt-get install build-essential md5sum manpages-posix-dev
 You are able to make the version you wish by using the following cmd, Or jump to the directory of the version and use make directly to build the project!
 
 ```shell
-make / make trove		 # default build v2.0.
+make / make trove	 # default build v2.0.
 make 1.0			# build v1.0
 make 2.0			# build v2.0
 ```
