@@ -90,10 +90,7 @@ void load_from_troveFile(char *filename, char *wordslist, HASHTABLE_MLIST *hasht
             tmp = (char *)calloc(20, sizeof(char));
             CHECK_MEM(tmp);
 
-            if (wordlen_check(word))
-            {
-                hashtable_mlist_add(hashtable, filename, word);
-            }
+            hashtable_mlist_add(hashtable, filename, word);
         }
         c = *(++wordslist);
     }
