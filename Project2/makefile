@@ -18,3 +18,4 @@ trove: 1.0
 
 clean:
 	rm -f trove
+	rm -f /tmp/trove
