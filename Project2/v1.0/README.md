@@ -61,9 +61,6 @@ make / make trove
 
 ## Notes  (Strongly Suggest Reading This before marking)
 
-- Please set up the environment for this project before building and running, The following packages are required to run this project:
-  1. build-essential (I believe you have already installed this)
-  2. md5sum (This is required to check if the file has been modified after the trove-file has been built or updated)
 - Do not put the trove program file or any other opened file (or the directory containing these) into the file list while updating or building, The program will not be able to read from these files. Any attempt to build or update the trove-file using those will fail. The program will return an error and terminate without making any changes to trove-file.
 - Although the build and update function accepts a directory as input for the file list, the remove function does not support a directory as input. You can remove all the files under a certain directory using the * sign (but it wouldn't remove the files under the subdirectory of it)
 - Please notice that files that are deleted or modified since the trove-file was built or updated, will be permanently removed from trove-file the next time you use the trove program. And this removal will not be resumed even if the deletion or changes made to these files are revocated. You will need to rebuild or update the trove-file to reinclude those files back into the trove-file( index file ) and make it rebecome searchable.

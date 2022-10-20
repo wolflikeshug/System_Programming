@@ -1,7 +1,7 @@
 #  CITS2002 Project 2 2022
 #  Student:   23006364   HU   ZHUO   100
 
-CC	= gcc -std=c99 -Wall -Werror
+CC	= gcc -std=c99 -Wall -Werror -lpthread
 
 trove: 	src/tools.c inc/tools.h \
 		src/list.c inc/list.h \
