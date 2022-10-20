@@ -24,11 +24,11 @@ void hashtable_mlist_add(HASHTABLE_MLIST *hashtable, char *filename, char *word)
     uint16_t hash = DJBHash(filename) % HASHTABLE_MLIST_SIZE;
 
     hashtable[hash] = mlist_add(hashtable[hash], filename);
-    if (hashtable[hash]->words == NULL)
+    if (hashtable[hash]->dictionary == NULL)
     {
-        hashtable[hash]->words = hashtable_list_new();
+        hashtable[hash]->dictionary = hashtable_list_new();
     }
-    hashtable_list_add(hashtable[hash]->words, word);
+    hashtable_list_add(hashtable[hash]->dictionary, word);
 }
 
 // RETURN THE A LIST CONTIANING ALL THE FILENAMES IN HASHTABLE_MLIST
@@ -77,12 +77,12 @@ HASHTABLE_LIST *hashtable_mlist_filename_list(HASHTABLE_MLIST *hashtable, char *
         {
             if (!strcmp(mlist->filename, filename))
             {
-                return mlist->words;
+                return mlist->dictionary;
             }
             mlist = mlist->next;
         }
     }
-    return mlist_add(hashtable[hash], filename)->words;
+    return mlist_add(hashtable[hash], filename)->dictionary;
 }
 
 // RETURN THE LIST OF FILENAME HAVING THE KEYWORD UNDER THEIR HASHTABLE_LIST
@@ -94,7 +94,7 @@ LIST *hashtable_mlist_files_have_word(HASHTABLE_MLIST *hashtable, char *keyword)
         MLIST *mlist = hashtable[i];
         while (mlist != NULL)
         {
-            if (hashtable_list_find(mlist->words, keyword))
+            if (hashtable_list_find(mlist->dictionary, keyword))
             {
                 list = list_add(list, mlist->filename);
             }

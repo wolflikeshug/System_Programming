@@ -24,6 +24,11 @@
 
 #define HASHTABLE_MLIST_SIZE 4999
 
+/*
+ *   Implementation of a hashtable using a mlist
+ *   This is the unit to store all the files from file-list
+ */
+
 typedef MLIST *HASHTABLE_MLIST;
 
 // ALLOCATE SPACE AND INITIALISE A NEW HASHTABLE_MLIST

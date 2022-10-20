@@ -24,6 +24,10 @@
 #include "mlist.h"
 #include "hashtable_mlist.h"
 
+/*
+ *   Including all the operation needed to work trove-file!
+ */
+
 extern char *TROVE_FILE;
 extern FILE *TROVE_FILE_P;
 

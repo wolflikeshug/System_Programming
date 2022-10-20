@@ -22,6 +22,11 @@
 
 #define HASHTABLE_LIST_SIZE 2999
 
+/*
+ *   Implementation of a hashtable using a list
+ *   This is the unit to store all the words gets from single file
+ */
+
 // WE DEFINE A HASHTABLE AS A (WILL BE, DYNAMICALLY ALLOCATED) ARRAY OF LISTs
 typedef LIST *HASHTABLE_LIST;
 

@@ -8,12 +8,19 @@
 
 #include "hashtable_list.h"
 
+/*
+ *   Implement a mother list
+ *   similar to the list implementation in list.h
+ *   stores the filename and the md5 and dictionary of the file
+ *   the smallest unit to record the info about each file
+ */
+
 // A MOTHER LIST HAS TWO LINKS, ONE FOR A SIMPLE LIST, ONE FOR THE NEXT MOTHER LIST
 typedef struct mlist
 {
     char *filename;
     char *md5;
-    HASHTABLE_LIST *words;
+    HASHTABLE_LIST *dictionary;
     struct mlist *next;
 } MLIST;
 

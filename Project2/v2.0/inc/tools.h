@@ -3,7 +3,6 @@
  *   Student:  23006364   HU ZHUO   100
  */
 
-// open up all features including POSIX_C_SOURCE
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
@@ -23,8 +22,14 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#define ARG_MAX 2097152
+
+/*
+ *   This header file contains some useful functions
+ *   which are used in the whole project
+ */
+
 extern uint32_t wordlen;
-extern uint32_t ARG_MAX;
 
 // CHECK IF THE MEMORY ALLOCATION WAS SUCCESSFUL
 #ifndef CHECK_MEM

@@ -14,7 +14,7 @@ MLIST *mlist_new(void)
 
     mlist->filename = NULL;
     mlist->md5 = NULL;
-    mlist->words = hashtable_list_new();
+    mlist->dictionary = hashtable_list_new();
     mlist->next = NULL;
 
     return mlist;
@@ -43,7 +43,7 @@ MLIST *mlist_new_item(char *filename)
 
     newMList->filename = strdup(filename);
     newMList->md5 = strdup(md5sum(filename));
-    newMList->words = hashtable_list_new();
+    newMList->dictionary = hashtable_list_new();
     newMList->next = mlist_new();
 
     return newMList;
@@ -74,7 +74,7 @@ void mlist_update(MLIST *mlist1, MLIST *mlist2)
         {
             if (!strcmp(mlist2->filename, mlist1->filename))
             {
-                mlist1->words = mlist2->words;
+                mlist1->dictionary = mlist2->dictionary;
                 mlist_remove(mlist2, mlist1->filename);
             }
             mlist2 = mlist2->next;
@@ -112,7 +112,7 @@ void mlist_print(MLIST *mlist)
             {
                 printf("\t%s:\n", mlist->filename);
                 printf("\tMD5: %s\n", mlist->md5);
-                hashtable_list_print(mlist->words);
+                hashtable_list_print(mlist->dictionary);
                 printf("\n");
             }
             mlist = mlist->next;
@@ -120,7 +120,7 @@ void mlist_print(MLIST *mlist)
         if (mlist->next == NULL && mlist->filename != NULL)
         {
             printf("\t%s:\n", mlist->filename);
-            hashtable_list_print(mlist->words);
+            hashtable_list_print(mlist->dictionary);
             printf("\n");
         }
     }
@@ -154,7 +154,7 @@ void mlist_free(MLIST *mlist)
         MLIST *tmp = mlist;
         free(tmp->filename);
         free(tmp->md5);
-        hashtable_list_free(mlist->words);
+        hashtable_list_free(mlist->dictionary);
         mlist = mlist->next;
         free(tmp);
         tmp = NULL;

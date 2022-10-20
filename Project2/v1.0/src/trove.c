@@ -1,7 +1,7 @@
-/*  
-*   CITS2002  Project 2  2022-sem2
-*   Student:  23006364   HU ZHUO   100
-*/
+/*
+ *   CITS2002  Project 2  2022-sem2
+ *   Student:  23006364   HU ZHUO   100
+ */
 
 #include "../inc/trove.h"
 
@@ -46,6 +46,11 @@ void build_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 // REMOVE FUNCTION
 void remove_func(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
+    if (access(TROVE_FILE, R_OK))
+    {
+        perror("Trove File");
+        exit(EXIT_FAILURE);
+    }
     printf("\tTrove-File:\t%s\n", TROVE_FILE);
     printf("\t--------------------------Removing--------------------------\n");
     hashtable = trovefile_load();
@@ -69,6 +74,11 @@ void remove_func(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 // UPDATE FUNCTION
 void update_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
+    if (access(TROVE_FILE, R_OK))
+    {
+        perror("Trove File");
+        exit(EXIT_FAILURE);
+    }
     printf("\tTrove-File:\t%s\n\tWordlen limit:\t%d\n", TROVE_FILE, wordlen);
     printf("\t--------------------------Updating--------------------------\n");
     hashtable = hashtable_mlist_new();
@@ -89,6 +99,11 @@ void update_trove(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 // SERACH FUNCTION
 void search_func(uint32_t argc, char *argv[], HASHTABLE_MLIST *hashtable)
 {
+    if (access(TROVE_FILE, R_OK))
+    {
+        perror("Trove File");
+        exit(EXIT_FAILURE);
+    }
     printf("\tSearching...\n\tTrove File:\t%s\n\tTarget Word:\t\"%s\"\n", TROVE_FILE, argv[argc - 1]);
     printf("\t-----------------------SEARCH RESULT------------------------\n");
     hashtable = trovefile_load();
@@ -117,7 +132,7 @@ int32_t main(int32_t argc, char *argv[])
 
         case 'l':
 
-            if (!isInt(optarg) || atoi(optarg) < 1)     // if the length is not a positive integer or larger than 255
+            if (!isInt(optarg) || atoi(optarg) < 1) // if the length is not a positive integer or larger than 255
             {
                 err_print();
             }

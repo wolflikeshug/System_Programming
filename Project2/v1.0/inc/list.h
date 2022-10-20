@@ -8,6 +8,11 @@
 
 #include "tools.h"
 
+/*
+ *  This is a implementation of a linked list
+ *  which is the smallest unit to store one word
+ */
+
 // IMPLITATION OF LIST
 typedef struct list
 {

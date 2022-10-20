@@ -21,10 +21,11 @@
 #include "tools.h"
 #include "hashtable_mlist.h"
 
-// RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
-extern void recordWord(char *filename, HASHTABLE_MLIST *hashtable);
+/*
+ *   I lied, there's only In, no out functions.
+ */
 
 // RECORD ALL THE WORDS FROM FILE INTO THE HASHTABLE
-extern void recordWord_MULTI(char *filename, HASHTABLE_MLIST *hashtable);
+extern void recordWord(char *filename, HASHTABLE_MLIST *hashtable);
 
 #endif

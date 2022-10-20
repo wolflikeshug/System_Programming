@@ -22,4 +22,8 @@
 #include "tools.h"
 #include "hashtable_mlist.h"
 
+/*
+ *  main function of trove program
+ */
+
 #endif

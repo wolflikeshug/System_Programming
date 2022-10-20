@@ -205,7 +205,7 @@ char *mlist_read(MLIST *mlist)
                 strcat(str, md5);
                 strcat(str, linespace);
 
-                str_hashtable_list = hashtable_list_read(mlist->words);
+                str_hashtable_list = hashtable_list_read(mlist->dictionary);
                 str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_hashtable_list) + 2));
                 strcat(str, str_hashtable_list);
                 strcat(str, linespace);
@@ -224,7 +224,7 @@ char *mlist_read(MLIST *mlist)
             strcat(str, md5);
             strcat(str, linespace);
 
-            str_hashtable_list = hashtable_list_read(mlist->words);
+            str_hashtable_list = hashtable_list_read(mlist->dictionary);
             str = (char *)realloc(str, sizeof(char) * (strlen(str) + strlen(str_hashtable_list) + 2));
             strcat(str, str_hashtable_list);
             strcat(str, linespace);

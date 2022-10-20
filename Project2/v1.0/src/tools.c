@@ -5,7 +5,6 @@
 
 #include "../inc/tools.h"
 
-uint32_t ARG_MAX = 2097152;
 uint32_t wordlen = 4;
 
 // DJBHASH FUNCTION FOR HASHING STRING
